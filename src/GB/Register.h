@@ -11,9 +11,9 @@ public:
 	Register(const Register& other);
 
 	// Set Values
-	void SetHighByte(u8 value);
-	void SetLowByte(u8 value);
-	void SetRegister(u16 value);
+	void SetHighByte(const u8 value);
+	void SetLowByte(const u8 value);
+	void SetRegister(const u16 value);
 
 	// Get values const
 	u8 GetHighByte() const { return high; }

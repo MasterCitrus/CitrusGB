@@ -17,17 +17,17 @@ Register::Register(const Register& other)
 {
 }
 
-void Register::SetHighByte(u8 value)
+void Register::SetHighByte(const u8 value)
 {
 	high = value;
 }
 
-void Register::SetLowByte(u8 value)
+void Register::SetLowByte(const u8 value)
 {
 	low = value;
 }
 
-void Register::SetRegister(u16 value)
+void Register::SetRegister(const u16 value)
 {
 	data = value;
 }
