@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Log/Log.h"
+#include "../GB/GameBoy.h"
 
 #include <SDL3/SDL_dialog.h>
 
@@ -46,6 +47,7 @@ private:
 private:
 	AppDetails details;
 	Log log;
+	GameBoy gb;
 	std::filesystem::path directory;;
 	std::filesystem::path romdirectory;
 	std::filesystem::path bootromdirectory;

@@ -1,4 +1,6 @@
 #include "Emulator.h"
+#include "GB/CPU.h"
+#include "GB/Memory.h"
 
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_properties.h>
@@ -112,7 +114,7 @@ void Emulator::Run()
 		ImGui_ImplSDL3_NewFrame();
 		ImGui::NewFrame();
 
-		ImGuiDockNodeFlags dockspaceFlags = ImGuiDockNodeFlags_PassthruCentralNode | ImGuiDockNodeFlags_NoTabBar;
+		ImGuiDockNodeFlags dockspaceFlags = ImGuiDockNodeFlags_PassthruCentralNode;
 
 		ImGuiID dockspaceID = ImGui::DockSpaceOverViewport(0, ImGui::GetMainViewport(), dockspaceFlags);
 
@@ -127,9 +129,14 @@ void Emulator::Run()
 
 			ImGuiID mainDockspaceID = dockspaceID;
 			ImGuiID right = ImGui::DockBuilderSplitNode(mainDockspaceID, ImGuiDir_Right, 0.60f, nullptr, &mainDockspaceID);
+			ImGuiID left = ImGui::DockBuilderSplitNode(mainDockspaceID, ImGuiDir_Left, 1.5f, nullptr, &mainDockspaceID);
+			ImGuiID leftTop = ImGui::DockBuilderSplitNode(left, ImGuiDir_Up, 1.5f, nullptr, &mainDockspaceID);
+			ImGuiID leftBottom = ImGui::DockBuilderSplitNode(left, ImGuiDir_Down, 1.5f, nullptr, &mainDockspaceID);
 
 			ImGui::DockBuilderDockWindow("Viewport", mainDockspaceID);
-			ImGui::DockBuilderDockWindow("Log", right);
+			ImGui::DockBuilderDockWindow("Memory", right);
+			ImGui::DockBuilderDockWindow("CPU State", left);
+			ImGui::DockBuilderDockWindow("Disassembly", leftBottom);
 			ImGui::DockBuilderFinish(dockspaceID);
 		}
 
@@ -172,7 +179,59 @@ void Emulator::Update(float deltaTime)
 		ImGui::EndMainMenuBar();
 	}
 
-	log.Draw();
+	//log.Draw();
+
+	// CPU State UI
+
+	ImGui::Begin("CPU State");
+	if (ImGui::BeginTable("Registers", 2, ImGuiTableFlags_Borders))
+	{
+		ImGui::TableNextRow();
+		ImGui::TableSetColumnIndex(0);
+		ImGui::Text("AF: %s", std::format("{:#04X}", gb.GetCPU()->GetAF().GetRegister()).c_str());
+		ImGui::TableSetColumnIndex(1);
+		ImGui::Text("BC: %s", std::format("{:#04X}", gb.GetCPU()->GetBC().GetRegister()).c_str());
+
+		ImGui::TableNextRow();
+		ImGui::TableSetColumnIndex(0);
+		ImGui::Text("DE: %s", std::format("{:#04X}", gb.GetCPU()->GetDE().GetRegister()).c_str());
+		ImGui::TableSetColumnIndex(1);
+		ImGui::Text("HL: %s", std::format("{:#04X}", gb.GetCPU()->GetHL().GetRegister()).c_str());
+
+		ImGui::TableNextRow();
+		ImGui::TableSetColumnIndex(0);
+		ImGui::Text("SP: %s", std::format("{:#04X}", gb.GetCPU()->GetSP()).c_str());
+		ImGui::TableSetColumnIndex(1);
+		ImGui::Text("PC: %s", std::format("{:#04X}", gb.GetCPU()->GetPC()).c_str());
+
+		ImGui::EndTable();
+	}
+	bool zero = gb.GetCPU()->GetZeroFlag();
+	ImGui::Text("Z");
+	ImGui::SameLine();
+	ImGui::Checkbox("##ZeroFlag", &zero);
+	ImGui::SameLine();
+	bool subtract = gb.GetCPU()->GetSubtractFlag();
+	ImGui::Text("S");
+	ImGui::SameLine();
+	ImGui::Checkbox("##SubtractFlag", &subtract);
+	ImGui::SameLine();
+	bool halfCarry = gb.GetCPU()->GetHalfCarryFlag();
+	ImGui::Text("HC");
+	ImGui::SameLine();
+	ImGui::Checkbox("##HalfCarryFlag", &halfCarry);
+	ImGui::SameLine();
+	bool carry = gb.GetCPU()->GetCarryFlag();
+	ImGui::Text("HC");
+	ImGui::SameLine();
+	ImGui::Checkbox("##CarryFlag", &carry);
+	ImGui::End();
+
+	ImGui::Begin("Disassembly");
+	ImGui::End();
+
+	ImGui::Begin("Memory");
+	ImGui::End();
 
 	//ImGui::Begin("Table Area");
 	//if (ImGui::BeginTable("Test Table", 2))
@@ -230,7 +289,7 @@ void Emulator::LoadROMFile()
 	SDL_SetPointerProperty(props, SDL_PROP_FILE_DIALOG_FILTERS_POINTER, filters);
 	SDL_SetNumberProperty(props, SDL_PROP_FILE_DIALOG_NFILTERS_NUMBER, 4);
 	SDL_SetPointerProperty(props, SDL_PROP_FILE_DIALOG_WINDOW_POINTER, window);
-	SDL_SetStringProperty(props, SDL_PROP_FILE_DIALOG_LOCATION_STRING, "\\roms");
+	SDL_SetStringProperty(props, SDL_PROP_FILE_DIALOG_LOCATION_STRING, romdirectory.string().c_str());
 	SDL_SetBooleanProperty(props, SDL_PROP_FILE_DIALOG_MANY_BOOLEAN, false);
 	SDL_SetStringProperty(props, SDL_PROP_FILE_DIALOG_TITLE_STRING, "Open ROM File");
 	SDL_SetStringProperty(props, SDL_PROP_FILE_DIALOG_ACCEPT_STRING, "Open");

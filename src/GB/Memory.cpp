@@ -1,8 +1,12 @@
 #include "Memory.h"
 
 Memory::Memory()
-    : bootROM(0xFF, 0), ROM0(0x4000, 0), ROM1(0x4000, 0), VRAM(0x2000, 0), WRAM0(0x1000, 0), WRAM1(0x1000, 0), ERAM(0x2000, 0),
-    OAM(0xFF, 0), ioRegisters(0x80, 0), HRAM(0x80, 0), interruptRegister(0)
+    : bootROM(0xFF, 0), VRAM(0x2000, 0), WRAM0(0x1000, 0), WRAM1(0x1000, 0), ERAM(0x2000, 0),
+    OAM(0xFF, 0), ioRegisters(0x80, 0), HRAM(0x80, 0), interruptRegister(0), bootRomEnabled(true)
+{
+}
+
+Memory::~Memory()
 {
 }
 
@@ -98,6 +102,7 @@ u8 Memory::Read(u16 address)
         // BIT 4 - Joypad
         return interruptRegister;
     }
+    return 0xFF;
 }
 
 void Memory::Write(u16 address, const u8 value)

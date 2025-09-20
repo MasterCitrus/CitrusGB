@@ -8,6 +8,7 @@ class Memory
 {
 public:
 	Memory();
+	~Memory();
 
 	u8 Read(u16 address);
 
