@@ -7,6 +7,7 @@ class Memory;
 enum class RegisterTarget
 {
 	A,
+	AF,
 	B,
 	C,
 	BC,
