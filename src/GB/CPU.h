@@ -54,7 +54,7 @@ public:
 	~CPU();
 
 	void Step();
-	int Decode();
+	void Decode();
 
 	u8 FetchByte();
 	u16 FetchWord();
@@ -81,6 +81,8 @@ private:
 
 	// Instruction Functions
 
+	// Select a prefix instruction
+	void Prefix();
 	// Load register into register
 	// Load memory into register
 	// Load register into memory
@@ -121,9 +123,13 @@ private:
 
 	// Prefix Instruction Functions
 
-	void BIT(int bit, RegisterTarget reg);
-	void RES(int bit, RegisterTarget reg);
-	void SET(int bit, RegisterTarget reg);
+	// Checks if bit of register is set
+	void BIT(RegisterTarget reg, int bit);
+	// Unsets bit of register
+	void RES(RegisterTarget reg, int bit);
+	// Sets bit of register
+	void SET(RegisterTarget reg, int bit);
+	// Shift bits left, bit 7 becomes carry flag
 	void RLC(RegisterTarget reg);
 	void RL(RegisterTarget reg);
 	void RRC(RegisterTarget reg);
@@ -143,6 +149,7 @@ private:
 	Register HL;
 	u16 PC;
 	u16 SP;
+	u8 OP;
 	bool IME;
 	bool zero;
 	bool subtract;

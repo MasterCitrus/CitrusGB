@@ -17,9 +17,13 @@ void CPU::Step()
 
 }
 
-int CPU::Decode()
+void CPU::Decode()
 {
-	return 1;
+	OP = FetchByte();
+	switch (OP)
+	{
+
+	}
 }
 
 u8 CPU::FetchByte()
@@ -52,6 +56,15 @@ void CPU::SetFlag(Flag flag, bool enabled)
 		case Flag::Carry:
 			carry = enabled;
 			break;
+	}
+}
+
+void CPU::Prefix()
+{
+	u8 code = FetchByte();
+	switch (code)
+	{
+
 	}
 }
 
@@ -1851,4 +1864,715 @@ void CPU::PUSH(RegisterTarget reg)
 	}
 	tCycles = 16;
 	mCycles = 4;
+}
+
+void CPU::BIT(RegisterTarget reg, int bit)
+{
+	SetFlag(Flag::Subtract, false);
+	SetFlag(Flag::HalfCarry, true);
+	switch (reg)
+	{
+		case RegisterTarget::A:
+			(AF.GetHighByte() & (1 << bit)) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::B:
+			(BC.GetHighByte() & (1 << bit)) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::C:
+			(BC.GetLowByte() & (1 << bit)) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::D:
+			(DE.GetHighByte() & (1 << bit)) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::E:
+			(DE.GetLowByte() & (1 << bit)) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::H:
+			(HL.GetHighByte() & (1 << bit)) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::L:
+			(HL.GetLowByte() & (1 << bit)) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::MemHL:
+			(memory->Read(HL.GetRegister()) & (1 << bit)) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			tCycles = 16;
+			mCycles = 4;
+			break;
+		default:
+			std::cout << "Unsupported or Invalid BIT Instruction\n";
+			std::exit(EXIT_FAILURE);
+			break;
+	}
+}
+
+void CPU::RES(RegisterTarget reg, int bit)
+{
+	switch (reg)
+	{
+		case RegisterTarget::A:
+			AF.GetHighByte() &= ~(1 << bit);
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::B:
+			BC.GetHighByte() &= ~(1 << bit);
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::C:
+			BC.GetLowByte() &= ~(1 << bit);
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::D:
+			DE.GetHighByte() &= ~(1 << bit);
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::E:
+			DE.GetLowByte() &= ~(1 << bit);
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::H:
+			HL.GetHighByte() &= ~(1 << bit);
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::L:
+			HL.GetLowByte() &= ~(1 << bit);
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::MemHL:
+			memory->Write(HL.GetRegister(), memory->Read(HL.GetRegister() & ~(1 << bit)));
+			tCycles = 16;
+			mCycles = 4;
+			break;
+		default:
+			std::cout << "Unsupported or Invalid RES Instruction\n";
+			std::exit(EXIT_FAILURE);
+			break;
+	}
+}
+
+void CPU::SET(RegisterTarget reg, int bit)
+{
+	switch (reg)
+	{
+		case RegisterTarget::A:
+			AF.GetHighByte() |= (1 << bit);
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::B:
+			BC.GetHighByte() |= (1 << bit);
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::C:
+			BC.GetLowByte() |= (1 << bit);
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::D:
+			DE.GetHighByte() |= (1 << bit);
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::E:
+			DE.GetLowByte() |= (1 << bit);
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::H:
+			HL.GetHighByte() |= (1 << bit);
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::L:
+			HL.GetLowByte() |= (1 << bit);
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::MemHL:
+			memory->Write(HL.GetRegister(), memory->Read(HL.GetRegister()) | (1 << bit));
+			tCycles = 16;
+			mCycles = 4;
+			break;
+		default:
+			std::cout << "Unsupported or Invalid SET Instruction\n";
+			std::exit(EXIT_FAILURE);
+			break;
+	}
+}
+
+void CPU::RLC(RegisterTarget reg)
+{
+	SetFlag(Flag::Subtract, false);
+	SetFlag(Flag::HalfCarry, false);
+	switch (reg)
+	{
+		case RegisterTarget::A:
+			(AF.GetHighByte() << 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			(AF.GetHighByte() >> 7) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
+			AF.GetHighByte() <<= 1 | (u8)GetCarryFlag();
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::B:
+			(BC.GetHighByte() << 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			(BC.GetHighByte() >> 7) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
+			BC.GetHighByte() <<= 1 | (u8)GetCarryFlag();
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::C:
+			(BC.GetLowByte() << 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			(BC.GetLowByte() >> 7) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
+			BC.GetLowByte() <<= 1 | (u8)GetCarryFlag();
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::D:
+			(DE.GetHighByte() << 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			(DE.GetHighByte() >> 7) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
+			DE.GetHighByte() <<= 1 | (u8)GetCarryFlag();
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::E:
+			(DE.GetLowByte() << 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			(DE.GetLowByte() >> 7) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
+			DE.GetLowByte() <<= 1 | (u8)GetCarryFlag();
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::H:
+			(HL.GetHighByte() << 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			(HL.GetHighByte() >> 7) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
+			HL.GetHighByte() <<= 1 | (u8)GetCarryFlag();
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::L:
+			(HL.GetLowByte() << 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			(HL.GetLowByte() >> 7) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
+			HL.GetLowByte() <<= 1 | (u8)GetCarryFlag();
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::MemHL:
+			(memory->Read(HL.GetRegister()) << 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			(memory->Read(HL.GetRegister()) >> 7) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
+			memory->Write(HL.GetRegister(), memory->Read(HL.GetRegister()) << 1 | (u8)GetCarryFlag());
+			tCycles = 16;
+			mCycles = 4;
+			break;
+		default:
+			std::cout << "Unsupported or Invalid RLC Instruction\n";
+			std::exit(EXIT_FAILURE);
+			break;
+	}
+}
+
+void CPU::RL(RegisterTarget reg)
+{
+	SetFlag(Flag::Subtract, false);
+	SetFlag(Flag::HalfCarry, false);
+	bool oldCarry = GetCarryFlag();
+	switch (reg)
+	{
+		case RegisterTarget::A:
+			(AF.GetHighByte() << 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			(AF.GetHighByte() >> 7) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
+			AF.GetHighByte() <<= 1 | (u8)oldCarry;
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::B:
+			(BC.GetHighByte() << 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			(BC.GetHighByte() >> 7) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
+			BC.GetHighByte() <<= 1 | (u8)oldCarry;
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::C:
+			(BC.GetLowByte() << 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			(BC.GetLowByte() >> 7) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
+			BC.GetLowByte() <<= 1 | (u8)oldCarry;
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::D:
+			(DE.GetHighByte() << 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			(DE.GetHighByte() >> 7) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
+			DE.GetHighByte() <<= 1 | (u8)oldCarry;
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::E:
+			(DE.GetLowByte() << 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			(DE.GetLowByte() >> 7) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
+			DE.GetLowByte() <<= 1 | (u8)oldCarry;
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::H:
+			(HL.GetHighByte() << 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			(HL.GetHighByte() >> 7) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
+			HL.GetHighByte() <<= 1 | (u8)oldCarry;
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::L:
+			(HL.GetLowByte() << 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			(HL.GetLowByte() >> 7) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
+			HL.GetLowByte() <<= 1 | (u8)oldCarry;
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::MemHL:
+			(memory->Read(HL.GetRegister()) << 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			(memory->Read(HL.GetRegister()) >> 7) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
+			memory->Write(HL.GetRegister(), memory->Read(HL.GetRegister()) << 1 | (u8)oldCarry);
+			tCycles = 16;
+			mCycles = 4;
+			break;
+		default:
+			std::cout << "Unsupported or Invalid RL Instruction\n";
+			std::exit(EXIT_FAILURE);
+			break;
+	}
+}
+
+void CPU::RRC(RegisterTarget reg)
+{
+	SetFlag(Flag::Subtract, false);
+	SetFlag(Flag::HalfCarry, false);
+	switch (reg)
+	{
+		case RegisterTarget::A:
+			(AF.GetHighByte() >> 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			(AF.GetHighByte() & 0x01) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
+			AF.GetHighByte() >>= 1 | ((u8)GetCarryFlag() << 7);
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::B:
+			(BC.GetHighByte() >> 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			(BC.GetHighByte() & 0x01) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
+			BC.GetHighByte() >>= 1 | ((u8)GetCarryFlag() << 7);
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::C:
+			(BC.GetLowByte() >> 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			(BC.GetLowByte() & 0x01) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
+			BC.GetLowByte() >>= 1 | ((u8)GetCarryFlag() << 7);
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::D:
+			(DE.GetHighByte() >> 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			(DE.GetHighByte() & 0x01) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
+			DE.GetHighByte() >>= 1 | ((u8)GetCarryFlag() << 7);
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::E:
+			(DE.GetLowByte() >> 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			(DE.GetLowByte() & 0x01) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
+			DE.GetLowByte() >>= 1 | ((u8)GetCarryFlag() << 7);
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::H:
+			(HL.GetHighByte() >> 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			(HL.GetHighByte() & 0x01) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
+			HL.GetHighByte() >>= 1 | ((u8)GetCarryFlag() << 7);
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::L:
+			(HL.GetLowByte() >> 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			(HL.GetLowByte() & 0x01) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
+			HL.GetLowByte() >>= 1 | ((u8)GetCarryFlag() << 7);
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::MemHL:
+			(memory->Read(HL.GetRegister()) >> 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			(memory->Read(HL.GetRegister()) & 0x01) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
+			memory->Write(HL.GetRegister(), memory->Read(HL.GetRegister()) >> 1 | ((u8)GetCarryFlag() << 7));
+			tCycles = 16;
+			mCycles = 4;
+			break;
+		default:
+			std::cout << "Unsupported or Invalid RRC Instruction\n";
+			std::exit(EXIT_FAILURE);
+			break;
+	}
+}
+
+void CPU::RR(RegisterTarget reg)
+{
+	SetFlag(Flag::Subtract, false);
+	SetFlag(Flag::HalfCarry, false);
+	bool oldCarry = GetCarryFlag();
+	switch (reg)
+	{
+		case RegisterTarget::A:
+			(AF.GetHighByte() >> 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			(AF.GetHighByte() & 0x01) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
+			AF.GetHighByte() >>= 1 | ((u8)oldCarry << 7);
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::B:
+			(BC.GetHighByte() >> 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			(BC.GetHighByte() & 0x01) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
+			BC.GetHighByte() >>= 1 | ((u8)oldCarry << 7);
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::C:
+			(BC.GetLowByte() >> 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			(BC.GetLowByte() & 0x01) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
+			BC.GetLowByte() >>= 1 | ((u8)oldCarry << 7);
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::D:
+			(DE.GetHighByte() >> 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			(DE.GetHighByte() & 0x01) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
+			DE.GetHighByte() >>= 1 | ((u8)oldCarry << 7);
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::E:
+			(DE.GetLowByte() >> 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			(DE.GetLowByte() & 0x01) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
+			DE.GetLowByte() >>= 1 | ((u8)oldCarry << 7);
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::H:
+			(HL.GetHighByte() >> 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			(HL.GetHighByte() & 0x01) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
+			HL.GetHighByte() >>= 1 | ((u8)oldCarry << 7);
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::L:
+			(HL.GetLowByte() >> 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			(HL.GetLowByte() & 0x01) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
+			HL.GetLowByte() >>= 1 | ((u8)oldCarry << 7);
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::MemHL:
+			(memory->Read(HL.GetRegister()) >> 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			(memory->Read(HL.GetRegister()) & 0x01) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
+			memory->Write(HL.GetRegister(), memory->Read(HL.GetRegister()) >> 1 | ((u8)oldCarry << 7));
+			tCycles = 16;
+			mCycles = 4;
+			break;
+		default:
+			std::cout << "Unsupported or Invalid RR Instruction\n";
+			std::exit(EXIT_FAILURE);
+			break;
+	}
+}
+
+void CPU::SLA(RegisterTarget reg)
+{
+	SetFlag(Flag::Subtract, false);
+	SetFlag(Flag::HalfCarry, false);
+	switch (reg)
+	{
+		case RegisterTarget::A:
+			(AF.GetHighByte() << 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			(AF.GetHighByte() >> 7) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
+			AF.GetHighByte() <<= 1;
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::B:
+			(BC.GetHighByte() << 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			(BC.GetHighByte() >> 7) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
+			BC.GetHighByte() <<= 1;
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::C:
+			(BC.GetLowByte() << 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			(BC.GetLowByte() >> 7) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
+			BC.GetLowByte() <<= 1;
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::D:
+			(DE.GetHighByte() << 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			(DE.GetHighByte() >> 7) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
+			DE.GetHighByte() <<= 1;
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::E:
+			(DE.GetLowByte() << 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			(DE.GetLowByte() >> 7) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
+			DE.GetLowByte() <<= 1;
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::H:
+			(HL.GetHighByte() << 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			(HL.GetHighByte() >> 7) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
+			HL.GetHighByte() <<= 1;
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::L:
+			(HL.GetLowByte() << 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			(HL.GetLowByte() >> 7) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
+			HL.GetLowByte() <<= 1;
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::MemHL:
+			(memory->Read(HL.GetRegister()) << 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			(memory->Read(HL.GetRegister()) >> 7) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
+			memory->Write(HL.GetRegister(), memory->Read(HL.GetRegister()) << 1);
+			tCycles = 16;
+			mCycles = 4;
+			break;
+		default:
+			std::cout << "Unsupported or Invalid SLA Instruction\n";
+			std::exit(EXIT_FAILURE);
+			break;
+	}
+}
+
+void CPU::SRA(RegisterTarget reg)
+{
+	SetFlag(Flag::Subtract, false);
+	SetFlag(Flag::HalfCarry, false);
+	u8 msb;
+	switch (reg)
+	{
+		case RegisterTarget::A:
+			msb = AF.GetHighByte() & 0x80;
+			(AF.GetHighByte() >> 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			(AF.GetHighByte() & 0x01) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
+			AF.GetHighByte() >>= 1 | msb;
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::B:
+			msb = BC.GetHighByte() & 0x80;
+			(BC.GetHighByte() >> 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			(BC.GetHighByte() & 0x01) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
+			BC.GetHighByte() >>= 1 | msb;
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::C:
+			msb = BC.GetLowByte() & 0x80;
+			(BC.GetLowByte() >> 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			(BC.GetLowByte() & 0x01) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
+			BC.GetLowByte() >>= 1 | msb;
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::D:
+			msb = DE.GetHighByte() & 0x80;
+			(DE.GetHighByte() >> 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			(DE.GetHighByte() & 0x01) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
+			DE.GetHighByte() >>= 1 | msb;
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::E:
+			msb = DE.GetLowByte() & 0x80;
+			(DE.GetLowByte() >> 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			(DE.GetLowByte() & 0x01) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
+			DE.GetLowByte() >>= 1 | msb;
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::H:
+			msb = HL.GetHighByte() & 0x80;
+			(HL.GetHighByte() >> 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			(HL.GetHighByte() & 0x01) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
+			HL.GetHighByte() >>= 1 | msb;
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::L:
+			msb = HL.GetLowByte() & 0x80;
+			(HL.GetLowByte() >> 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			(HL.GetLowByte() & 0x01) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
+			HL.GetLowByte() >>= 1 | msb;
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::MemHL:
+			msb = memory->Read(HL.GetRegister()) & 0x80;
+			(memory->Read(HL.GetRegister()) >> 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			(memory->Read(HL.GetRegister()) & 0x01) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
+			memory->Write(HL.GetRegister(), memory->Read(HL.GetRegister()) >> 1 | msb);
+			tCycles = 16;
+			mCycles = 4;
+			break;
+		default:
+			std::cout << "Unsupported or Invalid SRA Instruction\n";
+			std::exit(EXIT_FAILURE);
+			break;
+	}
+}
+
+void CPU::SWAP(RegisterTarget reg)
+{
+	SetFlag(Flag::Subtract, false);
+	SetFlag(Flag::HalfCarry, false);
+	SetFlag(Flag::Carry, false);
+	switch (reg)
+	{
+		case RegisterTarget::A:
+			((AF.GetHighByte() >> 4) | (AF.GetHighByte() << 4)) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			AF.GetHighByte() = (AF.GetHighByte() >> 4) | (AF.GetHighByte() << 4);
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::B:
+			((BC.GetHighByte() >> 4) | (BC.GetHighByte() << 4)) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			BC.GetHighByte() = (BC.GetHighByte() >> 4) | (BC.GetHighByte() << 4);
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::C:
+			((BC.GetLowByte() >> 4) | (BC.GetLowByte() << 4)) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			BC.GetLowByte() = (BC.GetLowByte() >> 4) | (BC.GetLowByte() << 4);
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::D:
+			((DE.GetHighByte() >> 4) | (DE.GetHighByte() << 4)) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			DE.GetHighByte() = (DE.GetHighByte() >> 4) | (DE.GetHighByte() << 4);
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::E:
+			((DE.GetLowByte() >> 4) | (DE.GetLowByte() << 4)) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			DE.GetLowByte() = (DE.GetLowByte() >> 4) | (DE.GetLowByte() << 4);
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::H:
+			((HL.GetHighByte() >> 4) | (HL.GetHighByte() << 4)) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			HL.GetHighByte() = (HL.GetHighByte() >> 4) | (HL.GetHighByte() << 4);
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::L:
+			((HL.GetLowByte() >> 4) | (HL.GetLowByte() << 4)) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			HL.GetLowByte() = (HL.GetLowByte() >> 4) | (HL.GetLowByte() << 4);
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::MemHL:
+			((memory->Read(HL.GetRegister()) >> 4) | (memory->Read(HL.GetRegister()) << 4)) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			memory->Write(HL.GetRegister(), (memory->Read(HL.GetRegister()) >> 4) | (memory->Read(HL.GetRegister()) << 4));
+			tCycles = 16;
+			mCycles = 4;
+			break;
+		default:
+			std::cout << "Unsupported or Invalid SWAP Instruction\n";
+			std::exit(EXIT_FAILURE);
+			break;
+	}
+}
+
+void CPU::SRL(RegisterTarget reg)
+{
+	SetFlag(Flag::Subtract, false);
+	SetFlag(Flag::HalfCarry, false);
+	switch (reg)
+	{
+		case RegisterTarget::A:
+			(AF.GetHighByte() >> 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			(AF.GetHighByte() & 0x01) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
+			AF.GetHighByte() >>= 1;
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::B:
+			(BC.GetHighByte() >> 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			(BC.GetHighByte() & 0x01) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
+			BC.GetHighByte() >>= 1;
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::C:
+			(BC.GetLowByte() >> 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			(BC.GetLowByte() & 0x01) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
+			BC.GetLowByte() >>= 1;
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::D:
+			(DE.GetHighByte() >> 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			(DE.GetHighByte() & 0x01) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
+			DE.GetHighByte() >>= 1;
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::E:
+			(DE.GetLowByte() >> 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			(DE.GetLowByte() & 0x01) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
+			DE.GetLowByte() >>= 1;
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::H:
+			(HL.GetHighByte() >> 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			(HL.GetHighByte() & 0x01) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
+			HL.GetHighByte() >>= 1;
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::L:
+			(HL.GetLowByte() >> 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			(HL.GetLowByte() & 0x01) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
+			HL.GetLowByte() >>= 1;
+			tCycles = 8;
+			mCycles = 2;
+			break;
+		case RegisterTarget::MemHL:
+			(memory->Read(HL.GetRegister()) >> 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			(memory->Read(HL.GetRegister()) & 0x01) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
+			memory->Write(HL.GetRegister(), memory->Read(HL.GetRegister()) >> 1);
+			tCycles = 16;
+			mCycles = 4;
+			break;
+		default:
+			std::cout << "Unsupported or Invalid SRL Instruction\n";
+			std::exit(EXIT_FAILURE);
+			break;
+	}
 }
