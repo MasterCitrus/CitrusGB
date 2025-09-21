@@ -734,7 +734,7 @@ void CPU::INC(RegisterTarget reg)
 		case RegisterTarget::D:
 			SetFlag(Flag::Subtract, false);
 			((DE.GetHighByte() + 1) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
-			((DE.GetHighByte() & 0x0F) + 1 & 0x0F)) > 0x0F) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
+			(((DE.GetHighByte() & 0x0F) + 1 & 0x0F) > 0x0F) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
 			DE.GetHighByte()++;
 			tCycles = 4;
 			mCycles = 1;
@@ -776,7 +776,7 @@ void CPU::INC(RegisterTarget reg)
 		case RegisterTarget::MemHL:
 			SetFlag(Flag::Subtract, false);
 			((memory->Read(HL.GetRegister()) + 1) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
-			((memory->Read(HL.GetRegister()) & 0x0F) + 1 & 0x0F)) > 0x0F) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
+			(((memory->Read(HL.GetRegister()) & 0x0F) + 1 & 0x0F) > 0x0F) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
 			memory->Write(HL.GetRegister(), memory->Read(HL.GetRegister()) + 1);
 			tCycles = 12;
 			mCycles = 3;
@@ -1098,7 +1098,7 @@ void CPU::ADD(RegisterTarget to, RegisterTarget from)
 				case RegisterTarget::Byte:
 				{
 					u8 byte = FetchByte();
-					((AF.GetHighByte() + byte == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+					((AF.GetHighByte() + byte) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 					(((AF.GetHighByte() & 0x0F) + (byte & 0x0F)) > 0x0F) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
 					((AF.GetHighByte() + byte) > 0xFF) ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
 					AF.GetHighByte() += byte;
@@ -1247,7 +1247,7 @@ void CPU::ADC(RegisterTarget reg)
 		case RegisterTarget::Byte:
 		{
 			u8 byte = FetchByte();
-			((AF.GetHighByte() + byte + (u8)temp == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			((AF.GetHighByte() + byte + (u8)temp) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(((AF.GetHighByte() & 0x0F) + (byte & 0x0F) + (u8)temp) > 0x0F) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
 			((AF.GetHighByte() + byte + (u8)temp) > 0xFF) ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
 			AF.GetHighByte() += byte + (u8)temp;
@@ -1334,7 +1334,7 @@ void CPU::SUB(RegisterTarget reg)
 		case RegisterTarget::Byte:
 		{
 			u8 byte = FetchByte();
-			((AF.GetHighByte() - byte == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			((AF.GetHighByte() - byte) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			((AF.GetHighByte() & 0x0F) < (byte & 0x0F)) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
 			(AF.GetHighByte() < byte) ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
 			AF.GetHighByte() -= byte;
@@ -1357,7 +1357,7 @@ void CPU::SBC(RegisterTarget reg)
 	{
 		case RegisterTarget::A:
 			((AF.GetHighByte() - (AF.GetHighByte() + (u8)temp)) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
-			((AF.GetHighByte() & 0x0F) < ((AF.GetHighByte() & 0x0F) + (u8)temp))) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
+			((AF.GetHighByte() & 0x0F) < ((AF.GetHighByte() & 0x0F) + (u8)temp)) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
 			(AF.GetHighByte() < (AF.GetHighByte() + (u8)temp)) ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
 			AF.GetHighByte() -= AF.GetHighByte() - (u8)temp;
 			tCycles = 4;
@@ -1372,7 +1372,7 @@ void CPU::SBC(RegisterTarget reg)
 			mCycles = 1;
 			break;
 		case RegisterTarget::C:
-			((AF.GetHighByte() - (BC.GetLowByte() + (u8)temp))) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			((AF.GetHighByte() - (BC.GetLowByte() + (u8)temp))) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			((AF.GetHighByte() & 0x0F) < ((BC.GetLowByte() & 0x0F) + (u8)temp)) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
 			(AF.GetHighByte() < (BC.GetLowByte() + (u8)temp)) ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
 			AF.GetHighByte() -= BC.GetLowByte() - (u8)temp;
@@ -1422,7 +1422,7 @@ void CPU::SBC(RegisterTarget reg)
 		case RegisterTarget::Byte:
 		{
 			u8 byte = FetchByte();
-			((AF.GetHighByte() - (byte + (u8)temp) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			((AF.GetHighByte() - (byte + (u8)temp)) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			((AF.GetHighByte() & 0x0F) < ((byte & 0x0F) + (u8)temp)) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
 			(AF.GetHighByte() < (byte + (u8)temp)) ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
 			AF.GetHighByte() -= byte - (u8)temp;
@@ -1496,7 +1496,7 @@ void CPU::AND(RegisterTarget reg)
 		{
 			u8 byte = FetchByte();
 			(AF.GetHighByte() & byte) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
-			AF.GetHighByte() &= byte);
+			AF.GetHighByte() &= byte;
 			tCycles = 4;
 			mCycles = 1;
 			break;
@@ -1567,7 +1567,7 @@ void CPU::XOR(RegisterTarget reg)
 		{
 			u8 byte = FetchByte();
 			(AF.GetHighByte() ^ byte) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
-			AF.GetHighByte() ^= byte);
+			AF.GetHighByte() ^= byte;
 			tCycles = 4;
 			mCycles = 1;
 			break;
@@ -1638,7 +1638,7 @@ void CPU::OR(RegisterTarget reg)
 		{
 			u8 byte = FetchByte();
 			(AF.GetHighByte() | byte) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
-			AF.GetHighByte() |= byte);
+			AF.GetHighByte() |= byte;
 			tCycles = 4;
 			mCycles = 1;
 			break;
@@ -1715,7 +1715,7 @@ void CPU::CP(RegisterTarget reg)
 		case RegisterTarget::Byte:
 		{
 			u8 byte = FetchByte();
-			((AF.GetHighByte() - byte == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
+			((AF.GetHighByte() - byte) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			((AF.GetHighByte() & 0x0F) < (byte & 0x0F)) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
 			(AF.GetHighByte() < byte) ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
 			tCycles = 8;
