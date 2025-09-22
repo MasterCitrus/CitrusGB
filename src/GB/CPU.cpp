@@ -599,7 +599,7 @@ void CPU::Decode()
 		CP(RegisterTarget::A);
 		break;
 	case 0xC0:
-
+		RET(Condition::NotZero);
 		break;
 	case 0xC1:
 		POP(RegisterTarget::BC);
@@ -623,10 +623,10 @@ void CPU::Decode()
 
 		break;
 	case 0xC8:
-
+		RET(Condition::Zero);
 		break;
 	case 0xC9:
-
+		RET(Condition::None);
 		break;
 	case 0xCA:
 		JP(Condition::Zero);
@@ -647,7 +647,7 @@ void CPU::Decode()
 
 		break;
 	case 0xD0:
-
+		RET(Condition::NotCarry);
 		break;
 	case 0xD1:
 		POP(RegisterTarget::DE);
@@ -671,10 +671,10 @@ void CPU::Decode()
 
 		break;
 	case 0xD8:
-
+		RET(Condition::Carry);
 		break;
 	case 0xD9:
-
+		RET(Condition::Interrupt);
 		break;
 	case 0xDA:
 		JP(Condition::Carry);
