@@ -3,6 +3,7 @@
 #include "Definitions.h"
 
 #include <string>
+#include <vector>
 
 enum class MBCType
 {
@@ -50,8 +51,16 @@ public:
 	u8 Read(u16 address);
 	void Write(u16 address, u8 value);
 
+	bool LoadROM(const std::string& rom);
+	void EjectROM();
+
+private:
+
+	void ReadCartHeader();
+
 private:
 	std::string cartTitle;
+	std::vector<u8> ROM;
 	int numROMBanks;
 	int numRAMBanks;
 	bool SGB;

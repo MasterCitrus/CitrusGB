@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Log/Log.h"
-#include "../GB/GameBoy.h"
+#include "GB/GameBoy.h"
 
 #include <SDL3/SDL_dialog.h>
 
@@ -38,16 +38,22 @@ public:
 
 	void Update(float deltaTime);
 
+	static GameBoy* Get() { return self; }
+
 private:
 
 	void MakeDirectories();
 
 	void LoadROMFile();
 
+public:
+	static GameBoy* self;
+
 private:
 	AppDetails details;
 	Log log;
 	GameBoy gb;
+	std::string rom;
 	std::filesystem::path directory;;
 	std::filesystem::path romdirectory;
 	std::filesystem::path bootromdirectory;
@@ -57,4 +63,4 @@ private:
 	bool running = false;
 };
 
-static void SDLCALL OpenFileCallback(void* userdata, const char* const* filelist, int filter_index);
+	static void SDLCALL OpenFileCallback(void* userdata, const char* const* filelist, int filter_index);

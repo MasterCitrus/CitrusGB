@@ -12,10 +12,16 @@
 #include <chrono>
 #include <iostream>
 
+GameBoy* Emulator::self = nullptr;
+
 Emulator::Emulator(AppDetails details)
 	: details(details)
 {
 	MakeDirectories();
+
+	gb.GetMemory()->SetBootROMPath(bootromdirectory.string() + "\\dmg_boot.bin");
+
+	self = &gb;
 }
 
 ReturnError Emulator::Initialise()
@@ -53,6 +59,7 @@ ReturnError Emulator::Initialise()
 	ImGui_ImplSDLRenderer3_Init(renderer);
 
 	running = true;
+	gb.Init();
 	return ReturnError::Success;
 }
 
@@ -156,6 +163,8 @@ void Emulator::Run()
 
 void Emulator::Update(float deltaTime)
 {
+	gb.Update();
+
 	if (ImGui::BeginMainMenuBar())
 	{
 		if (ImGui::BeginMenu("File"))
@@ -164,10 +173,13 @@ void Emulator::Update(float deltaTime)
 			if (ImGui::MenuItem("Open Rom"))
 			{
 				LoadROMFile();
+			}if (ImGui::MenuItem("Eject Rom"))
+			{
+				gb.EjectROM();
 			}
 			if (ImGui::MenuItem("Reset"))
 			{
-
+				gb.Reset();
 			}
 			ImGui::EndMenu();
 		}
@@ -206,6 +218,9 @@ void Emulator::Update(float deltaTime)
 
 		ImGui::EndTable();
 	}
+
+	ImGui::Text("Cycles: %d", gb.GetCycles());
+
 	bool zero = gb.GetCPU()->GetZeroFlag();
 	ImGui::Text("Z");
 	ImGui::SameLine();
@@ -228,6 +243,25 @@ void Emulator::Update(float deltaTime)
 	ImGui::End();
 
 	ImGui::Begin("Disassembly");
+	if (ImGui::BeginTable("DisassemblyTable", 3))
+	{
+		ImGui::TableSetupColumn("Address");
+		ImGui::TableSetupColumn("Opcode");
+		ImGui::TableSetupColumn("Mnemonic");
+		ImGui::TableHeadersRow();
+		for (auto& dism : gb.GetCPU()->GetInstructions())
+		{
+			ImGui::TableNextRow();
+			ImGui::TableSetColumnIndex(0);
+			ImGui::Text("%s", std::format("{:#04X}", dism.address).c_str());
+			ImGui::TableSetColumnIndex(1);
+			ImGui::Text("%s", std::format("{:#02X}", dism.opcode).c_str());
+			ImGui::TableSetColumnIndex(2);
+			ImGui::Text("%s", dism.mnemonic.c_str());
+		}
+
+		ImGui::EndTable();
+	}
 	ImGui::End();
 
 	ImGui::Begin("Memory");
@@ -295,10 +329,19 @@ void Emulator::LoadROMFile()
 	SDL_SetStringProperty(props, SDL_PROP_FILE_DIALOG_ACCEPT_STRING, "Open");
 	SDL_SetStringProperty(props, SDL_PROP_FILE_DIALOG_CANCEL_STRING, "Cancel");
 	
-	SDL_ShowFileDialogWithProperties(SDL_FILEDIALOG_OPENFILE, OpenFileCallback, nullptr, props);
+	void* data = 0;
+
+	SDL_ShowFileDialogWithProperties(SDL_FILEDIALOG_OPENFILE, OpenFileCallback, data, props);
 }
 
 void OpenFileCallback(void* userdata, const char* const* filelist, int filter_index)
 {
+	if (!filelist) return;
+	else if (filelist[0] == nullptr) return;
+	else
+	{
+		const char* file = *filelist;
 
+		Emulator::Get()->LoadROM(file);
+	}
 }

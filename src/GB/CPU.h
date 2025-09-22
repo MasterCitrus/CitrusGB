@@ -1,6 +1,9 @@
 #pragma once
 
+#include "Instruction.h"
 #include "Register.h"
+
+#include <vector>
 
 class Memory;
 
@@ -57,6 +60,8 @@ public:
 	void Step();
 	void Decode();
 
+	void Reset();
+
 	u8 FetchByte();
 	u16 FetchWord();
 
@@ -74,6 +79,8 @@ public:
 	Register GetHL() const { return HL; }
 	u16 GetSP() const { return SP; }
 	u16 GetPC() const { return PC; }
+
+	std::vector<Instruction> GetInstructions() const { return instructions; }
 
 private:
 
@@ -178,9 +185,11 @@ private:
 	void SRL(RegisterTarget reg);
 
 private:
-	Memory* memory;
+	Instruction currentInstruction;
+	std::vector<Instruction> instructions;
 	int mCycles = 0;
 	int tCycles = 0;
+	Memory* memory;
 	Register AF;
 	Register BC;
 	Register DE;

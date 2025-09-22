@@ -6,6 +6,7 @@ CPU::CPU(Memory* memory)
 	: memory(memory), PC(0x00), SP(0x00), IME(false), zero(false), subtract(false), halfCarry(false), carry(false),
 	AF(0x0), BC(0x0), DE(0x0), HL(0x0), OP(0x0)
 {
+	instructions.reserve(0x10000);
 }
 
 CPU::~CPU()
@@ -14,12 +15,15 @@ CPU::~CPU()
 
 void CPU::Step()
 {
-
+	currentInstruction.address = PC;
+	Decode();
+	instructions.push_back(currentInstruction);
 }
 
 void CPU::Decode()
 {
 	OP = FetchByte();
+	currentInstruction.opcode = OP;
 	switch (OP)
 	{
 		case 0x00:
@@ -797,6 +801,25 @@ void CPU::Decode()
 	}
 }
 
+void CPU::Reset()
+{
+	mCycles = 0;
+	tCycles = 0;
+	AF = 0x00;
+	BC = 0x00;
+	DE = 0x00;
+	HL = 0x00;
+	zero = false;
+	subtract = false;
+	halfCarry = false;
+	carry = false;
+	IME = false;
+	PC = 0x00;
+	OP = 0x0;
+	SP = 0x0;
+	instructions.clear();
+}
+
 u8 CPU::FetchByte()
 {
 	return memory->Read(PC++);
@@ -833,6 +856,7 @@ void CPU::SetFlag(Flag flag, bool enabled)
 void CPU::Prefix()
 {
 	u8 code = FetchByte();
+	currentInstruction.opcode = currentInstruction.opcode << 8 | code;
 	switch (code)
 	{
 		case 0x00:
@@ -1612,6 +1636,7 @@ void CPU::Prefix()
 
 void CPU::NOP()
 {
+	currentInstruction.mnemonic = "NOP";
 	tCycles = 4;
 	mCycles = 1;
 }
@@ -1624,77 +1649,92 @@ void CPU::LD(RegisterTarget to, RegisterTarget from)
 			switch (from)
 			{
 				case RegisterTarget::A:
+					currentInstruction.mnemonic = "LD A, A";
 					tCycles = 4;
 					mCycles = 1;
 					break;
 				case RegisterTarget::B:
+					currentInstruction.mnemonic = "LD A, B";
 					AF.SetHighByte(BC.GetHighByte());
 					tCycles = 4;
 					mCycles = 1;
 					break;
 				case RegisterTarget::C:
+					currentInstruction.mnemonic = "LD A, C";
 					AF.SetHighByte(BC.GetLowByte());
 					tCycles = 4;
 					mCycles = 1;
 					break;
 				case RegisterTarget::D:
+					currentInstruction.mnemonic = "LD A, D";
 					AF.SetHighByte(DE.GetHighByte());
 					tCycles = 4;
 					mCycles = 1;
 					break;
 				case RegisterTarget::E:
+					currentInstruction.mnemonic = "LD A, E";
 					AF.SetHighByte(DE.GetLowByte());
 					tCycles = 4;
 					mCycles = 1;
 					break;
 				case RegisterTarget::H:
+					currentInstruction.mnemonic = "LD A, H";
 					AF.SetHighByte(HL.GetHighByte());
 					tCycles = 4;
 					mCycles = 1;
 					break;
 				case RegisterTarget::L:
+					currentInstruction.mnemonic = "LD A, L";
 					AF.SetHighByte(HL.GetLowByte());
 					tCycles = 4;
 					mCycles = 1;
 					break;
 				case RegisterTarget::Byte:
+					currentInstruction.mnemonic = "LD A, d8";
 					AF.SetHighByte(FetchByte());
 					tCycles = 8;
 					mCycles = 2;
 					break;
 				case RegisterTarget::MemBC:
+					currentInstruction.mnemonic = "LD A, (BC)";
 					AF.SetHighByte(memory->Read(BC.GetRegister()));
 					tCycles = 8;
 					mCycles = 2;
 					break;
 				case RegisterTarget::MemDE:
+					currentInstruction.mnemonic = "LD A, (DE)";
 					AF.SetHighByte(memory->Read(DE.GetRegister()));
 					tCycles = 8;
 					mCycles = 2;
 					break;
 				case RegisterTarget::MemHL:
+					currentInstruction.mnemonic = "LD A, (HL)";
 					AF.SetHighByte(memory->Read(HL.GetRegister()));
 					tCycles = 8;
 					mCycles = 2;
 					break;
 				case RegisterTarget::MemHLDec:
+					currentInstruction.mnemonic = "LD A, (HL-)";
 					AF.SetHighByte(memory->Read(HL.GetRegister()));
 					HL--;
 					tCycles = 8;
 					mCycles = 2;
 					break;
 				case RegisterTarget::MemHLInc:
+					currentInstruction.mnemonic = "LD A, (HL+)";
 					AF.SetHighByte(memory->Read(HL.GetRegister()));
 					HL++;
 					tCycles = 8;
 					mCycles = 2;
 					break;
 				case RegisterTarget::OffsetC:
+					currentInstruction.mnemonic = "LD A, $FF00 + C";
 					AF.SetHighByte(memory->Read(0xFF00 + BC.GetLowByte()));
 					tCycles = 8;
 					mCycles = 2;
 					break;
 				case RegisterTarget::Offset:
+					currentInstruction.mnemonic = "LD A, $FF00 + d8";
 					AF.SetHighByte(memory->Read(0xFF00 + FetchByte()));
 					tCycles = 12;
 					mCycles = 3;
@@ -1709,45 +1749,54 @@ void CPU::LD(RegisterTarget to, RegisterTarget from)
 			switch (from)
 			{
 				case RegisterTarget::A:
+					currentInstruction.mnemonic = "LD B, A";
 					BC.SetHighByte(AF.GetHighByte());
 					tCycles = 4;
 					mCycles = 1;
 					break;
 				case RegisterTarget::B:
+					currentInstruction.mnemonic = "LD B, B";
 					tCycles = 4;
 					mCycles = 1;
 					break;
 				case RegisterTarget::C:
+					currentInstruction.mnemonic = "LD B, C";
 					BC.SetHighByte(BC.GetLowByte());
 					tCycles = 4;
 					mCycles = 1;
 					break;
 				case RegisterTarget::D:
+					currentInstruction.mnemonic = "LD B, D";
 					BC.SetHighByte(DE.GetHighByte());
 					tCycles = 4;
 					mCycles = 1;
 					break;
 				case RegisterTarget::E:
+					currentInstruction.mnemonic = "LD B, E";
 					BC.SetHighByte(DE.GetLowByte());
 					tCycles = 4;
 					mCycles = 1;
 					break;
 				case RegisterTarget::H:
+					currentInstruction.mnemonic = "LD B, H";
 					BC.SetHighByte(HL.GetHighByte());
 					tCycles = 4;
 					mCycles = 1;
 					break;
 				case RegisterTarget::L:
+					currentInstruction.mnemonic = "LD B, L";
 					BC.SetHighByte(HL.GetLowByte());
 					tCycles = 4;
 					mCycles = 1;
 					break;
 				case RegisterTarget::Byte:
+					currentInstruction.mnemonic = "LD B, d8";
 					BC.SetHighByte(FetchByte());
 					tCycles = 8;
 					mCycles = 2;
 					break;
 				case RegisterTarget::MemHL:
+					currentInstruction.mnemonic = "LD B, (HL)";
 					BC.SetHighByte(memory->Read(HL.GetRegister()));
 					tCycles = 8;
 					mCycles = 2;
@@ -1762,45 +1811,54 @@ void CPU::LD(RegisterTarget to, RegisterTarget from)
 			switch (from)
 			{
 				case RegisterTarget::A:
+					currentInstruction.mnemonic = "LD C, A";
 					BC.SetLowByte(AF.GetHighByte());
 					tCycles = 4;
 					mCycles = 1;
 					break;
 				case RegisterTarget::B:
+					currentInstruction.mnemonic = "LD C, B";
 					BC.SetLowByte(BC.GetHighByte());
 					tCycles = 4;
 					mCycles = 1;
 					break;
 				case RegisterTarget::C:
+					currentInstruction.mnemonic = "LD C, C";
 					tCycles = 4;
 					mCycles = 1;
 					break;
 				case RegisterTarget::D:
+					currentInstruction.mnemonic = "LD C, D";
 					BC.SetLowByte(DE.GetHighByte());
 					tCycles = 4;
 					mCycles = 1;
 					break;
 				case RegisterTarget::E:
+					currentInstruction.mnemonic = "LD C, E";
 					BC.SetLowByte(DE.GetLowByte());
 					tCycles = 4;
 					mCycles = 1;
 					break;
 				case RegisterTarget::H:
+					currentInstruction.mnemonic = "LD C, H";
 					BC.SetLowByte(HL.GetHighByte());
 					tCycles = 4;
 					mCycles = 1;
 					break;
 				case RegisterTarget::L:
+					currentInstruction.mnemonic = "LD C, L";
 					BC.SetLowByte(HL.GetLowByte());
 					tCycles = 4;
 					mCycles = 1;
 					break;
 				case RegisterTarget::Byte:
+					currentInstruction.mnemonic = "LD C, d8";
 					BC.SetLowByte(FetchByte());
 					tCycles = 8;
 					mCycles = 2;
 					break;
 				case RegisterTarget::MemHL:
+					currentInstruction.mnemonic = "LD C, (HL)";
 					BC.SetLowByte(memory->Read(HL.GetRegister()));
 					tCycles = 8;
 					mCycles = 2;
@@ -1815,6 +1873,7 @@ void CPU::LD(RegisterTarget to, RegisterTarget from)
 			switch (from)
 			{
 				case RegisterTarget::Word:
+					currentInstruction.mnemonic = "LD BC, d16";
 					BC.SetRegister(FetchWord());
 					tCycles = 12;
 					mCycles = 3;
@@ -1829,45 +1888,54 @@ void CPU::LD(RegisterTarget to, RegisterTarget from)
 			switch (from)
 			{
 				case RegisterTarget::A:
+					currentInstruction.mnemonic = "LD D, A";
 					DE.SetHighByte(AF.GetHighByte());
 					tCycles = 4;
 					mCycles = 1;
 					break;
 				case RegisterTarget::B:
+					currentInstruction.mnemonic = "LD D, B";
 					DE.SetHighByte(BC.GetHighByte());
 					tCycles = 4;
 					mCycles = 1;
 					break;
 				case RegisterTarget::C:
+					currentInstruction.mnemonic = "LD D, C";
 					DE.SetHighByte(BC.GetLowByte());
 					tCycles = 4;
 					mCycles = 1;
 					break;
 				case RegisterTarget::D:
+					currentInstruction.mnemonic = "LD D, D";
 					tCycles = 4;
 					mCycles = 1;
 					break;
 				case RegisterTarget::E:
+					currentInstruction.mnemonic = "LD D, E";
 					DE.SetHighByte(DE.GetLowByte());
 					tCycles = 4;
 					mCycles = 1;
 					break;
 				case RegisterTarget::H:
+					currentInstruction.mnemonic = "LD D, H";
 					DE.SetHighByte(HL.GetHighByte());
 					tCycles = 4;
 					mCycles = 1;
 					break;
 				case RegisterTarget::L:
+					currentInstruction.mnemonic = "LD D, L";
 					DE.SetHighByte(HL.GetLowByte());
 					tCycles = 4;
 					mCycles = 1;
 					break;
 				case RegisterTarget::Byte:
+					currentInstruction.mnemonic = "LD D, d8";
 					DE.SetHighByte(FetchByte());
 					tCycles = 8;
 					mCycles = 2;
 					break;
 				case RegisterTarget::MemHL:
+					currentInstruction.mnemonic = "LD D, (HL)";
 					DE.SetHighByte(memory->Read(HL.GetRegister()));
 					tCycles = 8;
 					mCycles = 2;
@@ -1882,45 +1950,54 @@ void CPU::LD(RegisterTarget to, RegisterTarget from)
 			switch (from)
 			{
 				case RegisterTarget::A:
+					currentInstruction.mnemonic = "LD E, A";
 					DE.SetLowByte(AF.GetHighByte());
 					tCycles = 4;
 					mCycles = 1;
 					break;
 				case RegisterTarget::B:
+					currentInstruction.mnemonic = "LD E, B";
 					DE.SetLowByte(BC.GetHighByte());
 					tCycles = 4;
 					mCycles = 1;
 					break;
 				case RegisterTarget::C:
+					currentInstruction.mnemonic = "LD E, C";
 					DE.SetLowByte(BC.GetLowByte());
 					tCycles = 4;
 					mCycles = 1;
 					break;
 				case RegisterTarget::D:
+					currentInstruction.mnemonic = "LD E, D";
 					DE.SetLowByte(DE.GetHighByte());
 					tCycles = 4;
 					mCycles = 1;
 					break;
 				case RegisterTarget::E:
+					currentInstruction.mnemonic = "LD E, E";
 					tCycles = 4;
 					mCycles = 1;
 					break;
 				case RegisterTarget::H:
+					currentInstruction.mnemonic = "LD E, H";
 					DE.SetLowByte(HL.GetHighByte());
 					tCycles = 4;
 					mCycles = 1;
 					break;
 				case RegisterTarget::L:
+					currentInstruction.mnemonic = "LD E, L";
 					DE.SetLowByte(HL.GetLowByte());
 					tCycles = 4;
 					mCycles = 1;
 					break;
 				case RegisterTarget::Byte:
+					currentInstruction.mnemonic = "LD E, d8";
 					DE.SetLowByte(FetchByte());
 					tCycles = 8;
 					mCycles = 2;
 					break;
 				case RegisterTarget::MemHL:
+					currentInstruction.mnemonic = "LD E, (HL)";
 					DE.SetLowByte(memory->Read(HL.GetRegister()));
 					tCycles = 8;
 					mCycles = 2;
@@ -1935,6 +2012,7 @@ void CPU::LD(RegisterTarget to, RegisterTarget from)
 			switch (from)
 			{
 				case RegisterTarget::Word:
+					currentInstruction.mnemonic = "LD DE, d16";
 					DE.SetRegister(FetchWord());
 					tCycles = 12;
 					mCycles = 3;
@@ -1949,45 +2027,54 @@ void CPU::LD(RegisterTarget to, RegisterTarget from)
 			switch (from)
 			{
 				case RegisterTarget::A:
+					currentInstruction.mnemonic = "LD H, A";
 					HL.SetHighByte(AF.GetHighByte());
 					tCycles = 4;
 					mCycles = 1;
 					break;
 				case RegisterTarget::B:
+					currentInstruction.mnemonic = "LD H, B";
 					HL.SetHighByte(BC.GetHighByte());
 					tCycles = 4;
 					mCycles = 1;
 					break;
 				case RegisterTarget::C:
+					currentInstruction.mnemonic = "LD H, C";
 					HL.SetHighByte(BC.GetLowByte());
 					tCycles = 4;
 					mCycles = 1;
 					break;
 				case RegisterTarget::D:
+					currentInstruction.mnemonic = "LD H, D";
 					HL.SetHighByte(DE.GetHighByte());
 					tCycles = 4;
 					mCycles = 1;
 					break;
 				case RegisterTarget::E:
+					currentInstruction.mnemonic = "LD H, E";
 					HL.SetHighByte(DE.GetLowByte());
 					tCycles = 4;
 					mCycles = 1;
 					break;
 				case RegisterTarget::H:
+					currentInstruction.mnemonic = "LD H, H";
 					tCycles = 4;
 					mCycles = 1;
 					break;
 				case RegisterTarget::L:
+					currentInstruction.mnemonic = "LD H, L";
 					HL.SetHighByte(HL.GetLowByte());
 					tCycles = 4;
 					mCycles = 1;
 					break;
 				case RegisterTarget::Byte:
+					currentInstruction.mnemonic = "LD H, d8";
 					HL.SetHighByte(FetchByte());
 					tCycles = 8;
 					mCycles = 2;
 					break;
 				case RegisterTarget::MemHL:
+					currentInstruction.mnemonic = "LD H, (HL)";
 					HL.SetHighByte(memory->Read(HL.GetRegister()));
 					tCycles = 8;
 					mCycles = 2;
@@ -2002,45 +2089,54 @@ void CPU::LD(RegisterTarget to, RegisterTarget from)
 			switch (from)
 			{
 				case RegisterTarget::A:
+					currentInstruction.mnemonic = "LD L, A";
 					HL.SetLowByte(AF.GetHighByte());
 					tCycles = 4;
 					mCycles = 1;
 					break;
 				case RegisterTarget::B:
+					currentInstruction.mnemonic = "LD L, B";
 					HL.SetLowByte(BC.GetHighByte());
 					tCycles = 4;
 					mCycles = 1;
 					break;
 				case RegisterTarget::C:
+					currentInstruction.mnemonic = "LD L, C";
 					HL.SetLowByte(BC.GetLowByte());
 					tCycles = 4;
 					mCycles = 1;
 					break;
 				case RegisterTarget::D:
+					currentInstruction.mnemonic = "LD L, D";
 					HL.SetLowByte(DE.GetHighByte());
 					tCycles = 4;
 					mCycles = 1;
 					break;
 				case RegisterTarget::E:
+					currentInstruction.mnemonic = "LD L, E";
 					HL.SetLowByte(DE.GetLowByte());
 					tCycles = 4;
 					mCycles = 1;
 					break;
 				case RegisterTarget::H:
+					currentInstruction.mnemonic = "LD L, H";
 					HL.SetLowByte(HL.GetHighByte());
 					tCycles = 4;
 					mCycles = 1;
 					break;
 				case RegisterTarget::L:
+					currentInstruction.mnemonic = "LD L, L";
 					tCycles = 4;
 					mCycles = 1;
 					break;
 				case RegisterTarget::Byte:
+					currentInstruction.mnemonic = "LD L, d8";
 					HL.SetLowByte(FetchByte());
 					tCycles = 8;
 					mCycles = 2;
 					break;
 				case RegisterTarget::MemHL:
+					currentInstruction.mnemonic = "LD L, (HL)";
 					HL.SetLowByte(memory->Read(HL.GetRegister()));
 					tCycles = 8;
 					mCycles = 2;
@@ -2055,6 +2151,7 @@ void CPU::LD(RegisterTarget to, RegisterTarget from)
 			switch (from)
 			{
 				case RegisterTarget::Word:
+					currentInstruction.mnemonic = "LD HL, d16";
 					HL.SetRegister(FetchWord());
 					tCycles = 12;
 					mCycles = 3;
@@ -2070,11 +2167,13 @@ void CPU::LD(RegisterTarget to, RegisterTarget from)
 			switch (from)
 			{
 				case RegisterTarget::Word:
+					currentInstruction.mnemonic = "LD SP, d16";
 					SP = FetchWord();
 					tCycles = 12;
 					mCycles = 3;
 					break;
 				case RegisterTarget::HL:
+					currentInstruction.mnemonic = "LD SP, HL";
 					SP = HL.GetRegister();
 					tCycles = 8;
 					mCycles = 2;
@@ -2089,12 +2188,14 @@ void CPU::LD(RegisterTarget to, RegisterTarget from)
 			switch (from)
 			{
 				case RegisterTarget::A:
+					currentInstruction.mnemonic = "LD d16, A";
 					memory->Write(FetchWord(), AF.GetHighByte());
 					tCycles = 16;
 					mCycles = 4;
 					break;
 				case RegisterTarget::SP:
 				{
+					currentInstruction.mnemonic = "LD d16, SP";
 					u16 address = FetchWord();
 					u8 low = SP & 0xFF;
 					u8 high = SP >> 8;
@@ -2114,6 +2215,7 @@ void CPU::LD(RegisterTarget to, RegisterTarget from)
 			switch (from)
 			{
 				case RegisterTarget::A:
+					currentInstruction.mnemonic = "LD (BC), A";
 					memory->Write(BC.GetRegister(), AF.GetHighByte());
 					tCycles = 8;
 					mCycles = 2;
@@ -2128,6 +2230,7 @@ void CPU::LD(RegisterTarget to, RegisterTarget from)
 			switch (from)
 			{
 				case RegisterTarget::A:
+					currentInstruction.mnemonic = "LD DE, A";
 					memory->Write(DE.GetRegister(), AF.GetHighByte());
 					tCycles = 8;
 					mCycles = 2;
@@ -2142,36 +2245,43 @@ void CPU::LD(RegisterTarget to, RegisterTarget from)
 			switch (from)
 			{
 				case RegisterTarget::A:
+					currentInstruction.mnemonic = "LD (HL), A";
 					memory->Write(HL.GetRegister(), AF.GetHighByte());
 					tCycles = 8;
 					mCycles = 2;
 					break;
 				case RegisterTarget::B:
+					currentInstruction.mnemonic = "LD (HL), B";
 					memory->Write(HL.GetRegister(), BC.GetHighByte());
 					tCycles = 8;
 					mCycles = 2;
 					break;
 				case RegisterTarget::C:
+					currentInstruction.mnemonic = "LD (HL), C";
 					memory->Write(HL.GetRegister(), BC.GetLowByte());
 					tCycles = 8;
 					mCycles = 2;
 					break;
 				case RegisterTarget::D:
+					currentInstruction.mnemonic = "LD (HL), D";
 					memory->Write(HL.GetRegister(), DE.GetHighByte());
 					tCycles = 8;
 					mCycles = 2;
 					break;
 				case RegisterTarget::E:
+					currentInstruction.mnemonic = "LD (HL), E";
 					memory->Write(HL.GetRegister(), DE.GetLowByte());
 					tCycles = 8;
 					mCycles = 2;
 					break;
 				case RegisterTarget::H:
+					currentInstruction.mnemonic = "LD (HL), H";
 					memory->Write(HL.GetRegister(), HL.GetHighByte());
 					tCycles = 8;
 					mCycles = 2;
 					break;
 				case RegisterTarget::L:
+					currentInstruction.mnemonic = "LD (HL), L";
 					memory->Write(HL.GetRegister(), HL.GetLowByte());
 					tCycles = 8;
 					mCycles = 2;
@@ -2186,6 +2296,7 @@ void CPU::LD(RegisterTarget to, RegisterTarget from)
 			switch (from)
 			{
 				case RegisterTarget::A:
+					currentInstruction.mnemonic = "LD (HL-), A";
 					memory->Write(HL.GetRegister(), AF.GetHighByte());
 					HL--;
 					tCycles = 8;
@@ -2201,6 +2312,7 @@ void CPU::LD(RegisterTarget to, RegisterTarget from)
 			switch (from)
 			{
 				case RegisterTarget::A:
+					currentInstruction.mnemonic = "LD (HL+), A";
 					memory->Write(HL.GetRegister(), AF.GetHighByte());
 					HL++;
 					tCycles = 8;
@@ -2216,6 +2328,7 @@ void CPU::LD(RegisterTarget to, RegisterTarget from)
 			switch (from)
 			{
 				case RegisterTarget::A:
+					currentInstruction.mnemonic = "LD $FF00 + C, A";
 					memory->Write(0xFF00 + BC.GetLowByte(), AF.GetHighByte());
 					break;
 				default:
@@ -2228,6 +2341,7 @@ void CPU::LD(RegisterTarget to, RegisterTarget from)
 			switch (from)
 			{
 				case RegisterTarget::A:
+					currentInstruction.mnemonic = "LD $FF00 + d8, A";
 					memory->Write(0xFF00 + FetchByte(), AF.GetHighByte());
 					tCycles = 12;
 					mCycles = 3;
