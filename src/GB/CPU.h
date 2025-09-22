@@ -125,8 +125,8 @@ private:
 	void PUSH(RegisterTarget reg);
 	// Return to PC if condition is met
 	void RET(Condition condition);
-	// 
-	void RST(int bit);
+	// Push PC to stack and jump to a specific address
+	void RST(int num);
 	// TODO STOP instructiom
 	// void STOP();
 	// TODO HALT instruction

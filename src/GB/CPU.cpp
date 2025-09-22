@@ -3509,6 +3509,73 @@ void CPU::RET(Condition condition)
 	}
 }
 
+void CPU::RST(int num)
+{
+	switch (num)
+	{
+		case 0:
+			memory->Write(--SP, PC >> 8);
+			memory->Write(--SP, PC & 0xFF);
+			PC = 0x00;
+			tCycles = 16;
+			mCycles = 4;
+			break;
+		case 1:
+			memory->Write(--SP, PC >> 8);
+			memory->Write(--SP, PC & 0xFF);
+			PC = 0x08;
+			tCycles = 16;
+			mCycles = 4;
+			break;
+		case 2:
+			memory->Write(--SP, PC >> 8);
+			memory->Write(--SP, PC & 0xFF);
+			PC = 0x10;
+			tCycles = 16;
+			mCycles = 4;
+			break;
+		case 3:
+			memory->Write(--SP, PC >> 8);
+			memory->Write(--SP, PC & 0xFF);
+			PC = 0x18;
+			tCycles = 16;
+			mCycles = 4;
+			break;
+		case 4:
+			memory->Write(--SP, PC >> 8);
+			memory->Write(--SP, PC & 0xFF);
+			PC = 0x20;
+			tCycles = 16;
+			mCycles = 4;
+			break;
+		case 5:
+			memory->Write(--SP, PC >> 8);
+			memory->Write(--SP, PC & 0xFF);
+			PC = 0x28;
+			tCycles = 16;
+			mCycles = 4;
+			break;
+		case 6:
+			memory->Write(--SP, PC >> 8);
+			memory->Write(--SP, PC & 0xFF);
+			PC = 0x30;
+			tCycles = 16;
+			mCycles = 4;
+			break;
+		case 7:
+			memory->Write(--SP, PC >> 8);
+			memory->Write(--SP, PC & 0xFF);
+			PC = 0x38;
+			tCycles = 16;
+			mCycles = 4;
+			break;
+		default:
+			std::cout << "Unsupported or Invalid RST instruction\n";
+			std::exit(EXIT_FAILURE);
+			break;
+	}
+}
+
 void CPU::SCF()
 {
 	SetFlag(Flag::HalfCarry, false);
