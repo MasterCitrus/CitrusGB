@@ -3419,12 +3419,14 @@ void CPU::RET(Condition condition)
 	switch (condition)
 	{
 	case Condition::None:
+	{
 		u8 low = memory->Read(SP++);
 		u8 high = memory->Read(SP++);
 		PC = (high << 8) | low;
 		tCycles = 16;
 		mCycles = 4;
 		break;
+	}
 	case Condition::Zero:
 		if (zero)
 		{
@@ -3491,12 +3493,14 @@ void CPU::RET(Condition condition)
 		}
 		break;
 	case Condition::Interrupt:
+	{
 		u8 low = memory->Read(SP++);
 		u8 high = memory->Read(SP++);
 		PC = (high << 8) | low;
 		tCycles = 16;
 		mCycles = 4;
 		break;
+	}
 	}
 }
 
