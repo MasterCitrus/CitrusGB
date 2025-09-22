@@ -217,12 +217,12 @@ void Emulator::Update(float deltaTime)
 	ImGui::Checkbox("##SubtractFlag", &subtract);
 	ImGui::SameLine();
 	bool halfCarry = gb.GetCPU()->GetHalfCarryFlag();
-	ImGui::Text("HC");
+	ImGui::Text("H");
 	ImGui::SameLine();
 	ImGui::Checkbox("##HalfCarryFlag", &halfCarry);
 	ImGui::SameLine();
 	bool carry = gb.GetCPU()->GetCarryFlag();
-	ImGui::Text("HC");
+	ImGui::Text("C");
 	ImGui::SameLine();
 	ImGui::Checkbox("##CarryFlag", &carry);
 	ImGui::End();
