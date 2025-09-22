@@ -63,8 +63,8 @@ private:
 	{
 		struct
 		{
-			u8 high;
 			u8 low;
+			u8 high;
 		};
 		u16 data;
 	};

@@ -135,14 +135,15 @@ void Emulator::Run()
 			ImGui::DockBuilderSetNodeSize(dockspaceID, ImGui::GetWindowSize());
 
 			ImGuiID mainDockspaceID = dockspaceID;
-			ImGuiID right = ImGui::DockBuilderSplitNode(mainDockspaceID, ImGuiDir_Right, 0.60f, nullptr, &mainDockspaceID);
-			ImGuiID left = ImGui::DockBuilderSplitNode(mainDockspaceID, ImGuiDir_Left, 1.5f, nullptr, &mainDockspaceID);
-			ImGuiID leftTop = ImGui::DockBuilderSplitNode(left, ImGuiDir_Up, 1.5f, nullptr, &mainDockspaceID);
-			ImGuiID leftBottom = ImGui::DockBuilderSplitNode(left, ImGuiDir_Down, 1.5f, nullptr, &mainDockspaceID);
+			ImGuiID middle = ImGui::DockBuilderSplitNode(mainDockspaceID, ImGuiDir_Right, 0.30f, nullptr, &mainDockspaceID);
+			ImGuiID left = ImGui::DockBuilderSplitNode(mainDockspaceID, ImGuiDir_Left, 1.0f, nullptr, &middle);
+			ImGuiID right = ImGui::DockBuilderSplitNode(mainDockspaceID, ImGuiDir_Right, 0.60f, nullptr, &right);
+			ImGuiID leftTop = ImGui::DockBuilderSplitNode(left, ImGuiDir_Up, 0.25f, nullptr, &mainDockspaceID);
+			ImGuiID leftBottom = ImGui::DockBuilderSplitNode(left, ImGuiDir_Down, 0.75f, nullptr, &mainDockspaceID);
 
-			ImGui::DockBuilderDockWindow("Viewport", mainDockspaceID);
+			ImGui::DockBuilderDockWindow("Viewport", middle);
 			ImGui::DockBuilderDockWindow("Memory", right);
-			ImGui::DockBuilderDockWindow("CPU State", left);
+			ImGui::DockBuilderDockWindow("CPU State", leftTop);
 			ImGui::DockBuilderDockWindow("Disassembly", leftBottom);
 			ImGui::DockBuilderFinish(dockspaceID);
 		}
@@ -185,7 +186,24 @@ void Emulator::Update(float deltaTime)
 		}
 		if (ImGui::BeginMenu("Options"))
 		{
+			ImGui::Text("Show CPU State");
+			ImGui::SameLine();
+			if (ImGui::Checkbox("##showcpustate", &showCPUState))
+			{
 
+			}
+			ImGui::Text("Show Disassembly");
+			ImGui::SameLine();
+			if (ImGui::Checkbox("##showdisassembly", &showDisassembly))
+			{
+
+			}
+			ImGui::Text("Show Memory Map");
+			ImGui::SameLine();
+			if (ImGui::Checkbox("##showmemorymap", &showMemoryMap))
+			{
+
+			}
 			ImGui::EndMenu();
 		}
 		ImGui::EndMainMenuBar();
@@ -193,9 +211,14 @@ void Emulator::Update(float deltaTime)
 
 	//log.Draw();
 
+	// Viewport UI
+
+	ImGui::Begin("Viewport");
+	ImGui::End();
+
 	// CPU State UI
 
-	ImGui::Begin("CPU State");
+	ImGui::Begin("CPU State", &showCPUState);
 	if (ImGui::BeginTable("Registers", 2, ImGuiTableFlags_Borders))
 	{
 		ImGui::TableNextRow();
@@ -242,11 +265,13 @@ void Emulator::Update(float deltaTime)
 	ImGui::Checkbox("##CarryFlag", &carry);
 	ImGui::End();
 
-	ImGui::Begin("Disassembly");
+	// Disassembly UI
+
+	ImGui::Begin("Disassembly", &showDisassembly);
 	if (ImGui::BeginTable("DisassemblyTable", 3))
 	{
-		ImGui::TableSetupColumn("Address");
-		ImGui::TableSetupColumn("Opcode");
+		ImGui::TableSetupColumn("Address", ImGuiTableColumnFlags_WidthFixed, 50.0f);
+		ImGui::TableSetupColumn("Opcode", ImGuiTableColumnFlags_WidthFixed, 50.0f);
 		ImGui::TableSetupColumn("Mnemonic");
 		ImGui::TableHeadersRow();
 		for (auto& dism : gb.GetCPU()->GetInstructions())
@@ -264,7 +289,9 @@ void Emulator::Update(float deltaTime)
 	}
 	ImGui::End();
 
-	ImGui::Begin("Memory");
+	// Memory Map UI
+
+	ImGui::Begin("Memory", &showMemoryMap);
 	ImGui::End();
 
 	//ImGui::Begin("Table Area");

@@ -61,6 +61,9 @@ private:
 	SDL_Renderer* renderer = nullptr;
 	unsigned int fps = 0;
 	bool running = false;
+	bool showCPUState = true;
+	bool showDisassembly = true;
+	bool showMemoryMap = true;
 };
 
 	static void SDLCALL OpenFileCallback(void* userdata, const char* const* filelist, int filter_index);

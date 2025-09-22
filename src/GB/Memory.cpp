@@ -40,12 +40,12 @@ u8 Memory::Read(u16 address)
     }
     else if (address >= 0xC000 && address < 0xD000)
     {
-        return WRAM0[address - 0xA000];
+        return WRAM0[address - 0xC000];
     }
     else if (address >= 0xD000 && address < 0xE000)
     {
         // TODO CGB Mode switchable bank
-        return WRAM1[address - 0xB000];
+        return WRAM1[address - 0xD000];
     }
     else if (address >= 0xE000 && address < 0xFE00)
     {
@@ -53,17 +53,17 @@ u8 Memory::Read(u16 address)
         address -= 0x1E00;
         if (address >= 0xC000 && address < 0xD000)
         {
-            return WRAM0[address - 0xA000];
+            return WRAM0[address - 0xC000];
         }
         if (address >= 0xD000 && address < 0xEE00)
         {
-            return WRAM1[address - 0xAE00];
+            return WRAM1[address - 0xDE00];
         }
     }
     else if (address >= 0xFE00 && address < 0xFEA0)
     {
         // TODO add in OAM Block when PPU work starts
-        return OAM[address - 0xFF00];
+        return OAM[address - 0xFE00];
     }
     else if (address >= 0xFEA0 && address < 0xFF00)
     {
@@ -90,11 +90,11 @@ u8 Memory::Read(u16 address)
         // $FF68 - $FF6B BG / OBJ Palettes (CGB)
         // $FF6C Object Priority mode (CGB)
         // $FF70 WRAM Bank Select (CGB)
-        return ioRegisters[address - 0xFEA0];
+        return ioRegisters[address - 0xFF00];
     }
     else if (address >= 0xFF80 && address < 0xFFFF)
     {
-        return HRAM[address - 0xFF00];
+        return HRAM[address - 0xFF80];
     }
     else if (address == 0xFFFF)
     {
@@ -128,12 +128,12 @@ void Memory::Write(u16 address, const u8 value)
     }
     else if (address >= 0xC000 && address < 0xD000)
     {
-        WRAM0[address - 0xA000] = value;
+        WRAM0[address - 0xC000] = value;
     }
     else if (address >= 0xD000 && address < 0xE000)
     {
         // TODO CGB Mode switchable bank
-        WRAM1[address - 0xB000] = value;
+        WRAM1[address - 0xD000] = value;
     }
     else if (address >= 0xE000 && address < 0xFE00)
     {
@@ -141,17 +141,17 @@ void Memory::Write(u16 address, const u8 value)
         address -= 0x1E00;
         if (address >= 0xC000 && address < 0xD000)
         {
-            WRAM0[address - 0xA000] = value;
+            WRAM0[address - 0xC000] = value;
         }
         if (address >= 0xD000 && address < 0xEE00)
         {
-            WRAM1[address - 0xAE00] = value;
+            WRAM1[address - 0xDE00] = value;
         }
     }
     else if (address >= 0xFE00 && address < 0xFEA0)
     {
         // TODO add in OAM Block when PPU work starts
-        OAM[address - 0xFF00] = value;
+        OAM[address - 0xFE00] = value;
     }
     else if (address >= 0xFEA0 && address < 0xFF00)
     {
@@ -177,11 +177,11 @@ void Memory::Write(u16 address, const u8 value)
         // $FF68 - $FF6B BG / OBJ Palettes (CGB)
         // $FF6C Object Priority mode (CGB)
         // $FF70 WRAM Bank Select (CGB)
-        ioRegisters[address - 0xFEA0] = value;
+        ioRegisters[address - 0xFF00] = value;
     }
     else if (address >= 0xFF80 && address < 0xFFFF)
     {
-        HRAM[address - 0xFF00] = value;
+        HRAM[address - 0xFF80] = value;
     }
     else if (address == 0xFFFF)
     {

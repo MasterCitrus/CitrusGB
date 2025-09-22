@@ -1,5 +1,7 @@
 #include "CPU.h"
 #include "Memory.h"
+
+#include <format>
 #include <iostream>
 
 CPU::CPU(Memory* memory)
@@ -2365,6 +2367,7 @@ void CPU::INC(RegisterTarget reg)
 	switch (reg)
 	{
 		case RegisterTarget::A:
+			currentInstruction.mnemonic = "INC A";
 			SetFlag(Flag::Subtract, false);
 			((AF.GetHighByte() + 1) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			((AF.GetHighByte() & 0x0F) + 1 > 0x0F) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
@@ -2373,6 +2376,7 @@ void CPU::INC(RegisterTarget reg)
 			mCycles = 1;
 			break;
 		case RegisterTarget::B:
+			currentInstruction.mnemonic = "INC B";
 			SetFlag(Flag::Subtract, false);
 			((BC.GetHighByte() + 1) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			((BC.GetHighByte() & 0x0F) + 1 > 0x0F) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
@@ -2381,6 +2385,7 @@ void CPU::INC(RegisterTarget reg)
 			mCycles = 1;
 			break;
 		case RegisterTarget::C:
+			currentInstruction.mnemonic = "INC C";
 			SetFlag(Flag::Subtract, false);
 			((BC.GetLowByte() + 1) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			((BC.GetLowByte() & 0x0F) + 1 > 0x0F) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
@@ -2389,11 +2394,13 @@ void CPU::INC(RegisterTarget reg)
 			mCycles = 1;
 			break;
 		case RegisterTarget::BC:
+			currentInstruction.mnemonic = "INC BC";
 			BC++;
 			tCycles = 8;
 			mCycles = 2;
 			break;
 		case RegisterTarget::D:
+			currentInstruction.mnemonic = "INC D";
 			SetFlag(Flag::Subtract, false);
 			((DE.GetHighByte() + 1) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(((DE.GetHighByte() & 0x0F) + 1 & 0x0F) > 0x0F) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
@@ -2402,6 +2409,7 @@ void CPU::INC(RegisterTarget reg)
 			mCycles = 1;
 			break;
 		case RegisterTarget::E:
+			currentInstruction.mnemonic = "INC E";
 			SetFlag(Flag::Subtract, false);
 			((DE.GetLowByte() + 1) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			((DE.GetLowByte() & 0x0F) + 1 > 0x0F) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
@@ -2410,11 +2418,13 @@ void CPU::INC(RegisterTarget reg)
 			mCycles = 1;
 			break;
 		case RegisterTarget::DE:
+			currentInstruction.mnemonic = "INC DE";
 			DE++;
 			tCycles = 8;
 			mCycles = 2;
 			break;
 		case RegisterTarget::H:
+			currentInstruction.mnemonic = "INC H";
 			SetFlag(Flag::Subtract, false);
 			((HL.GetHighByte() + 1) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			((HL.GetHighByte() & 0x0F) + 1 > 0x0F) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
@@ -2423,6 +2433,7 @@ void CPU::INC(RegisterTarget reg)
 			mCycles = 1;
 			break;
 		case RegisterTarget::L:
+			currentInstruction.mnemonic = "INC L";
 			SetFlag(Flag::Subtract, false);
 			((HL.GetLowByte() + 1) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			((HL.GetLowByte() & 0x0F) + 1 > 0x0F) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
@@ -2431,11 +2442,13 @@ void CPU::INC(RegisterTarget reg)
 			mCycles = 1;
 			break;
 		case RegisterTarget::HL:
+			currentInstruction.mnemonic = "INC HL";
 			HL++;
 			tCycles = 8;
 			mCycles = 2;
 			break;
 		case RegisterTarget::MemHL:
+			currentInstruction.mnemonic = "INC (HL)";
 			SetFlag(Flag::Subtract, false);
 			((memory->Read(HL.GetRegister()) + 1) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(((memory->Read(HL.GetRegister()) & 0x0F) + 1 & 0x0F) > 0x0F) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
@@ -2454,6 +2467,7 @@ void CPU::DEC(RegisterTarget reg)
 {
 	switch (reg)
 	{
+		currentInstruction.mnemonic = "DEC A";
 		case RegisterTarget::A:
 			SetFlag(Flag::Subtract, true);
 			((AF.GetHighByte() - 1) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
@@ -2463,6 +2477,7 @@ void CPU::DEC(RegisterTarget reg)
 			mCycles = 1;
 			break;
 		case RegisterTarget::B:
+			currentInstruction.mnemonic = "DEC B";
 			SetFlag(Flag::Subtract, true);
 			((BC.GetHighByte() - 1) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			((BC.GetHighByte() & 0x0F) == 0x0) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
@@ -2471,6 +2486,7 @@ void CPU::DEC(RegisterTarget reg)
 			mCycles = 1;
 			break;
 		case RegisterTarget::C:
+			currentInstruction.mnemonic = "DEC C";
 			SetFlag(Flag::Subtract, true);
 			((BC.GetLowByte() - 1) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			((BC.GetLowByte() & 0x0F) == 0x0) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
@@ -2479,11 +2495,13 @@ void CPU::DEC(RegisterTarget reg)
 			mCycles = 1;
 			break;
 		case RegisterTarget::BC:
+			currentInstruction.mnemonic = "DEC BC";
 			BC--;
 			tCycles = 8;
 			mCycles = 2;
 			break;
 		case RegisterTarget::D:
+			currentInstruction.mnemonic = "DEC D";
 			SetFlag(Flag::Subtract, true);
 			((DE.GetHighByte() - 1) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			((DE.GetHighByte() & 0x0F) == 0x0) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
@@ -2492,6 +2510,7 @@ void CPU::DEC(RegisterTarget reg)
 			mCycles = 1;
 			break;
 		case RegisterTarget::E:
+			currentInstruction.mnemonic = "DEC E";
 			SetFlag(Flag::Subtract, true);
 			((DE.GetLowByte() - 1) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			((DE.GetLowByte() & 0x0F) == 0x0) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
@@ -2500,11 +2519,13 @@ void CPU::DEC(RegisterTarget reg)
 			mCycles = 1;
 			break;
 		case RegisterTarget::DE:
+			currentInstruction.mnemonic = "DEC DE";
 			DE--;
 			tCycles = 8;
 			mCycles = 2;
 			break;
 		case RegisterTarget::H:
+			currentInstruction.mnemonic = "DEC H";
 			SetFlag(Flag::Subtract, true);
 			((HL.GetHighByte() - 1) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			((HL.GetHighByte() & 0x0F) == 0x0) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
@@ -2513,6 +2534,7 @@ void CPU::DEC(RegisterTarget reg)
 			mCycles = 1;
 			break;
 		case RegisterTarget::L:
+			currentInstruction.mnemonic = "DEC L";
 			SetFlag(Flag::Subtract, true);
 			((HL.GetLowByte() - 1) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			((HL.GetLowByte() & 0x0F) == 0x0) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
@@ -2521,11 +2543,13 @@ void CPU::DEC(RegisterTarget reg)
 			mCycles = 1;
 			break;
 		case RegisterTarget::HL:
+			currentInstruction.mnemonic = "DEC HL";
 			HL--;
 			tCycles = 8;
 			mCycles = 2;
 			break;
 		case RegisterTarget::MemHL:
+			currentInstruction.mnemonic = "DEC (HL)";
 			SetFlag(Flag::Subtract, true);
 			((memory->Read(HL.GetRegister()) - 1) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			((memory->Read(HL.GetRegister()) & 0x0F) == 0x0) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
@@ -2545,12 +2569,14 @@ void CPU::JP(Condition condition)
 	u16 address = FetchWord();
 	switch (condition)
 	{
+		currentInstruction.mnemonic = "JP a16";
 		case Condition::None:
 			PC = address;
 			tCycles = 16;
 			mCycles = 4;
 			break;
 		case Condition::Zero:
+			currentInstruction.mnemonic = "JP Z a16";
 			if (zero)
 			{
 				PC = address;
@@ -2564,6 +2590,7 @@ void CPU::JP(Condition condition)
 			}
 			break;
 		case Condition::NotZero:
+			currentInstruction.mnemonic = "JP NZ a16";
 			if (!zero)
 			{
 				PC = address;
@@ -2577,6 +2604,7 @@ void CPU::JP(Condition condition)
 			}
 			break;
 		case Condition::Carry:
+			currentInstruction.mnemonic = "JP C a16";
 			if (carry)
 			{
 				PC = address;
@@ -2590,6 +2618,7 @@ void CPU::JP(Condition condition)
 			}
 			break;
 		case Condition::NotCarry:
+			currentInstruction.mnemonic = "JP NC a16";
 			if (!carry)
 			{
 				PC = address;
@@ -2603,6 +2632,7 @@ void CPU::JP(Condition condition)
 			}
 			break;
 		case Condition::HL:
+			currentInstruction.mnemonic = "JP HL";
 			PC = HL.GetRegister();
 			tCycles = 4;
 			mCycles = 1;
@@ -2616,17 +2646,19 @@ void CPU::JP(Condition condition)
 
 void CPU::JR(Condition condition)
 {
-	u8 offset = FetchByte();
+	s8 offset = FetchByte();
 	switch (condition)
 	{
 		case Condition::None:
 		{
+			currentInstruction.mnemonic = "JR s8";
 			PC += offset;
 			tCycles = 12;
 			mCycles = 3;
 			break;
 		}
 		case Condition::Zero:
+			currentInstruction.mnemonic = "JR Z s8";
 			if (zero)
 			{
 				PC += offset;
@@ -2640,6 +2672,7 @@ void CPU::JR(Condition condition)
 			}
 			break;
 		case Condition::NotZero:
+			currentInstruction.mnemonic = "JR NZ s8";
 			if (zero)
 			{
 				PC += offset;
@@ -2653,6 +2686,7 @@ void CPU::JR(Condition condition)
 			}
 			break;
 		case Condition::Carry:
+			currentInstruction.mnemonic = "JR C s8";
 			if (zero)
 			{
 				PC += offset;
@@ -2666,6 +2700,7 @@ void CPU::JR(Condition condition)
 			}
 			break;
 		case Condition::NotCarry:
+			currentInstruction.mnemonic = "JR NC s8";
 			if (zero)
 			{
 				PC += offset;
@@ -2694,6 +2729,7 @@ void CPU::ADD(RegisterTarget from, RegisterTarget to)
 			switch (from)
 			{
 				case RegisterTarget::A:
+					currentInstruction.mnemonic = "ADD A, A";
 					((AF.GetHighByte() + AF.GetHighByte()) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 					(((AF.GetHighByte() & 0x0F) + (AF.GetHighByte() & 0x0F)) > 0x0F) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
 					((AF.GetHighByte() + AF.GetHighByte()) > 0xFF) ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
@@ -2702,6 +2738,7 @@ void CPU::ADD(RegisterTarget from, RegisterTarget to)
 					mCycles = 1;
 					break;
 				case RegisterTarget::B:
+					currentInstruction.mnemonic = "ADD A, B";
 					((AF.GetHighByte() + BC.GetHighByte()) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 					(((AF.GetHighByte() & 0x0F) + (BC.GetHighByte() & 0x0F)) > 0x0F) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
 					((AF.GetHighByte() + BC.GetHighByte()) > 0xFF) ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
@@ -2710,6 +2747,7 @@ void CPU::ADD(RegisterTarget from, RegisterTarget to)
 					mCycles = 1;
 					break;
 				case RegisterTarget::C:
+					currentInstruction.mnemonic = "ADD A, C";
 					((AF.GetHighByte() + BC.GetLowByte()) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 					(((AF.GetHighByte() & 0x0F) + (BC.GetLowByte() & 0x0F)) > 0x0F) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
 					((AF.GetHighByte() + BC.GetLowByte()) > 0xFF) ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
@@ -2718,6 +2756,7 @@ void CPU::ADD(RegisterTarget from, RegisterTarget to)
 					mCycles = 1;
 					break;
 				case RegisterTarget::D:
+					currentInstruction.mnemonic = "ADD A, D";
 					((AF.GetHighByte() + DE.GetHighByte()) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 					(((AF.GetHighByte() & 0x0F) + (DE.GetHighByte() & 0x0F)) > 0x0F) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
 					((AF.GetHighByte() + DE.GetHighByte()) > 0xFF) ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
@@ -2726,6 +2765,7 @@ void CPU::ADD(RegisterTarget from, RegisterTarget to)
 					mCycles = 1;
 					break;
 				case RegisterTarget::E:
+					currentInstruction.mnemonic = "ADD A, E";
 					((AF.GetHighByte() + DE.GetLowByte()) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 					(((AF.GetHighByte() & 0x0F) + (DE.GetLowByte() & 0x0F)) > 0x0F) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
 					((AF.GetHighByte() + DE.GetLowByte()) > 0xFF) ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
@@ -2734,6 +2774,7 @@ void CPU::ADD(RegisterTarget from, RegisterTarget to)
 					mCycles = 1;
 					break;
 				case RegisterTarget::H:
+					currentInstruction.mnemonic = "ADD A, H";
 					((AF.GetHighByte() + HL.GetHighByte()) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 					(((AF.GetHighByte() & 0x0F) + (HL.GetHighByte() & 0x0F)) > 0x0F) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
 					((AF.GetHighByte() + HL.GetHighByte()) > 0xFF) ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
@@ -2742,6 +2783,7 @@ void CPU::ADD(RegisterTarget from, RegisterTarget to)
 					mCycles = 1;
 					break;
 				case RegisterTarget::L:
+					currentInstruction.mnemonic = "ADD A, L";
 					((AF.GetHighByte() + HL.GetLowByte()) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 					(((AF.GetHighByte() & 0x0F) + (HL.GetLowByte() & 0x0F)) > 0x0F) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
 					((AF.GetHighByte() + HL.GetLowByte()) > 0xFF) ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
@@ -2750,6 +2792,7 @@ void CPU::ADD(RegisterTarget from, RegisterTarget to)
 					mCycles = 1;
 					break;
 				case RegisterTarget::MemHL:
+					currentInstruction.mnemonic = "ADD A, (HL)";
 					((AF.GetHighByte() + memory->Read(HL.GetRegister())) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 					(((AF.GetHighByte() & 0x0F) + (memory->Read(HL.GetRegister()) & 0x0F)) > 0x0F) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
 					((AF.GetHighByte() + memory->Read(HL.GetRegister())) > 0xFF) ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
@@ -2759,6 +2802,7 @@ void CPU::ADD(RegisterTarget from, RegisterTarget to)
 					break;
 				case RegisterTarget::Byte:
 				{
+					currentInstruction.mnemonic = "ADD A, d8";
 					u8 byte = FetchByte();
 					((AF.GetHighByte() + byte) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 					(((AF.GetHighByte() & 0x0F) + (byte & 0x0F)) > 0x0F) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
@@ -2778,6 +2822,7 @@ void CPU::ADD(RegisterTarget from, RegisterTarget to)
 			switch (from)
 			{
 				case RegisterTarget::BC:
+					currentInstruction.mnemonic = "ADD HL, BC";
 					(((HL.GetRegister() & 0x0FFF) + (BC.GetRegister() & 0x0FFF)) > 0x0FFF) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
 					((HL.GetRegister() + BC.GetRegister()) > 0xFFFF) ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
 					HL.GetRegister() += BC.GetRegister();
@@ -2785,6 +2830,7 @@ void CPU::ADD(RegisterTarget from, RegisterTarget to)
 					mCycles = 2;
 					break;
 				case RegisterTarget::DE:
+					currentInstruction.mnemonic = "ADD HL, DE";
 					(((HL.GetRegister() & 0x0FFF) + (DE.GetRegister() & 0x0FFF)) > 0x0FFF) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
 					((HL.GetRegister() + DE.GetRegister()) > 0xFFFF) ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
 					HL.GetRegister() += DE.GetRegister();
@@ -2792,6 +2838,7 @@ void CPU::ADD(RegisterTarget from, RegisterTarget to)
 					mCycles = 2;
 					break;
 				case RegisterTarget::HL:
+					currentInstruction.mnemonic = "ADD HL, HL";
 					(((HL.GetRegister() & 0x0FFF) + (HL.GetRegister() & 0x0FFF)) > 0x0FFF) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
 					((HL.GetRegister() + HL.GetRegister()) > 0xFFFF) ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
 					HL.GetRegister() += HL.GetRegister();
@@ -2799,6 +2846,7 @@ void CPU::ADD(RegisterTarget from, RegisterTarget to)
 					mCycles = 2;
 					break;
 				case RegisterTarget::SP:
+					currentInstruction.mnemonic = "ADD HL, SP";
 					(((HL.GetRegister() & 0x0FFF) + (SP & 0x0FFF)) > 0x0FFF) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
 					((HL.GetRegister() + SP) > 0xFFFF) ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
 					HL.GetRegister() += SP;
@@ -2816,6 +2864,7 @@ void CPU::ADD(RegisterTarget from, RegisterTarget to)
 			{
 				case RegisterTarget::Offset:
 				{
+					currentInstruction.mnemonic = "ADD SP, s8";
 					s8 offset = FetchByte();
 					SetFlag(Flag::Zero, false);
 					((SP & 0x0F) + (offset & 0x0F) > 0x0F) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
@@ -2830,6 +2879,7 @@ void CPU::ADD(RegisterTarget from, RegisterTarget to)
 					std::exit(EXIT_FAILURE);
 					break;
 			}
+			break;
 		default:
 			std::cout << "Unsupported or Invalid Add Instruction\n";
 			std::exit(EXIT_FAILURE);
@@ -2844,6 +2894,7 @@ void CPU::ADC(RegisterTarget reg)
 	switch (reg)
 	{
 		case RegisterTarget::A:
+			currentInstruction.mnemonic = "ADC A, A";
 			((AF.GetHighByte() + AF.GetHighByte() + (u8)temp) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(((AF.GetHighByte() & 0x0F) + (AF.GetHighByte() & 0x0F) + (u8)temp) > 0x0F) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
 			((AF.GetHighByte() + AF.GetHighByte() + (u8)temp) > 0xFF) ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
@@ -2852,6 +2903,7 @@ void CPU::ADC(RegisterTarget reg)
 			mCycles = 1;
 			break;
 		case RegisterTarget::B:
+			currentInstruction.mnemonic = "ADC A, B";
 			((AF.GetHighByte() + BC.GetHighByte() + (u8)temp) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(((AF.GetHighByte() & 0x0F) + (BC.GetHighByte() & 0x0F) + (u8)temp) > 0x0F) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
 			((AF.GetHighByte() + BC.GetHighByte() + (u8)temp) > 0xFF) ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
@@ -2860,6 +2912,7 @@ void CPU::ADC(RegisterTarget reg)
 			mCycles = 1;
 			break;
 		case RegisterTarget::C:
+			currentInstruction.mnemonic = "ADC A, C";
 			((AF.GetHighByte() + BC.GetLowByte() + (u8)temp) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(((AF.GetHighByte() & 0x0F) + (BC.GetLowByte() & 0x0F) + (u8)temp) > 0x0F) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
 			((AF.GetHighByte() + BC.GetLowByte() + (u8)temp) > 0xFF) ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
@@ -2868,6 +2921,7 @@ void CPU::ADC(RegisterTarget reg)
 			mCycles = 1;
 			break;
 		case RegisterTarget::D:
+			currentInstruction.mnemonic = "ADC A, D";
 			((AF.GetHighByte() + DE.GetHighByte() + (u8)temp) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(((AF.GetHighByte() & 0x0F) + (DE.GetHighByte() & 0x0F) + (u8)temp) > 0x0F) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
 			((AF.GetHighByte() + DE.GetHighByte() + (u8)temp) > 0xFF) ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
@@ -2876,6 +2930,7 @@ void CPU::ADC(RegisterTarget reg)
 			mCycles = 1;
 			break;
 		case RegisterTarget::E:
+			currentInstruction.mnemonic = "ADC A, E";
 			((AF.GetHighByte() + DE.GetLowByte() + (u8)temp) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(((AF.GetHighByte() & 0x0F) + (DE.GetLowByte() & 0x0F) + (u8)temp) > 0x0F) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
 			((AF.GetHighByte() + DE.GetLowByte() + (u8)temp) > 0xFF) ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
@@ -2884,6 +2939,7 @@ void CPU::ADC(RegisterTarget reg)
 			mCycles = 1;
 			break;
 		case RegisterTarget::H:
+			currentInstruction.mnemonic = "ADC A, H";
 			((AF.GetHighByte() + HL.GetHighByte() + (u8)temp) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(((AF.GetHighByte() & 0x0F) + (HL.GetHighByte() & 0x0F) + (u8)temp) > 0x0F) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
 			((AF.GetHighByte() + HL.GetHighByte() + (u8)temp) > 0xFF) ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
@@ -2892,6 +2948,7 @@ void CPU::ADC(RegisterTarget reg)
 			mCycles = 1;
 			break;
 		case RegisterTarget::L:
+			currentInstruction.mnemonic = "ADC A, L";
 			((AF.GetHighByte() + HL.GetLowByte() + (u8)temp) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(((AF.GetHighByte() & 0x0F) + (HL.GetLowByte() & 0x0F) + (u8)temp) > 0x0F) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
 			((AF.GetHighByte() + HL.GetLowByte() + (u8)temp) > 0xFF) ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
@@ -2900,6 +2957,7 @@ void CPU::ADC(RegisterTarget reg)
 			mCycles = 1;
 			break;
 		case RegisterTarget::MemHL:
+			currentInstruction.mnemonic = "ADC A, (HL)";
 			((AF.GetHighByte() + memory->Read(HL.GetRegister()) + (u8)temp) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(((AF.GetHighByte() & 0x0F) + (memory->Read(HL.GetRegister()) & 0x0F) + (u8)temp) > 0x0F) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
 			((AF.GetHighByte() + memory->Read(HL.GetRegister()) + (u8)temp) > 0xFF) ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
@@ -2909,6 +2967,7 @@ void CPU::ADC(RegisterTarget reg)
 			break;
 		case RegisterTarget::Byte:
 		{
+			currentInstruction.mnemonic = "ADC A, d8";
 			u8 byte = FetchByte();
 			((AF.GetHighByte() + byte + (u8)temp) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(((AF.GetHighByte() & 0x0F) + (byte & 0x0F) + (u8)temp) > 0x0F) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
@@ -2931,6 +2990,7 @@ void CPU::SUB(RegisterTarget reg)
 	switch (reg)
 	{
 		case RegisterTarget::A:
+			currentInstruction.mnemonic = "SUB A, A";
 			((AF.GetHighByte() - AF.GetHighByte()) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			((AF.GetHighByte() & 0x0F) < (AF.GetHighByte() & 0x0F)) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
 			(AF.GetHighByte() < AF.GetHighByte()) ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
@@ -2939,6 +2999,7 @@ void CPU::SUB(RegisterTarget reg)
 			mCycles = 1;
 			break;
 		case RegisterTarget::B:
+			currentInstruction.mnemonic = "SUB A, B";
 			((AF.GetHighByte() - BC.GetHighByte()) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			((AF.GetHighByte() & 0x0F) < (BC.GetHighByte() & 0x0F)) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
 			(AF.GetHighByte() < BC.GetHighByte()) ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
@@ -2947,6 +3008,7 @@ void CPU::SUB(RegisterTarget reg)
 			mCycles = 1;
 			break;
 		case RegisterTarget::C:
+			currentInstruction.mnemonic = "SUB A, C";
 			((AF.GetHighByte() - BC.GetLowByte()) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			((AF.GetHighByte() & 0x0F) < (BC.GetLowByte() & 0x0F)) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
 			(AF.GetHighByte() < BC.GetLowByte()) ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
@@ -2955,6 +3017,7 @@ void CPU::SUB(RegisterTarget reg)
 			mCycles = 1;
 			break;
 		case RegisterTarget::D:
+			currentInstruction.mnemonic = "SUB A, D";
 			((AF.GetHighByte() - DE.GetHighByte()) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			((AF.GetHighByte() & 0x0F) < (DE.GetHighByte() & 0x0F)) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
 			(AF.GetHighByte() < DE.GetHighByte()) ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
@@ -2963,6 +3026,7 @@ void CPU::SUB(RegisterTarget reg)
 			mCycles = 1;
 			break;
 		case RegisterTarget::E:
+			currentInstruction.mnemonic = "SUB A, E";
 			((AF.GetHighByte() - DE.GetLowByte()) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			((AF.GetHighByte() & 0x0F) < (DE.GetLowByte() & 0x0F)) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
 			(AF.GetHighByte() < DE.GetLowByte()) ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
@@ -2971,6 +3035,7 @@ void CPU::SUB(RegisterTarget reg)
 			mCycles = 1;
 			break;
 		case RegisterTarget::H:
+			currentInstruction.mnemonic = "SUB A, H";
 			((AF.GetHighByte() - HL.GetHighByte()) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			((AF.GetHighByte() & 0x0F) < (HL.GetHighByte() & 0x0F)) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
 			(AF.GetHighByte() < HL.GetHighByte()) ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
@@ -2979,6 +3044,7 @@ void CPU::SUB(RegisterTarget reg)
 			mCycles = 1;
 			break;
 		case RegisterTarget::L:
+			currentInstruction.mnemonic = "SUB A, L";
 			((AF.GetHighByte() - HL.GetLowByte()) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			((AF.GetHighByte() & 0x0F) < (HL.GetLowByte() & 0x0F)) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
 			(AF.GetHighByte() < HL.GetLowByte()) ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
@@ -2987,6 +3053,7 @@ void CPU::SUB(RegisterTarget reg)
 			mCycles = 1;
 			break;
 		case RegisterTarget::MemHL:
+			currentInstruction.mnemonic = "SUB A, (HL)";
 			((AF.GetHighByte() - memory->Read(HL.GetRegister())) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			((AF.GetHighByte() & 0x0F) < (memory->Read(HL.GetRegister()) & 0x0F)) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
 			(AF.GetHighByte() < memory->Read(HL.GetRegister())) ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
@@ -2996,6 +3063,7 @@ void CPU::SUB(RegisterTarget reg)
 			break;
 		case RegisterTarget::Byte:
 		{
+			currentInstruction.mnemonic = "SUB A, d8";
 			u8 byte = FetchByte();
 			((AF.GetHighByte() - byte) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			((AF.GetHighByte() & 0x0F) < (byte & 0x0F)) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
@@ -3019,6 +3087,7 @@ void CPU::SBC(RegisterTarget reg)
 	switch (reg)
 	{
 		case RegisterTarget::A:
+			currentInstruction.mnemonic = "SBC A, A";
 			((AF.GetHighByte() - (AF.GetHighByte() + (u8)temp)) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			((AF.GetHighByte() & 0x0F) < ((AF.GetHighByte() & 0x0F) + (u8)temp)) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
 			(AF.GetHighByte() < (AF.GetHighByte() + (u8)temp)) ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
@@ -3027,6 +3096,7 @@ void CPU::SBC(RegisterTarget reg)
 			mCycles = 1;
 			break;
 		case RegisterTarget::B:
+			currentInstruction.mnemonic = "SBC A, B";
 			((AF.GetHighByte() - (BC.GetHighByte() + (u8)temp)) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			((AF.GetHighByte() & 0x0F) < ((BC.GetHighByte() & 0x0F) + (u8)temp)) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
 			(AF.GetHighByte() < (BC.GetHighByte() + (u8)temp)) ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
@@ -3035,6 +3105,7 @@ void CPU::SBC(RegisterTarget reg)
 			mCycles = 1;
 			break;
 		case RegisterTarget::C:
+			currentInstruction.mnemonic = "SBC A, C";
 			((AF.GetHighByte() - (BC.GetLowByte() + (u8)temp))) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			((AF.GetHighByte() & 0x0F) < ((BC.GetLowByte() & 0x0F) + (u8)temp)) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
 			(AF.GetHighByte() < (BC.GetLowByte() + (u8)temp)) ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
@@ -3043,6 +3114,7 @@ void CPU::SBC(RegisterTarget reg)
 			mCycles = 1;
 			break;
 		case RegisterTarget::D:
+			currentInstruction.mnemonic = "SBC A, D";
 			((AF.GetHighByte() - (DE.GetHighByte() + (u8)temp)) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			((AF.GetHighByte() & 0x0F) < ((DE.GetHighByte() & 0x0F) + (u8)temp)) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
 			(AF.GetHighByte() < (DE.GetHighByte() + (u8)temp)) ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
@@ -3051,6 +3123,7 @@ void CPU::SBC(RegisterTarget reg)
 			mCycles = 1;
 			break;
 		case RegisterTarget::E:
+			currentInstruction.mnemonic = "SBC A, E";
 			((AF.GetHighByte() - (DE.GetLowByte() + (u8)temp)) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			((AF.GetHighByte() & 0x0F) < ((DE.GetLowByte() & 0x0F) + (u8)temp)) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
 			(AF.GetHighByte() < (DE.GetLowByte() + (u8)temp)) ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
@@ -3059,6 +3132,7 @@ void CPU::SBC(RegisterTarget reg)
 			mCycles = 1;
 			break;
 		case RegisterTarget::H:
+			currentInstruction.mnemonic = "SBC A, H";
 			((AF.GetHighByte() - (HL.GetHighByte() + (u8)temp)) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			((AF.GetHighByte() & 0x0F) < ((HL.GetHighByte() & 0x0F) + (u8)temp)) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
 			(AF.GetHighByte() < (HL.GetHighByte() + (u8)temp)) ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
@@ -3067,6 +3141,7 @@ void CPU::SBC(RegisterTarget reg)
 			mCycles = 1;
 			break;
 		case RegisterTarget::L:
+			currentInstruction.mnemonic = "SBC A, L";
 			((AF.GetHighByte() - (HL.GetLowByte() + (u8)temp)) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			((AF.GetHighByte() & 0x0F) < ((HL.GetLowByte() & 0x0F) + (u8)temp)) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
 			(AF.GetHighByte() < (HL.GetLowByte() + (u8)temp)) ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
@@ -3075,6 +3150,7 @@ void CPU::SBC(RegisterTarget reg)
 			mCycles = 1;
 			break;
 		case RegisterTarget::MemHL:
+			currentInstruction.mnemonic = "SBC A, (HL)";
 			((AF.GetHighByte() - (memory->Read(HL.GetRegister()) + (u8)temp)) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			((AF.GetHighByte() & 0x0F) < ((memory->Read(HL.GetRegister() + (u8)temp)) & 0x0F)) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
 			(AF.GetHighByte() < (memory->Read(HL.GetRegister()) + (u8)temp)) ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
@@ -3084,6 +3160,7 @@ void CPU::SBC(RegisterTarget reg)
 			break;
 		case RegisterTarget::Byte:
 		{
+			currentInstruction.mnemonic = "SBC A, d8";
 			u8 byte = FetchByte();
 			((AF.GetHighByte() - (byte + (u8)temp)) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			((AF.GetHighByte() & 0x0F) < ((byte & 0x0F) + (u8)temp)) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
@@ -3108,48 +3185,56 @@ void CPU::AND(RegisterTarget reg)
 	switch (reg)
 	{
 		case RegisterTarget::A:
+			currentInstruction.mnemonic = "AND A";
 			(AF.GetHighByte() & AF.GetHighByte()) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			AF.GetHighByte() &= AF.GetHighByte();
 			tCycles = 4;
 			mCycles = 1;
 			break;
 		case RegisterTarget::B:
+			currentInstruction.mnemonic = "AND B";
 			(AF.GetHighByte() & BC.GetHighByte()) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			AF.GetHighByte() &= BC.GetHighByte();
 			tCycles = 4;
 			mCycles = 1;
 			break;
 		case RegisterTarget::C:
+			currentInstruction.mnemonic = "AND C";
 			(AF.GetHighByte() & BC.GetLowByte()) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			AF.GetHighByte() &= BC.GetLowByte();
 			tCycles = 4;
 			mCycles = 1;
 			break;
 		case RegisterTarget::D:
+			currentInstruction.mnemonic = "AND D";
 			(AF.GetHighByte() & DE.GetHighByte()) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			AF.GetHighByte() &= DE.GetHighByte();
 			tCycles = 4;
 			mCycles = 1;
 			break;
 		case RegisterTarget::E:
+			currentInstruction.mnemonic = "AND E";
 			(AF.GetHighByte() & DE.GetLowByte()) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			AF.GetHighByte() &= DE.GetLowByte();
 			tCycles = 4;
 			mCycles = 1;
 			break;
 		case RegisterTarget::H:
+			currentInstruction.mnemonic = "AND H";
 			(AF.GetHighByte() & HL.GetHighByte()) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			AF.GetHighByte() &= HL.GetHighByte();
 			tCycles = 4;
 			mCycles = 1;
 			break;
 		case RegisterTarget::L:
+			currentInstruction.mnemonic = "AND L";
 			(AF.GetHighByte() & HL.GetLowByte()) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			AF.GetHighByte() &= HL.GetLowByte();
 			tCycles = 4;
 			mCycles = 1;
 			break;
 		case RegisterTarget::MemHL:
+			currentInstruction.mnemonic = "AND (HL)";
 			(AF.GetHighByte() & memory->Read(HL.GetRegister())) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			AF.GetHighByte() &= memory->Read(HL.GetRegister());
 			tCycles = 4;
@@ -3157,6 +3242,7 @@ void CPU::AND(RegisterTarget reg)
 			break;
 		case RegisterTarget::Byte:
 		{
+			currentInstruction.mnemonic = "AND d8";
 			u8 byte = FetchByte();
 			(AF.GetHighByte() & byte) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			AF.GetHighByte() &= byte;
@@ -3179,48 +3265,56 @@ void CPU::XOR(RegisterTarget reg)
 	switch (reg)
 	{
 		case RegisterTarget::A:
+			currentInstruction.mnemonic = "XOR A";
 			(AF.GetHighByte() ^ AF.GetHighByte()) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			AF.GetHighByte() ^= AF.GetHighByte();
 			tCycles = 4;
 			mCycles = 1;
 			break;
 		case RegisterTarget::B:
+			currentInstruction.mnemonic = "XOR B";
 			(AF.GetHighByte() ^ BC.GetHighByte()) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			AF.GetHighByte() ^= BC.GetHighByte();
 			tCycles = 4;
 			mCycles = 1;
 			break;
 		case RegisterTarget::C:
+			currentInstruction.mnemonic = "XOR C";
 			(AF.GetHighByte() ^ BC.GetLowByte()) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			AF.GetHighByte() ^= BC.GetLowByte();
 			tCycles = 4;
 			mCycles = 1;
 			break;
 		case RegisterTarget::D:
+			currentInstruction.mnemonic = "XOR D";
 			(AF.GetHighByte() ^ DE.GetHighByte()) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			AF.GetHighByte() ^= DE.GetHighByte();
 			tCycles = 4;
 			mCycles = 1;
 			break;
 		case RegisterTarget::E:
+			currentInstruction.mnemonic = "XOR E";
 			(AF.GetHighByte() ^ DE.GetLowByte()) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			AF.GetHighByte() ^= DE.GetLowByte();
 			tCycles = 4;
 			mCycles = 1;
 			break;
 		case RegisterTarget::H:
+			currentInstruction.mnemonic = "XOR H";
 			(AF.GetHighByte() ^ HL.GetHighByte()) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			AF.GetHighByte() ^= HL.GetHighByte();
 			tCycles = 4;
 			mCycles = 1;
 			break;
 		case RegisterTarget::L:
+			currentInstruction.mnemonic = "XOR L";
 			(AF.GetHighByte() ^ HL.GetLowByte()) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			AF.GetHighByte() ^= HL.GetLowByte();
 			tCycles = 4;
 			mCycles = 1;
 			break;
 		case RegisterTarget::MemHL:
+			currentInstruction.mnemonic = "XOR (HL)";
 			(AF.GetHighByte() ^ memory->Read(HL.GetRegister())) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			AF.GetHighByte() ^= memory->Read(HL.GetRegister());
 			tCycles = 4;
@@ -3228,6 +3322,7 @@ void CPU::XOR(RegisterTarget reg)
 			break;
 		case RegisterTarget::Byte:
 		{
+			currentInstruction.mnemonic = "XOR d8";
 			u8 byte = FetchByte();
 			(AF.GetHighByte() ^ byte) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			AF.GetHighByte() ^= byte;
@@ -3250,48 +3345,56 @@ void CPU::OR(RegisterTarget reg)
 	switch (reg)
 	{
 		case RegisterTarget::A:
+			currentInstruction.mnemonic = "OR A";
 			(AF.GetHighByte() | AF.GetHighByte()) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			AF.GetHighByte() |= AF.GetHighByte();
 			tCycles = 4;
 			mCycles = 1;
 			break;
 		case RegisterTarget::B:
+			currentInstruction.mnemonic = "OR B";
 			(AF.GetHighByte() | BC.GetHighByte()) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			AF.GetHighByte() |= BC.GetHighByte();
 			tCycles = 4;
 			mCycles = 1;
 			break;
 		case RegisterTarget::C:
+			currentInstruction.mnemonic = "OR C";
 			(AF.GetHighByte() | BC.GetLowByte()) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			AF.GetHighByte() |= BC.GetLowByte();
 			tCycles = 4;
 			mCycles = 1;
 			break;
 		case RegisterTarget::D:
+			currentInstruction.mnemonic = "OR D";
 			(AF.GetHighByte() | DE.GetHighByte()) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			AF.GetHighByte() |= DE.GetHighByte();
 			tCycles = 4;
 			mCycles = 1;
 			break;
 		case RegisterTarget::E:
+			currentInstruction.mnemonic = "OR E";
 			(AF.GetHighByte() | DE.GetLowByte()) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			AF.GetHighByte() |= DE.GetLowByte();
 			tCycles = 4;
 			mCycles = 1;
 			break;
 		case RegisterTarget::H:
+			currentInstruction.mnemonic = "OR H";
 			(AF.GetHighByte() | HL.GetHighByte()) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			AF.GetHighByte() |= HL.GetHighByte();
 			tCycles = 4;
 			mCycles = 1;
 			break;
 		case RegisterTarget::L:
+			currentInstruction.mnemonic = "OR L";
 			(AF.GetHighByte() | HL.GetLowByte()) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			AF.GetHighByte() |= HL.GetLowByte();
 			tCycles = 4;
 			mCycles = 1;
 			break;
 		case RegisterTarget::MemHL:
+			currentInstruction.mnemonic = "OR (HL)";
 			(AF.GetHighByte() | memory->Read(HL.GetRegister())) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			AF.GetHighByte() |= memory->Read(HL.GetRegister());
 			tCycles = 4;
@@ -3299,6 +3402,7 @@ void CPU::OR(RegisterTarget reg)
 			break;
 		case RegisterTarget::Byte:
 		{
+			currentInstruction.mnemonic = "OR d8";
 			u8 byte = FetchByte();
 			(AF.GetHighByte() | byte) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			AF.GetHighByte() |= byte;
@@ -3319,6 +3423,7 @@ void CPU::CP(RegisterTarget reg)
 	switch (reg)
 	{
 		case RegisterTarget::A:
+			currentInstruction.mnemonic = "CP A";
 			((AF.GetHighByte() - AF.GetHighByte()) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			((AF.GetHighByte() & 0x0F) < (AF.GetHighByte() & 0x0F)) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
 			(AF.GetHighByte() < AF.GetHighByte()) ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
@@ -3326,6 +3431,7 @@ void CPU::CP(RegisterTarget reg)
 			mCycles = 1;
 			break;
 		case RegisterTarget::B:
+			currentInstruction.mnemonic = "CP B";
 			((AF.GetHighByte() - BC.GetHighByte()) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			((AF.GetHighByte() & 0x0F) < (BC.GetHighByte() & 0x0F)) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
 			(AF.GetHighByte() < BC.GetHighByte()) ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
@@ -3333,6 +3439,7 @@ void CPU::CP(RegisterTarget reg)
 			mCycles = 1;
 			break;
 		case RegisterTarget::C:
+			currentInstruction.mnemonic = "CP C";
 			((AF.GetHighByte() - BC.GetLowByte()) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			((AF.GetHighByte() & 0x0F) < (BC.GetLowByte() & 0x0F)) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
 			(AF.GetHighByte() < BC.GetLowByte()) ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
@@ -3341,6 +3448,7 @@ void CPU::CP(RegisterTarget reg)
 			mCycles = 1;
 			break;
 		case RegisterTarget::D:
+			currentInstruction.mnemonic = "CP D";
 			((AF.GetHighByte() - DE.GetHighByte()) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			((AF.GetHighByte() & 0x0F) < (DE.GetHighByte() & 0x0F)) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
 			(AF.GetHighByte() < DE.GetHighByte()) ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
@@ -3348,6 +3456,7 @@ void CPU::CP(RegisterTarget reg)
 			mCycles = 1;
 			break;
 		case RegisterTarget::E:
+			currentInstruction.mnemonic = "CP E";
 			((AF.GetHighByte() - DE.GetLowByte()) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			((AF.GetHighByte() & 0x0F) < (DE.GetLowByte() & 0x0F)) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
 			(AF.GetHighByte() < DE.GetLowByte()) ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
@@ -3355,6 +3464,7 @@ void CPU::CP(RegisterTarget reg)
 			mCycles = 1;
 			break;
 		case RegisterTarget::H:
+			currentInstruction.mnemonic = "CP H";
 			((AF.GetHighByte() - HL.GetHighByte()) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			((AF.GetHighByte() & 0x0F) < (HL.GetHighByte() & 0x0F)) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
 			(AF.GetHighByte() < HL.GetHighByte()) ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
@@ -3362,6 +3472,7 @@ void CPU::CP(RegisterTarget reg)
 			mCycles = 1;
 			break;
 		case RegisterTarget::L:
+			currentInstruction.mnemonic = "CP L";
 			((AF.GetHighByte() - HL.GetLowByte()) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			((AF.GetHighByte() & 0x0F) < (HL.GetLowByte() & 0x0F)) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
 			(AF.GetHighByte() < HL.GetLowByte()) ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
@@ -3369,6 +3480,7 @@ void CPU::CP(RegisterTarget reg)
 			mCycles = 1;
 			break;
 		case RegisterTarget::MemHL:
+			currentInstruction.mnemonic = "CP (HL)";
 			((AF.GetHighByte() - memory->Read(HL.GetRegister())) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			((AF.GetHighByte() & 0x0F) < (memory->Read(HL.GetRegister()) & 0x0F)) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
 			(AF.GetHighByte() < memory->Read(HL.GetRegister())) ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
@@ -3377,6 +3489,7 @@ void CPU::CP(RegisterTarget reg)
 			break;
 		case RegisterTarget::Byte:
 		{
+			currentInstruction.mnemonic = "CP d8";
 			u8 byte = FetchByte();
 			((AF.GetHighByte() - byte) == 0) ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			((AF.GetHighByte() & 0x0F) < (byte & 0x0F)) ? SetFlag(Flag::HalfCarry, true) : SetFlag(Flag::HalfCarry, false);
@@ -3398,6 +3511,7 @@ void CPU::CALL(Condition condition)
 	switch (condition)
 	{
 		case Condition::None:
+			currentInstruction.mnemonic = "CALL a16";
 			memory->Write(--SP, PC >> 8);
 			memory->Write(--SP, PC & 0xFF);
 			PC = address;
@@ -3405,6 +3519,7 @@ void CPU::CALL(Condition condition)
 			mCycles = 6;
 			break;
 		case Condition::Zero:
+			currentInstruction.mnemonic = "CALL Z a16";
 			if (zero)
 			{
 				memory->Write(--SP, PC >> 8);
@@ -3420,6 +3535,7 @@ void CPU::CALL(Condition condition)
 			}
 			break;
 		case Condition::NotZero:
+			currentInstruction.mnemonic = "CALL NZ a16";
 			if (!zero)
 			{
 				memory->Write(--SP, PC >> 8);
@@ -3435,6 +3551,7 @@ void CPU::CALL(Condition condition)
 			}
 			break;
 		case Condition::Carry:
+			currentInstruction.mnemonic = "CALL C a16";
 			if (carry)
 			{
 				memory->Write(--SP, PC >> 8);
@@ -3450,6 +3567,7 @@ void CPU::CALL(Condition condition)
 			}
 			break;
 		case Condition::NotCarry:
+			currentInstruction.mnemonic = "CALL NC a16";
 			if (!carry)
 			{
 				memory->Write(--SP, PC >> 8);
@@ -3476,18 +3594,22 @@ void CPU::POP(RegisterTarget reg)
 	switch (reg)
 	{
 		case RegisterTarget::BC:
+			currentInstruction.mnemonic = "POP BC";
 			BC.SetLowByte(memory->Read(SP++));
 			BC.SetHighByte(memory->Read(SP++));
 			break;
 		case RegisterTarget::DE:
+			currentInstruction.mnemonic = "POP DE";
 			DE.SetLowByte(memory->Read(SP++));
 			DE.SetHighByte(memory->Read(SP++));
 			break;
 		case RegisterTarget::HL:
+			currentInstruction.mnemonic = "POP HL";
 			HL.SetLowByte(memory->Read(SP++));
 			HL.SetHighByte(memory->Read(SP++));
 			break;
 		case RegisterTarget::AF:
+			currentInstruction.mnemonic = "POP AF";
 			AF.SetLowByte(memory->Read(SP++));
 			AF.SetHighByte(memory->Read(SP++));
 			break;
@@ -3505,18 +3627,22 @@ void CPU::PUSH(RegisterTarget reg)
 	switch (reg)
 	{
 		case RegisterTarget::BC:
+			currentInstruction.mnemonic = "PUSH BC";
 			memory->Write(--SP, BC.GetHighByte());
 			memory->Write(--SP, BC.GetLowByte());
 			break;
 		case RegisterTarget::DE:
+			currentInstruction.mnemonic = "PUSH DE";
 			memory->Write(--SP, DE.GetHighByte());
 			memory->Write(--SP, DE.GetLowByte());
 			break;
 		case RegisterTarget::HL:
+			currentInstruction.mnemonic = "PUSH HL";
 			memory->Write(--SP, HL.GetHighByte());
 			memory->Write(--SP, HL.GetLowByte());
 			break;
 		case RegisterTarget::AF:
+			currentInstruction.mnemonic = "PUSH AF";
 			memory->Write(--SP, AF.GetHighByte());
 			memory->Write(--SP, AF.GetLowByte());
 			break;
@@ -3535,6 +3661,7 @@ void CPU::RET(Condition condition)
 	{
 		case Condition::None:
 		{
+			currentInstruction.mnemonic = "RET";
 			u8 low = memory->Read(SP++);
 			u8 high = memory->Read(SP++);
 			PC = (high << 8) | low;
@@ -3543,6 +3670,7 @@ void CPU::RET(Condition condition)
 			break;
 		}
 		case Condition::Zero:
+			currentInstruction.mnemonic = "RET Z";
 			if (zero)
 			{
 				u8 low = memory->Read(SP++);
@@ -3560,6 +3688,7 @@ void CPU::RET(Condition condition)
 			}
 			break;
 		case Condition::NotZero:
+			currentInstruction.mnemonic = "RET NZ";
 			if (!zero)
 			{
 				u8 low = memory->Read(SP++);
@@ -3576,6 +3705,7 @@ void CPU::RET(Condition condition)
 			}
 			break;
 		case Condition::Carry:
+			currentInstruction.mnemonic = "RET C";
 			if (carry)
 			{
 				u8 low = memory->Read(SP++);
@@ -3592,6 +3722,7 @@ void CPU::RET(Condition condition)
 			}
 			break;
 		case Condition::NotCarry:
+			currentInstruction.mnemonic = "RET NC";
 			if (!carry)
 			{
 				u8 low = memory->Read(SP++);
@@ -3609,6 +3740,7 @@ void CPU::RET(Condition condition)
 			break;
 		case Condition::Interrupt:
 		{
+			currentInstruction.mnemonic = "RETI";
 			u8 low = memory->Read(SP++);
 			u8 high = memory->Read(SP++);
 			PC = (high << 8) | low;
@@ -3628,6 +3760,7 @@ void CPU::RST(int num)
 	switch (num)
 	{
 		case 0:
+			currentInstruction.mnemonic = "RST 0";
 			memory->Write(--SP, PC >> 8);
 			memory->Write(--SP, PC & 0xFF);
 			PC = 0x00;
@@ -3635,6 +3768,7 @@ void CPU::RST(int num)
 			mCycles = 4;
 			break;
 		case 1:
+			currentInstruction.mnemonic = "RST 1";
 			memory->Write(--SP, PC >> 8);
 			memory->Write(--SP, PC & 0xFF);
 			PC = 0x08;
@@ -3642,6 +3776,7 @@ void CPU::RST(int num)
 			mCycles = 4;
 			break;
 		case 2:
+			currentInstruction.mnemonic = "RST 2";
 			memory->Write(--SP, PC >> 8);
 			memory->Write(--SP, PC & 0xFF);
 			PC = 0x10;
@@ -3649,6 +3784,7 @@ void CPU::RST(int num)
 			mCycles = 4;
 			break;
 		case 3:
+			currentInstruction.mnemonic = "RST 3";
 			memory->Write(--SP, PC >> 8);
 			memory->Write(--SP, PC & 0xFF);
 			PC = 0x18;
@@ -3656,6 +3792,7 @@ void CPU::RST(int num)
 			mCycles = 4;
 			break;
 		case 4:
+			currentInstruction.mnemonic = "RST 4";
 			memory->Write(--SP, PC >> 8);
 			memory->Write(--SP, PC & 0xFF);
 			PC = 0x20;
@@ -3663,6 +3800,7 @@ void CPU::RST(int num)
 			mCycles = 4;
 			break;
 		case 5:
+			currentInstruction.mnemonic = "RST 5";
 			memory->Write(--SP, PC >> 8);
 			memory->Write(--SP, PC & 0xFF);
 			PC = 0x28;
@@ -3670,6 +3808,7 @@ void CPU::RST(int num)
 			mCycles = 4;
 			break;
 		case 6:
+			currentInstruction.mnemonic = "RST 6";
 			memory->Write(--SP, PC >> 8);
 			memory->Write(--SP, PC & 0xFF);
 			PC = 0x30;
@@ -3677,6 +3816,7 @@ void CPU::RST(int num)
 			mCycles = 4;
 			break;
 		case 7:
+			currentInstruction.mnemonic = "RST 7";
 			memory->Write(--SP, PC >> 8);
 			memory->Write(--SP, PC & 0xFF);
 			PC = 0x38;
@@ -3692,6 +3832,7 @@ void CPU::RST(int num)
 
 void CPU::SCF()
 {
+	currentInstruction.mnemonic = "SCF";
 	SetFlag(Flag::HalfCarry, false);
 	SetFlag(Flag::Subtract, false);
 	SetFlag(Flag::Carry, true);
@@ -3701,6 +3842,7 @@ void CPU::SCF()
 
 void CPU::RLCA()
 {
+	currentInstruction.mnemonic = "RLCA";
 	SetFlag(Flag::Zero, false);
 	SetFlag(Flag::Subtract, false);
 	SetFlag(Flag::HalfCarry, false);
@@ -3712,6 +3854,7 @@ void CPU::RLCA()
 
 void CPU::RLA()
 {
+	currentInstruction.mnemonic = "RLA";
 	bool oldCarry = GetCarryFlag();
 	SetFlag(Flag::Zero, false);
 	SetFlag(Flag::Subtract, false);
@@ -3724,6 +3867,7 @@ void CPU::RLA()
 
 void CPU::RRCA()
 {
+	currentInstruction.mnemonic = "RRCA";
 	SetFlag(Flag::Zero, false);
 	SetFlag(Flag::Subtract, false);
 	SetFlag(Flag::HalfCarry, false);
@@ -3735,6 +3879,7 @@ void CPU::RRCA()
 
 void CPU::RRA()
 {
+	currentInstruction.mnemonic = "RRA";
 	bool oldCarry = GetCarryFlag();
 	SetFlag(Flag::Zero, false);
 	SetFlag(Flag::Subtract, false);
@@ -3748,6 +3893,7 @@ void CPU::RRA()
 
 void CPU::CPL()
 {
+	currentInstruction.mnemonic = "CPL";
 	SetFlag(Flag::Subtract, true);
 	SetFlag(Flag::HalfCarry, true);
 	AF.SetHighByte(~AF.GetHighByte());
@@ -3757,6 +3903,7 @@ void CPU::CPL()
 
 void CPU::CCF()
 {
+	currentInstruction.mnemonic = "CCF";
 	SetFlag(Flag::HalfCarry, false);
 	SetFlag(Flag::Subtract, false);
 	bool flag = GetCarryFlag();
@@ -3772,41 +3919,49 @@ void CPU::BIT(RegisterTarget reg, int bit)
 	switch (reg)
 	{
 		case RegisterTarget::A:
+			currentInstruction.mnemonic = std::format("BIT {:d} A", bit);
 			(AF.GetHighByte() & (1 << bit)) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			tCycles = 8;
 			mCycles = 2;
 			break;
 		case RegisterTarget::B:
+			currentInstruction.mnemonic = std::format("BIT {:d} B", bit);
 			(BC.GetHighByte() & (1 << bit)) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			tCycles = 8;
 			mCycles = 2;
 			break;
 		case RegisterTarget::C:
+			currentInstruction.mnemonic = std::format("BIT {:d} C", bit);
 			(BC.GetLowByte() & (1 << bit)) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			tCycles = 8;
 			mCycles = 2;
 			break;
 		case RegisterTarget::D:
+			currentInstruction.mnemonic = std::format("BIT {:d} D", bit);
 			(DE.GetHighByte() & (1 << bit)) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			tCycles = 8;
 			mCycles = 2;
 			break;
 		case RegisterTarget::E:
+			currentInstruction.mnemonic = std::format("BIT {:d} E", bit);
 			(DE.GetLowByte() & (1 << bit)) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			tCycles = 8;
 			mCycles = 2;
 			break;
 		case RegisterTarget::H:
+			currentInstruction.mnemonic = std::format("BIT {:d} H", bit);
 			(HL.GetHighByte() & (1 << bit)) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			tCycles = 8;
 			mCycles = 2;
 			break;
 		case RegisterTarget::L:
+			currentInstruction.mnemonic = std::format("BIT {:d} L", bit);
 			(HL.GetLowByte() & (1 << bit)) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			tCycles = 8;
 			mCycles = 2;
 			break;
 		case RegisterTarget::MemHL:
+			currentInstruction.mnemonic = std::format("BIT {:d} (HL)", bit);
 			(memory->Read(HL.GetRegister()) & (1 << bit)) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			tCycles = 16;
 			mCycles = 4;
@@ -3823,41 +3978,49 @@ void CPU::RES(RegisterTarget reg, int bit)
 	switch (reg)
 	{
 		case RegisterTarget::A:
+			currentInstruction.mnemonic = std::format("RES {:d} A", bit);
 			AF.GetHighByte() &= ~(1 << bit);
 			tCycles = 8;
 			mCycles = 2;
 			break;
 		case RegisterTarget::B:
+			currentInstruction.mnemonic = std::format("RES {:d} B", bit);
 			BC.GetHighByte() &= ~(1 << bit);
 			tCycles = 8;
 			mCycles = 2;
 			break;
 		case RegisterTarget::C:
+			currentInstruction.mnemonic = std::format("RES {:d} C", bit);
 			BC.GetLowByte() &= ~(1 << bit);
 			tCycles = 8;
 			mCycles = 2;
 			break;
 		case RegisterTarget::D:
+			currentInstruction.mnemonic = std::format("RES {:d} D", bit);
 			DE.GetHighByte() &= ~(1 << bit);
 			tCycles = 8;
 			mCycles = 2;
 			break;
 		case RegisterTarget::E:
+			currentInstruction.mnemonic = std::format("RES {:d} E", bit);
 			DE.GetLowByte() &= ~(1 << bit);
 			tCycles = 8;
 			mCycles = 2;
 			break;
 		case RegisterTarget::H:
+			currentInstruction.mnemonic = std::format("RES {:d} H", bit);
 			HL.GetHighByte() &= ~(1 << bit);
 			tCycles = 8;
 			mCycles = 2;
 			break;
 		case RegisterTarget::L:
+			currentInstruction.mnemonic = std::format("RES {:d} H", bit);
 			HL.GetLowByte() &= ~(1 << bit);
 			tCycles = 8;
 			mCycles = 2;
 			break;
 		case RegisterTarget::MemHL:
+			currentInstruction.mnemonic = std::format("RES {:d} (HL)", bit);
 			memory->Write(HL.GetRegister(), memory->Read(HL.GetRegister() & ~(1 << bit)));
 			tCycles = 16;
 			mCycles = 4;
@@ -3874,41 +4037,49 @@ void CPU::SET(RegisterTarget reg, int bit)
 	switch (reg)
 	{
 		case RegisterTarget::A:
+			currentInstruction.mnemonic = std::format("SET {:d} A", bit);
 			AF.GetHighByte() |= (1 << bit);
 			tCycles = 8;
 			mCycles = 2;
 			break;
 		case RegisterTarget::B:
+			currentInstruction.mnemonic = std::format("SET {:d} B", bit);
 			BC.GetHighByte() |= (1 << bit);
 			tCycles = 8;
 			mCycles = 2;
 			break;
 		case RegisterTarget::C:
+			currentInstruction.mnemonic = std::format("SET {:d} C", bit);
 			BC.GetLowByte() |= (1 << bit);
 			tCycles = 8;
 			mCycles = 2;
 			break;
 		case RegisterTarget::D:
+			currentInstruction.mnemonic = std::format("SET {:d} D", bit);
 			DE.GetHighByte() |= (1 << bit);
 			tCycles = 8;
 			mCycles = 2;
 			break;
 		case RegisterTarget::E:
+			currentInstruction.mnemonic = std::format("SET {:d} E", bit);
 			DE.GetLowByte() |= (1 << bit);
 			tCycles = 8;
 			mCycles = 2;
 			break;
 		case RegisterTarget::H:
+			currentInstruction.mnemonic = std::format("SET {:d} H", bit);
 			HL.GetHighByte() |= (1 << bit);
 			tCycles = 8;
 			mCycles = 2;
 			break;
 		case RegisterTarget::L:
+			currentInstruction.mnemonic = std::format("SET {:d} L", bit);
 			HL.GetLowByte() |= (1 << bit);
 			tCycles = 8;
 			mCycles = 2;
 			break;
 		case RegisterTarget::MemHL:
+			currentInstruction.mnemonic = std::format("SET {:d} (HL)", bit);
 			memory->Write(HL.GetRegister(), memory->Read(HL.GetRegister()) | (1 << bit));
 			tCycles = 16;
 			mCycles = 4;
@@ -3927,6 +4098,7 @@ void CPU::RLC(RegisterTarget reg)
 	switch (reg)
 	{
 		case RegisterTarget::A:
+			currentInstruction.mnemonic = "RLC A";
 			(AF.GetHighByte() << 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(AF.GetHighByte() >> 7) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
 			AF.GetHighByte() <<= 1 | (u8)GetCarryFlag();
@@ -3934,6 +4106,7 @@ void CPU::RLC(RegisterTarget reg)
 			mCycles = 2;
 			break;
 		case RegisterTarget::B:
+			currentInstruction.mnemonic = "RLC B";
 			(BC.GetHighByte() << 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(BC.GetHighByte() >> 7) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
 			BC.GetHighByte() <<= 1 | (u8)GetCarryFlag();
@@ -3941,6 +4114,7 @@ void CPU::RLC(RegisterTarget reg)
 			mCycles = 2;
 			break;
 		case RegisterTarget::C:
+			currentInstruction.mnemonic = "RLC C";
 			(BC.GetLowByte() << 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(BC.GetLowByte() >> 7) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
 			BC.GetLowByte() <<= 1 | (u8)GetCarryFlag();
@@ -3948,6 +4122,7 @@ void CPU::RLC(RegisterTarget reg)
 			mCycles = 2;
 			break;
 		case RegisterTarget::D:
+			currentInstruction.mnemonic = "RLC D";
 			(DE.GetHighByte() << 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(DE.GetHighByte() >> 7) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
 			DE.GetHighByte() <<= 1 | (u8)GetCarryFlag();
@@ -3955,6 +4130,7 @@ void CPU::RLC(RegisterTarget reg)
 			mCycles = 2;
 			break;
 		case RegisterTarget::E:
+			currentInstruction.mnemonic = "RLC E";
 			(DE.GetLowByte() << 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(DE.GetLowByte() >> 7) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
 			DE.GetLowByte() <<= 1 | (u8)GetCarryFlag();
@@ -3962,6 +4138,7 @@ void CPU::RLC(RegisterTarget reg)
 			mCycles = 2;
 			break;
 		case RegisterTarget::H:
+			currentInstruction.mnemonic = "RLC H";
 			(HL.GetHighByte() << 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(HL.GetHighByte() >> 7) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
 			HL.GetHighByte() <<= 1 | (u8)GetCarryFlag();
@@ -3969,6 +4146,7 @@ void CPU::RLC(RegisterTarget reg)
 			mCycles = 2;
 			break;
 		case RegisterTarget::L:
+			currentInstruction.mnemonic = "RLC L";
 			(HL.GetLowByte() << 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(HL.GetLowByte() >> 7) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
 			HL.GetLowByte() <<= 1 | (u8)GetCarryFlag();
@@ -3976,6 +4154,7 @@ void CPU::RLC(RegisterTarget reg)
 			mCycles = 2;
 			break;
 		case RegisterTarget::MemHL:
+			currentInstruction.mnemonic = "RLC (HL)";
 			(memory->Read(HL.GetRegister()) << 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(memory->Read(HL.GetRegister()) >> 7) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
 			memory->Write(HL.GetRegister(), memory->Read(HL.GetRegister()) << 1 | (u8)GetCarryFlag());
@@ -3997,6 +4176,7 @@ void CPU::RL(RegisterTarget reg)
 	switch (reg)
 	{
 		case RegisterTarget::A:
+			currentInstruction.mnemonic = "RL A";
 			(AF.GetHighByte() << 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(AF.GetHighByte() >> 7) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
 			AF.GetHighByte() <<= 1 | (u8)oldCarry;
@@ -4004,6 +4184,7 @@ void CPU::RL(RegisterTarget reg)
 			mCycles = 2;
 			break;
 		case RegisterTarget::B:
+			currentInstruction.mnemonic = "RL B";
 			(BC.GetHighByte() << 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(BC.GetHighByte() >> 7) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
 			BC.GetHighByte() <<= 1 | (u8)oldCarry;
@@ -4011,6 +4192,7 @@ void CPU::RL(RegisterTarget reg)
 			mCycles = 2;
 			break;
 		case RegisterTarget::C:
+			currentInstruction.mnemonic = "RL C";
 			(BC.GetLowByte() << 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(BC.GetLowByte() >> 7) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
 			BC.GetLowByte() <<= 1 | (u8)oldCarry;
@@ -4018,6 +4200,7 @@ void CPU::RL(RegisterTarget reg)
 			mCycles = 2;
 			break;
 		case RegisterTarget::D:
+			currentInstruction.mnemonic = "RL D";
 			(DE.GetHighByte() << 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(DE.GetHighByte() >> 7) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
 			DE.GetHighByte() <<= 1 | (u8)oldCarry;
@@ -4025,6 +4208,7 @@ void CPU::RL(RegisterTarget reg)
 			mCycles = 2;
 			break;
 		case RegisterTarget::E:
+			currentInstruction.mnemonic = "RL E";
 			(DE.GetLowByte() << 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(DE.GetLowByte() >> 7) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
 			DE.GetLowByte() <<= 1 | (u8)oldCarry;
@@ -4032,6 +4216,7 @@ void CPU::RL(RegisterTarget reg)
 			mCycles = 2;
 			break;
 		case RegisterTarget::H:
+			currentInstruction.mnemonic = "RL H";
 			(HL.GetHighByte() << 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(HL.GetHighByte() >> 7) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
 			HL.GetHighByte() <<= 1 | (u8)oldCarry;
@@ -4039,6 +4224,7 @@ void CPU::RL(RegisterTarget reg)
 			mCycles = 2;
 			break;
 		case RegisterTarget::L:
+			currentInstruction.mnemonic = "RL L";
 			(HL.GetLowByte() << 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(HL.GetLowByte() >> 7) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
 			HL.GetLowByte() <<= 1 | (u8)oldCarry;
@@ -4046,6 +4232,7 @@ void CPU::RL(RegisterTarget reg)
 			mCycles = 2;
 			break;
 		case RegisterTarget::MemHL:
+			currentInstruction.mnemonic = "RL (HL)";
 			(memory->Read(HL.GetRegister()) << 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(memory->Read(HL.GetRegister()) >> 7) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
 			memory->Write(HL.GetRegister(), memory->Read(HL.GetRegister()) << 1 | (u8)oldCarry);
@@ -4066,6 +4253,7 @@ void CPU::RRC(RegisterTarget reg)
 	switch (reg)
 	{
 		case RegisterTarget::A:
+			currentInstruction.mnemonic = "RRC A";
 			(AF.GetHighByte() >> 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(AF.GetHighByte() & 0x01) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
 			AF.GetHighByte() >>= 1 | ((u8)GetCarryFlag() << 7);
@@ -4073,6 +4261,7 @@ void CPU::RRC(RegisterTarget reg)
 			mCycles = 2;
 			break;
 		case RegisterTarget::B:
+			currentInstruction.mnemonic = "RRC B";
 			(BC.GetHighByte() >> 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(BC.GetHighByte() & 0x01) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
 			BC.GetHighByte() >>= 1 | ((u8)GetCarryFlag() << 7);
@@ -4080,6 +4269,7 @@ void CPU::RRC(RegisterTarget reg)
 			mCycles = 2;
 			break;
 		case RegisterTarget::C:
+			currentInstruction.mnemonic = "RRC C";
 			(BC.GetLowByte() >> 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(BC.GetLowByte() & 0x01) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
 			BC.GetLowByte() >>= 1 | ((u8)GetCarryFlag() << 7);
@@ -4087,6 +4277,7 @@ void CPU::RRC(RegisterTarget reg)
 			mCycles = 2;
 			break;
 		case RegisterTarget::D:
+			currentInstruction.mnemonic = "RRC D";
 			(DE.GetHighByte() >> 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(DE.GetHighByte() & 0x01) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
 			DE.GetHighByte() >>= 1 | ((u8)GetCarryFlag() << 7);
@@ -4094,6 +4285,7 @@ void CPU::RRC(RegisterTarget reg)
 			mCycles = 2;
 			break;
 		case RegisterTarget::E:
+			currentInstruction.mnemonic = "RRC E";
 			(DE.GetLowByte() >> 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(DE.GetLowByte() & 0x01) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
 			DE.GetLowByte() >>= 1 | ((u8)GetCarryFlag() << 7);
@@ -4101,6 +4293,7 @@ void CPU::RRC(RegisterTarget reg)
 			mCycles = 2;
 			break;
 		case RegisterTarget::H:
+			currentInstruction.mnemonic = "RRC H";
 			(HL.GetHighByte() >> 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(HL.GetHighByte() & 0x01) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
 			HL.GetHighByte() >>= 1 | ((u8)GetCarryFlag() << 7);
@@ -4108,6 +4301,7 @@ void CPU::RRC(RegisterTarget reg)
 			mCycles = 2;
 			break;
 		case RegisterTarget::L:
+			currentInstruction.mnemonic = "RRC L";
 			(HL.GetLowByte() >> 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(HL.GetLowByte() & 0x01) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
 			HL.GetLowByte() >>= 1 | ((u8)GetCarryFlag() << 7);
@@ -4115,6 +4309,7 @@ void CPU::RRC(RegisterTarget reg)
 			mCycles = 2;
 			break;
 		case RegisterTarget::MemHL:
+			currentInstruction.mnemonic = "RRC (HL)";
 			(memory->Read(HL.GetRegister()) >> 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(memory->Read(HL.GetRegister()) & 0x01) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
 			memory->Write(HL.GetRegister(), memory->Read(HL.GetRegister()) >> 1 | ((u8)GetCarryFlag() << 7));
@@ -4136,6 +4331,7 @@ void CPU::RR(RegisterTarget reg)
 	switch (reg)
 	{
 		case RegisterTarget::A:
+			currentInstruction.mnemonic = "RR A";
 			(AF.GetHighByte() >> 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(AF.GetHighByte() & 0x01) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
 			AF.GetHighByte() >>= 1 | ((u8)oldCarry << 7);
@@ -4143,6 +4339,7 @@ void CPU::RR(RegisterTarget reg)
 			mCycles = 2;
 			break;
 		case RegisterTarget::B:
+			currentInstruction.mnemonic = "RR B";
 			(BC.GetHighByte() >> 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(BC.GetHighByte() & 0x01) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
 			BC.GetHighByte() >>= 1 | ((u8)oldCarry << 7);
@@ -4150,6 +4347,7 @@ void CPU::RR(RegisterTarget reg)
 			mCycles = 2;
 			break;
 		case RegisterTarget::C:
+			currentInstruction.mnemonic = "RR C";
 			(BC.GetLowByte() >> 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(BC.GetLowByte() & 0x01) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
 			BC.GetLowByte() >>= 1 | ((u8)oldCarry << 7);
@@ -4157,6 +4355,7 @@ void CPU::RR(RegisterTarget reg)
 			mCycles = 2;
 			break;
 		case RegisterTarget::D:
+			currentInstruction.mnemonic = "RR D";
 			(DE.GetHighByte() >> 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(DE.GetHighByte() & 0x01) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
 			DE.GetHighByte() >>= 1 | ((u8)oldCarry << 7);
@@ -4164,6 +4363,7 @@ void CPU::RR(RegisterTarget reg)
 			mCycles = 2;
 			break;
 		case RegisterTarget::E:
+			currentInstruction.mnemonic = "RR E";
 			(DE.GetLowByte() >> 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(DE.GetLowByte() & 0x01) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
 			DE.GetLowByte() >>= 1 | ((u8)oldCarry << 7);
@@ -4171,6 +4371,7 @@ void CPU::RR(RegisterTarget reg)
 			mCycles = 2;
 			break;
 		case RegisterTarget::H:
+			currentInstruction.mnemonic = "RR H";
 			(HL.GetHighByte() >> 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(HL.GetHighByte() & 0x01) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
 			HL.GetHighByte() >>= 1 | ((u8)oldCarry << 7);
@@ -4178,6 +4379,7 @@ void CPU::RR(RegisterTarget reg)
 			mCycles = 2;
 			break;
 		case RegisterTarget::L:
+			currentInstruction.mnemonic = "RR L";
 			(HL.GetLowByte() >> 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(HL.GetLowByte() & 0x01) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
 			HL.GetLowByte() >>= 1 | ((u8)oldCarry << 7);
@@ -4185,6 +4387,7 @@ void CPU::RR(RegisterTarget reg)
 			mCycles = 2;
 			break;
 		case RegisterTarget::MemHL:
+			currentInstruction.mnemonic = "RR (HL)";
 			(memory->Read(HL.GetRegister()) >> 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(memory->Read(HL.GetRegister()) & 0x01) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
 			memory->Write(HL.GetRegister(), memory->Read(HL.GetRegister()) >> 1 | ((u8)oldCarry << 7));
@@ -4205,6 +4408,7 @@ void CPU::SLA(RegisterTarget reg)
 	switch (reg)
 	{
 		case RegisterTarget::A:
+			currentInstruction.mnemonic = "SLA A";
 			(AF.GetHighByte() << 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(AF.GetHighByte() >> 7) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
 			AF.GetHighByte() <<= 1;
@@ -4212,6 +4416,7 @@ void CPU::SLA(RegisterTarget reg)
 			mCycles = 2;
 			break;
 		case RegisterTarget::B:
+			currentInstruction.mnemonic = "SLA B";
 			(BC.GetHighByte() << 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(BC.GetHighByte() >> 7) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
 			BC.GetHighByte() <<= 1;
@@ -4219,6 +4424,7 @@ void CPU::SLA(RegisterTarget reg)
 			mCycles = 2;
 			break;
 		case RegisterTarget::C:
+			currentInstruction.mnemonic = "SLA C";
 			(BC.GetLowByte() << 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(BC.GetLowByte() >> 7) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
 			BC.GetLowByte() <<= 1;
@@ -4226,6 +4432,7 @@ void CPU::SLA(RegisterTarget reg)
 			mCycles = 2;
 			break;
 		case RegisterTarget::D:
+			currentInstruction.mnemonic = "SLA D";
 			(DE.GetHighByte() << 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(DE.GetHighByte() >> 7) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
 			DE.GetHighByte() <<= 1;
@@ -4233,6 +4440,7 @@ void CPU::SLA(RegisterTarget reg)
 			mCycles = 2;
 			break;
 		case RegisterTarget::E:
+			currentInstruction.mnemonic = "SLA E";
 			(DE.GetLowByte() << 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(DE.GetLowByte() >> 7) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
 			DE.GetLowByte() <<= 1;
@@ -4240,6 +4448,7 @@ void CPU::SLA(RegisterTarget reg)
 			mCycles = 2;
 			break;
 		case RegisterTarget::H:
+			currentInstruction.mnemonic = "SLA H";
 			(HL.GetHighByte() << 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(HL.GetHighByte() >> 7) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
 			HL.GetHighByte() <<= 1;
@@ -4247,6 +4456,7 @@ void CPU::SLA(RegisterTarget reg)
 			mCycles = 2;
 			break;
 		case RegisterTarget::L:
+			currentInstruction.mnemonic = "SLA L";
 			(HL.GetLowByte() << 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(HL.GetLowByte() >> 7) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
 			HL.GetLowByte() <<= 1;
@@ -4254,6 +4464,7 @@ void CPU::SLA(RegisterTarget reg)
 			mCycles = 2;
 			break;
 		case RegisterTarget::MemHL:
+			currentInstruction.mnemonic = "SLA (HL)";
 			(memory->Read(HL.GetRegister()) << 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(memory->Read(HL.GetRegister()) >> 7) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
 			memory->Write(HL.GetRegister(), memory->Read(HL.GetRegister()) << 1);
@@ -4275,6 +4486,7 @@ void CPU::SRA(RegisterTarget reg)
 	switch (reg)
 	{
 		case RegisterTarget::A:
+			currentInstruction.mnemonic = "SRA A";
 			msb = AF.GetHighByte() & 0x80;
 			(AF.GetHighByte() >> 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(AF.GetHighByte() & 0x01) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
@@ -4283,6 +4495,7 @@ void CPU::SRA(RegisterTarget reg)
 			mCycles = 2;
 			break;
 		case RegisterTarget::B:
+			currentInstruction.mnemonic = "SRA B";
 			msb = BC.GetHighByte() & 0x80;
 			(BC.GetHighByte() >> 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(BC.GetHighByte() & 0x01) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
@@ -4291,6 +4504,7 @@ void CPU::SRA(RegisterTarget reg)
 			mCycles = 2;
 			break;
 		case RegisterTarget::C:
+			currentInstruction.mnemonic = "SRA C";
 			msb = BC.GetLowByte() & 0x80;
 			(BC.GetLowByte() >> 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(BC.GetLowByte() & 0x01) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
@@ -4299,6 +4513,7 @@ void CPU::SRA(RegisterTarget reg)
 			mCycles = 2;
 			break;
 		case RegisterTarget::D:
+			currentInstruction.mnemonic = "SRA D";
 			msb = DE.GetHighByte() & 0x80;
 			(DE.GetHighByte() >> 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(DE.GetHighByte() & 0x01) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
@@ -4307,6 +4522,7 @@ void CPU::SRA(RegisterTarget reg)
 			mCycles = 2;
 			break;
 		case RegisterTarget::E:
+			currentInstruction.mnemonic = "SRA E";
 			msb = DE.GetLowByte() & 0x80;
 			(DE.GetLowByte() >> 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(DE.GetLowByte() & 0x01) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
@@ -4315,6 +4531,7 @@ void CPU::SRA(RegisterTarget reg)
 			mCycles = 2;
 			break;
 		case RegisterTarget::H:
+			currentInstruction.mnemonic = "SRA H";
 			msb = HL.GetHighByte() & 0x80;
 			(HL.GetHighByte() >> 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(HL.GetHighByte() & 0x01) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
@@ -4323,6 +4540,7 @@ void CPU::SRA(RegisterTarget reg)
 			mCycles = 2;
 			break;
 		case RegisterTarget::L:
+			currentInstruction.mnemonic = "SRA L";
 			msb = HL.GetLowByte() & 0x80;
 			(HL.GetLowByte() >> 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(HL.GetLowByte() & 0x01) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
@@ -4331,6 +4549,7 @@ void CPU::SRA(RegisterTarget reg)
 			mCycles = 2;
 			break;
 		case RegisterTarget::MemHL:
+			currentInstruction.mnemonic = "SRA (HL)";
 			msb = memory->Read(HL.GetRegister()) & 0x80;
 			(memory->Read(HL.GetRegister()) >> 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(memory->Read(HL.GetRegister()) & 0x01) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
@@ -4353,48 +4572,56 @@ void CPU::SWAP(RegisterTarget reg)
 	switch (reg)
 	{
 		case RegisterTarget::A:
+			currentInstruction.mnemonic = "SWAP A";
 			((AF.GetHighByte() >> 4) | (AF.GetHighByte() << 4)) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			AF.GetHighByte() = (AF.GetHighByte() >> 4) | (AF.GetHighByte() << 4);
 			tCycles = 8;
 			mCycles = 2;
 			break;
 		case RegisterTarget::B:
+			currentInstruction.mnemonic = "SWAP B";
 			((BC.GetHighByte() >> 4) | (BC.GetHighByte() << 4)) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			BC.GetHighByte() = (BC.GetHighByte() >> 4) | (BC.GetHighByte() << 4);
 			tCycles = 8;
 			mCycles = 2;
 			break;
 		case RegisterTarget::C:
+			currentInstruction.mnemonic = "SWAP C";
 			((BC.GetLowByte() >> 4) | (BC.GetLowByte() << 4)) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			BC.GetLowByte() = (BC.GetLowByte() >> 4) | (BC.GetLowByte() << 4);
 			tCycles = 8;
 			mCycles = 2;
 			break;
 		case RegisterTarget::D:
+			currentInstruction.mnemonic = "SWAP D";
 			((DE.GetHighByte() >> 4) | (DE.GetHighByte() << 4)) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			DE.GetHighByte() = (DE.GetHighByte() >> 4) | (DE.GetHighByte() << 4);
 			tCycles = 8;
 			mCycles = 2;
 			break;
 		case RegisterTarget::E:
+			currentInstruction.mnemonic = "SWAP E";
 			((DE.GetLowByte() >> 4) | (DE.GetLowByte() << 4)) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			DE.GetLowByte() = (DE.GetLowByte() >> 4) | (DE.GetLowByte() << 4);
 			tCycles = 8;
 			mCycles = 2;
 			break;
 		case RegisterTarget::H:
+			currentInstruction.mnemonic = "SWAP H";
 			((HL.GetHighByte() >> 4) | (HL.GetHighByte() << 4)) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			HL.GetHighByte() = (HL.GetHighByte() >> 4) | (HL.GetHighByte() << 4);
 			tCycles = 8;
 			mCycles = 2;
 			break;
 		case RegisterTarget::L:
+			currentInstruction.mnemonic = "SWAP L";
 			((HL.GetLowByte() >> 4) | (HL.GetLowByte() << 4)) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			HL.GetLowByte() = (HL.GetLowByte() >> 4) | (HL.GetLowByte() << 4);
 			tCycles = 8;
 			mCycles = 2;
 			break;
 		case RegisterTarget::MemHL:
+			currentInstruction.mnemonic = "SWAP (HL)";
 			((memory->Read(HL.GetRegister()) >> 4) | (memory->Read(HL.GetRegister()) << 4)) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			memory->Write(HL.GetRegister(), (memory->Read(HL.GetRegister()) >> 4) | (memory->Read(HL.GetRegister()) << 4));
 			tCycles = 16;
@@ -4414,6 +4641,7 @@ void CPU::SRL(RegisterTarget reg)
 	switch (reg)
 	{
 		case RegisterTarget::A:
+			currentInstruction.mnemonic = "SRL A";
 			(AF.GetHighByte() >> 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(AF.GetHighByte() & 0x01) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
 			AF.GetHighByte() >>= 1;
@@ -4421,6 +4649,7 @@ void CPU::SRL(RegisterTarget reg)
 			mCycles = 2;
 			break;
 		case RegisterTarget::B:
+			currentInstruction.mnemonic = "SRL B";
 			(BC.GetHighByte() >> 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(BC.GetHighByte() & 0x01) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
 			BC.GetHighByte() >>= 1;
@@ -4428,6 +4657,7 @@ void CPU::SRL(RegisterTarget reg)
 			mCycles = 2;
 			break;
 		case RegisterTarget::C:
+			currentInstruction.mnemonic = "SRL C";
 			(BC.GetLowByte() >> 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(BC.GetLowByte() & 0x01) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
 			BC.GetLowByte() >>= 1;
@@ -4435,6 +4665,7 @@ void CPU::SRL(RegisterTarget reg)
 			mCycles = 2;
 			break;
 		case RegisterTarget::D:
+			currentInstruction.mnemonic = "SRL D";
 			(DE.GetHighByte() >> 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(DE.GetHighByte() & 0x01) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
 			DE.GetHighByte() >>= 1;
@@ -4442,6 +4673,7 @@ void CPU::SRL(RegisterTarget reg)
 			mCycles = 2;
 			break;
 		case RegisterTarget::E:
+			currentInstruction.mnemonic = "SRL E";
 			(DE.GetLowByte() >> 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(DE.GetLowByte() & 0x01) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
 			DE.GetLowByte() >>= 1;
@@ -4449,6 +4681,7 @@ void CPU::SRL(RegisterTarget reg)
 			mCycles = 2;
 			break;
 		case RegisterTarget::H:
+			currentInstruction.mnemonic = "SRL H";
 			(HL.GetHighByte() >> 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(HL.GetHighByte() & 0x01) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
 			HL.GetHighByte() >>= 1;
@@ -4456,6 +4689,7 @@ void CPU::SRL(RegisterTarget reg)
 			mCycles = 2;
 			break;
 		case RegisterTarget::L:
+			currentInstruction.mnemonic = "SRL L";
 			(HL.GetLowByte() >> 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(HL.GetLowByte() & 0x01) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
 			HL.GetLowByte() >>= 1;
@@ -4463,6 +4697,7 @@ void CPU::SRL(RegisterTarget reg)
 			mCycles = 2;
 			break;
 		case RegisterTarget::MemHL:
+			currentInstruction.mnemonic = "SRL (HL)";
 			(memory->Read(HL.GetRegister()) >> 1) == 0 ? SetFlag(Flag::Zero, true) : SetFlag(Flag::Zero, false);
 			(memory->Read(HL.GetRegister()) & 0x01) == 1 ? SetFlag(Flag::Carry, true) : SetFlag(Flag::Carry, false);
 			memory->Write(HL.GetRegister(), memory->Read(HL.GetRegister()) >> 1);
