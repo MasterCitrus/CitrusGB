@@ -22,778 +22,778 @@ void CPU::Decode()
 	OP = FetchByte();
 	switch (OP)
 	{
-	case 0x00:
-		NOP();
-		break;
-	case 0x01:
-		LD(RegisterTarget::BC, RegisterTarget::Word);
-		break;
-	case 0x02:
-		LD(RegisterTarget::MemBC, RegisterTarget::A);
-		break;
-	case 0x03:
-		INC(RegisterTarget::BC);
-		break;
-	case 0x04:
-		INC(RegisterTarget::B);
-		break;
-	case 0x05:
-		DEC(RegisterTarget::C);
-		break;
-	case 0x06:
-		LD(RegisterTarget::B, RegisterTarget::Byte);
-		break;
-	case 0x07:
+		case 0x00:
+			NOP();
+			break;
+		case 0x01:
+			LD(RegisterTarget::BC, RegisterTarget::Word);
+			break;
+		case 0x02:
+			LD(RegisterTarget::MemBC, RegisterTarget::A);
+			break;
+		case 0x03:
+			INC(RegisterTarget::BC);
+			break;
+		case 0x04:
+			INC(RegisterTarget::B);
+			break;
+		case 0x05:
+			DEC(RegisterTarget::C);
+			break;
+		case 0x06:
+			LD(RegisterTarget::B, RegisterTarget::Byte);
+			break;
+		case 0x07:
 		
-		break;
-	case 0x08:
-		LD(RegisterTarget::Word, RegisterTarget::SP);
-		break;
-	case 0x09:
-		ADD(RegisterTarget::BC, RegisterTarget::HL);
-		break;
-	case 0x0A:
-		LD(RegisterTarget::A, RegisterTarget::MemBC);
-		break;
-	case 0x0B:
-		DEC(RegisterTarget::BC);
-		break;
-	case 0x0C:
-		INC(RegisterTarget::C);
-		break;
-	case 0x0D:
-		DEC(RegisterTarget::C);
-		break;
-	case 0x0E:
-		LD(RegisterTarget::C, RegisterTarget::Byte);
-		break;
-	case 0x0F:
+			break;
+		case 0x08:
+			LD(RegisterTarget::Word, RegisterTarget::SP);
+			break;
+		case 0x09:
+			ADD(RegisterTarget::BC, RegisterTarget::HL);
+			break;
+		case 0x0A:
+			LD(RegisterTarget::A, RegisterTarget::MemBC);
+			break;
+		case 0x0B:
+			DEC(RegisterTarget::BC);
+			break;
+		case 0x0C:
+			INC(RegisterTarget::C);
+			break;
+		case 0x0D:
+			DEC(RegisterTarget::C);
+			break;
+		case 0x0E:
+			LD(RegisterTarget::C, RegisterTarget::Byte);
+			break;
+		case 0x0F:
 
-		break;
-	case 0x10:
+			break;
+		case 0x10:
 		
-		break;
-	case 0x11:
-		LD(RegisterTarget::DE, RegisterTarget::Word);
-		break;
-	case 0x12:
-		LD(RegisterTarget::MemDE, RegisterTarget::A);
-		break;
-	case 0x13:
-		INC(RegisterTarget::DE);
-		break;
-	case 0x14:
-		INC(RegisterTarget::D);
-		break;
-	case 0x15:
-		DEC(RegisterTarget::E);
-		break;
-	case 0x16:
-		LD(RegisterTarget::D, RegisterTarget::Byte);
-		break;
-	case 0x17:
+			break;
+		case 0x11:
+			LD(RegisterTarget::DE, RegisterTarget::Word);
+			break;
+		case 0x12:
+			LD(RegisterTarget::MemDE, RegisterTarget::A);
+			break;
+		case 0x13:
+			INC(RegisterTarget::DE);
+			break;
+		case 0x14:
+			INC(RegisterTarget::D);
+			break;
+		case 0x15:
+			DEC(RegisterTarget::E);
+			break;
+		case 0x16:
+			LD(RegisterTarget::D, RegisterTarget::Byte);
+			break;
+		case 0x17:
 
-		break;
-	case 0x18:
-		JR(Condition::None);
-		break;
-	case 0x19:
-		ADD(RegisterTarget::DE, RegisterTarget::HL);
-		break;
-	case 0x1A:
-		LD(RegisterTarget::A, RegisterTarget::MemDE);
-		break;
-	case 0x1B:
-		DEC(RegisterTarget::DE);
-		break;
-	case 0x1C:
-		INC(RegisterTarget::E);
-		break;
-	case 0x1D:
-		DEC(RegisterTarget::E);
-		break;
-	case 0x1E:
-		LD(RegisterTarget::E, RegisterTarget::Byte);
-		break;
-	case 0x1F:
+			break;
+		case 0x18:
+			JR(Condition::None);
+			break;
+		case 0x19:
+			ADD(RegisterTarget::DE, RegisterTarget::HL);
+			break;
+		case 0x1A:
+			LD(RegisterTarget::A, RegisterTarget::MemDE);
+			break;
+		case 0x1B:
+			DEC(RegisterTarget::DE);
+			break;
+		case 0x1C:
+			INC(RegisterTarget::E);
+			break;
+		case 0x1D:
+			DEC(RegisterTarget::E);
+			break;
+		case 0x1E:
+			LD(RegisterTarget::E, RegisterTarget::Byte);
+			break;
+		case 0x1F:
 
-		break;
-	case 0x20:
-		JR(Condition::NotZero);
-		break;
-	case 0x21:
-		LD(RegisterTarget::HL, RegisterTarget::Word);
-		break;
-	case 0x22:
-		LD(RegisterTarget::MemHLInc, RegisterTarget::A);
-		break;
-	case 0x23:
-		INC(RegisterTarget::HL);
-		break;
-	case 0x24:
-		INC(RegisterTarget::H);
-		break;
-	case 0x25:
-		DEC(RegisterTarget::H);
-		break;
-	case 0x26:
-		LD(RegisterTarget::H, RegisterTarget::Byte);
-		break;
-	case 0x27:
+			break;
+		case 0x20:
+			JR(Condition::NotZero);
+			break;
+		case 0x21:
+			LD(RegisterTarget::HL, RegisterTarget::Word);
+			break;
+		case 0x22:
+			LD(RegisterTarget::MemHLInc, RegisterTarget::A);
+			break;
+		case 0x23:
+			INC(RegisterTarget::HL);
+			break;
+		case 0x24:
+			INC(RegisterTarget::H);
+			break;
+		case 0x25:
+			DEC(RegisterTarget::H);
+			break;
+		case 0x26:
+			LD(RegisterTarget::H, RegisterTarget::Byte);
+			break;
+		case 0x27:
 
-		break;
-	case 0x28:
-		JR(Condition::Zero);
-		break;
-	case 0x29:
-		ADD(RegisterTarget::HL, RegisterTarget::HL);
-		break;
-	case 0x2A:
-		LD(RegisterTarget::A, RegisterTarget::MemHLInc);
-		break;
-	case 0x2B:
-		DEC(RegisterTarget::HL);
-		break;
-	case 0x2C:
-		INC(RegisterTarget::L);
-		break;
-	case 0x2D:
-		DEC(RegisterTarget::L);
-		break;
-	case 0x2E:
-		LD(RegisterTarget::L, RegisterTarget::Byte);
-		break;
-	case 0x2F:
+			break;
+		case 0x28:
+			JR(Condition::Zero);
+			break;
+		case 0x29:
+			ADD(RegisterTarget::HL, RegisterTarget::HL);
+			break;
+		case 0x2A:
+			LD(RegisterTarget::A, RegisterTarget::MemHLInc);
+			break;
+		case 0x2B:
+			DEC(RegisterTarget::HL);
+			break;
+		case 0x2C:
+			INC(RegisterTarget::L);
+			break;
+		case 0x2D:
+			DEC(RegisterTarget::L);
+			break;
+		case 0x2E:
+			LD(RegisterTarget::L, RegisterTarget::Byte);
+			break;
+		case 0x2F:
 
-		break;
-	case 0x30:
-		JR(Condition::NotCarry);
-		break;
-	case 0x31:
-		LD(RegisterTarget::SP, RegisterTarget::Word);
-		break;
-	case 0x32:
-		LD(RegisterTarget::MemHLDec, RegisterTarget::A);
-		break;
-	case 0x33:
-		INC(RegisterTarget::SP);
-		break;
-	case 0x34:
-		INC(RegisterTarget::MemHL);
-		break;
-	case 0x35:
-		DEC(RegisterTarget::MemHL);
-		break;
-	case 0x36:
-		LD(RegisterTarget::MemHL, RegisterTarget::Byte);
-		break;
-	case 0x37:
+			break;
+		case 0x30:
+			JR(Condition::NotCarry);
+			break;
+		case 0x31:
+			LD(RegisterTarget::SP, RegisterTarget::Word);
+			break;
+		case 0x32:
+			LD(RegisterTarget::MemHLDec, RegisterTarget::A);
+			break;
+		case 0x33:
+			INC(RegisterTarget::SP);
+			break;
+		case 0x34:
+			INC(RegisterTarget::MemHL);
+			break;
+		case 0x35:
+			DEC(RegisterTarget::MemHL);
+			break;
+		case 0x36:
+			LD(RegisterTarget::MemHL, RegisterTarget::Byte);
+			break;
+		case 0x37:
 
-		break;
-	case 0x38:
-		JR(Condition::Carry);
-		break;
-	case 0x39:
-		ADD(RegisterTarget::SP, RegisterTarget::HL);
-		break;
-	case 0x3A:
-		LD(RegisterTarget::A, RegisterTarget::MemHLDec);
-		break;
-	case 0x3B:
-		DEC(RegisterTarget::SP);
-		break;
-	case 0x3C:
-		INC(RegisterTarget::A);
-		break;
-	case 0x3D:
-		DEC(RegisterTarget::A);
-		break;
-	case 0x3E:
-		LD(RegisterTarget::A, RegisterTarget::Byte);
-		break;
-	case 0x3F:
+			break;
+		case 0x38:
+			JR(Condition::Carry);
+			break;
+		case 0x39:
+			ADD(RegisterTarget::SP, RegisterTarget::HL);
+			break;
+		case 0x3A:
+			LD(RegisterTarget::A, RegisterTarget::MemHLDec);
+			break;
+		case 0x3B:
+			DEC(RegisterTarget::SP);
+			break;
+		case 0x3C:
+			INC(RegisterTarget::A);
+			break;
+		case 0x3D:
+			DEC(RegisterTarget::A);
+			break;
+		case 0x3E:
+			LD(RegisterTarget::A, RegisterTarget::Byte);
+			break;
+		case 0x3F:
 		
-		break;
-	case 0x40:
-		LD(RegisterTarget::B, RegisterTarget::B);
-		break;
-	case 0x41:
-		LD(RegisterTarget::B, RegisterTarget::C);
-		break;
-	case 0x42:
-		LD(RegisterTarget::B, RegisterTarget::D);
-		break;
-	case 0x43:
-		LD(RegisterTarget::B, RegisterTarget::E);
-		break;
-	case 0x44:
-		LD(RegisterTarget::B, RegisterTarget::H);
-		break;
-	case 0x45:
-		LD(RegisterTarget::B, RegisterTarget::L);
-		break;
-	case 0x46:
-		LD(RegisterTarget::B, RegisterTarget::MemHL);
-		break;
-	case 0x47:
-		LD(RegisterTarget::B, RegisterTarget::A);
-		break;
-	case 0x48:
-		LD(RegisterTarget::C, RegisterTarget::B);
-		break;
-	case 0x49:
-		LD(RegisterTarget::C, RegisterTarget::C);
-		break;
-	case 0x4A:
-		LD(RegisterTarget::C, RegisterTarget::D);
-		break;
-	case 0x4B:
-		LD(RegisterTarget::C, RegisterTarget::E);
-		break;
-	case 0x4C:
-		LD(RegisterTarget::C, RegisterTarget::H);
-		break;
-	case 0x4D:
-		LD(RegisterTarget::C, RegisterTarget::L);
-		break;
-	case 0x4E:
-		LD(RegisterTarget::C, RegisterTarget::MemHL);
-		break;
-	case 0x4F:
-		LD(RegisterTarget::C, RegisterTarget::A);
-		break;
-	case 0x50:
-		LD(RegisterTarget::D, RegisterTarget::B);
-		break;
-	case 0x51:
-		LD(RegisterTarget::D, RegisterTarget::C);
-		break;
-	case 0x52:
-		LD(RegisterTarget::D, RegisterTarget::D);
-		break;
-	case 0x53:
-		LD(RegisterTarget::D, RegisterTarget::E);
-		break;
-	case 0x54:
-		LD(RegisterTarget::D, RegisterTarget::H);
-		break;
-	case 0x55:
-		LD(RegisterTarget::D, RegisterTarget::L);
-		break;
-	case 0x56:
-		LD(RegisterTarget::D, RegisterTarget::MemHL);
-		break;
-	case 0x57:
-		LD(RegisterTarget::D, RegisterTarget::A);
-		break;
-	case 0x58:
-		LD(RegisterTarget::E, RegisterTarget::B);
-		break;
-	case 0x59:
-		LD(RegisterTarget::E, RegisterTarget::C);
-		break;
-	case 0x5A:
-		LD(RegisterTarget::E, RegisterTarget::D);
-		break;
-	case 0x5B:
-		LD(RegisterTarget::E, RegisterTarget::E);
-		break;
-	case 0x5C:
-		LD(RegisterTarget::E, RegisterTarget::H);
-		break;
-	case 0x5D:
-		LD(RegisterTarget::E, RegisterTarget::L);
-		break;
-	case 0x5E:
-		LD(RegisterTarget::E, RegisterTarget::MemHL);
-		break;
-	case 0x5F:
-		LD(RegisterTarget::E, RegisterTarget::A);
-		break;
-	case 0x60:
-		LD(RegisterTarget::H, RegisterTarget::B);
-		break;
-	case 0x61:
-		LD(RegisterTarget::H, RegisterTarget::C);
-		break;
-	case 0x62:
-		LD(RegisterTarget::H, RegisterTarget::D);
-		break;
-	case 0x63:
-		LD(RegisterTarget::H, RegisterTarget::E);
-		break;
-	case 0x64:
-		LD(RegisterTarget::H, RegisterTarget::H);
-		break;
-	case 0x65:
-		LD(RegisterTarget::H, RegisterTarget::L);
-		break;
-	case 0x66:
-		LD(RegisterTarget::H, RegisterTarget::MemHL);
-		break;
-	case 0x67:
-		LD(RegisterTarget::H, RegisterTarget::A);
-		break;
-	case 0x68:
-		LD(RegisterTarget::L, RegisterTarget::B);
-		break;
-	case 0x69:
-		LD(RegisterTarget::L, RegisterTarget::C);
-		break;
-	case 0x6A:
-		LD(RegisterTarget::L, RegisterTarget::D);
-		break;
-	case 0x6B:
-		LD(RegisterTarget::L, RegisterTarget::E);
-		break;
-	case 0x6C:
-		LD(RegisterTarget::L, RegisterTarget::H);
-		break;
-	case 0x6D:
-		LD(RegisterTarget::L, RegisterTarget::L);
-		break;
-	case 0x6E:
-		LD(RegisterTarget::L, RegisterTarget::MemHL);
-		break;
-	case 0x6F:
-		LD(RegisterTarget::L, RegisterTarget::A);
-		break;
-	case 0x70:
-		LD(RegisterTarget::MemHL, RegisterTarget::B);
-		break;
-	case 0x71:
-		LD(RegisterTarget::MemHL, RegisterTarget::C);
-		break;
-	case 0x72:
-		LD(RegisterTarget::MemHL, RegisterTarget::D);
-		break;
-	case 0x73:
-		LD(RegisterTarget::MemHL, RegisterTarget::E);
-		break;
-	case 0x74:
-		LD(RegisterTarget::MemHL, RegisterTarget::H);
-		break;
-	case 0x75:
-		LD(RegisterTarget::MemHL, RegisterTarget::L);
-		break;
-	case 0x76:
+			break;
+		case 0x40:
+			LD(RegisterTarget::B, RegisterTarget::B);
+			break;
+		case 0x41:
+			LD(RegisterTarget::B, RegisterTarget::C);
+			break;
+		case 0x42:
+			LD(RegisterTarget::B, RegisterTarget::D);
+			break;
+		case 0x43:
+			LD(RegisterTarget::B, RegisterTarget::E);
+			break;
+		case 0x44:
+			LD(RegisterTarget::B, RegisterTarget::H);
+			break;
+		case 0x45:
+			LD(RegisterTarget::B, RegisterTarget::L);
+			break;
+		case 0x46:
+			LD(RegisterTarget::B, RegisterTarget::MemHL);
+			break;
+		case 0x47:
+			LD(RegisterTarget::B, RegisterTarget::A);
+			break;
+		case 0x48:
+			LD(RegisterTarget::C, RegisterTarget::B);
+			break;
+		case 0x49:
+			LD(RegisterTarget::C, RegisterTarget::C);
+			break;
+		case 0x4A:
+			LD(RegisterTarget::C, RegisterTarget::D);
+			break;
+		case 0x4B:
+			LD(RegisterTarget::C, RegisterTarget::E);
+			break;
+		case 0x4C:
+			LD(RegisterTarget::C, RegisterTarget::H);
+			break;
+		case 0x4D:
+			LD(RegisterTarget::C, RegisterTarget::L);
+			break;
+		case 0x4E:
+			LD(RegisterTarget::C, RegisterTarget::MemHL);
+			break;
+		case 0x4F:
+			LD(RegisterTarget::C, RegisterTarget::A);
+			break;
+		case 0x50:
+			LD(RegisterTarget::D, RegisterTarget::B);
+			break;
+		case 0x51:
+			LD(RegisterTarget::D, RegisterTarget::C);
+			break;
+		case 0x52:
+			LD(RegisterTarget::D, RegisterTarget::D);
+			break;
+		case 0x53:
+			LD(RegisterTarget::D, RegisterTarget::E);
+			break;
+		case 0x54:
+			LD(RegisterTarget::D, RegisterTarget::H);
+			break;
+		case 0x55:
+			LD(RegisterTarget::D, RegisterTarget::L);
+			break;
+		case 0x56:
+			LD(RegisterTarget::D, RegisterTarget::MemHL);
+			break;
+		case 0x57:
+			LD(RegisterTarget::D, RegisterTarget::A);
+			break;
+		case 0x58:
+			LD(RegisterTarget::E, RegisterTarget::B);
+			break;
+		case 0x59:
+			LD(RegisterTarget::E, RegisterTarget::C);
+			break;
+		case 0x5A:
+			LD(RegisterTarget::E, RegisterTarget::D);
+			break;
+		case 0x5B:
+			LD(RegisterTarget::E, RegisterTarget::E);
+			break;
+		case 0x5C:
+			LD(RegisterTarget::E, RegisterTarget::H);
+			break;
+		case 0x5D:
+			LD(RegisterTarget::E, RegisterTarget::L);
+			break;
+		case 0x5E:
+			LD(RegisterTarget::E, RegisterTarget::MemHL);
+			break;
+		case 0x5F:
+			LD(RegisterTarget::E, RegisterTarget::A);
+			break;
+		case 0x60:
+			LD(RegisterTarget::H, RegisterTarget::B);
+			break;
+		case 0x61:
+			LD(RegisterTarget::H, RegisterTarget::C);
+			break;
+		case 0x62:
+			LD(RegisterTarget::H, RegisterTarget::D);
+			break;
+		case 0x63:
+			LD(RegisterTarget::H, RegisterTarget::E);
+			break;
+		case 0x64:
+			LD(RegisterTarget::H, RegisterTarget::H);
+			break;
+		case 0x65:
+			LD(RegisterTarget::H, RegisterTarget::L);
+			break;
+		case 0x66:
+			LD(RegisterTarget::H, RegisterTarget::MemHL);
+			break;
+		case 0x67:
+			LD(RegisterTarget::H, RegisterTarget::A);
+			break;
+		case 0x68:
+			LD(RegisterTarget::L, RegisterTarget::B);
+			break;
+		case 0x69:
+			LD(RegisterTarget::L, RegisterTarget::C);
+			break;
+		case 0x6A:
+			LD(RegisterTarget::L, RegisterTarget::D);
+			break;
+		case 0x6B:
+			LD(RegisterTarget::L, RegisterTarget::E);
+			break;
+		case 0x6C:
+			LD(RegisterTarget::L, RegisterTarget::H);
+			break;
+		case 0x6D:
+			LD(RegisterTarget::L, RegisterTarget::L);
+			break;
+		case 0x6E:
+			LD(RegisterTarget::L, RegisterTarget::MemHL);
+			break;
+		case 0x6F:
+			LD(RegisterTarget::L, RegisterTarget::A);
+			break;
+		case 0x70:
+			LD(RegisterTarget::MemHL, RegisterTarget::B);
+			break;
+		case 0x71:
+			LD(RegisterTarget::MemHL, RegisterTarget::C);
+			break;
+		case 0x72:
+			LD(RegisterTarget::MemHL, RegisterTarget::D);
+			break;
+		case 0x73:
+			LD(RegisterTarget::MemHL, RegisterTarget::E);
+			break;
+		case 0x74:
+			LD(RegisterTarget::MemHL, RegisterTarget::H);
+			break;
+		case 0x75:
+			LD(RegisterTarget::MemHL, RegisterTarget::L);
+			break;
+		case 0x76:
 
-		break;
-	case 0x77:
-		LD(RegisterTarget::MemHL, RegisterTarget::A);
-		break;
-	case 0x78:
-		LD(RegisterTarget::A, RegisterTarget::B);
-		break;
-	case 0x79:
-		LD(RegisterTarget::A, RegisterTarget::C);
-		break;
-	case 0x7A:
-		LD(RegisterTarget::A, RegisterTarget::D);
-		break;
-	case 0x7B:
-		LD(RegisterTarget::A, RegisterTarget::E);
-		break;
-	case 0x7C:
-		LD(RegisterTarget::A, RegisterTarget::H);
-		break;
-	case 0x7D:
-		LD(RegisterTarget::A, RegisterTarget::L);
-		break;
-	case 0x7E:
-		LD(RegisterTarget::A, RegisterTarget::MemHL);
-		break;
-	case 0x7F:
-		LD(RegisterTarget::A, RegisterTarget::A);
-		break;
-	case 0x80:
-		ADD(RegisterTarget::B);
-		break;
-	case 0x81:
-		ADD(RegisterTarget::C);
-		break;
-	case 0x82:
-		ADD(RegisterTarget::D);
-		break;
-	case 0x83:
-		ADD(RegisterTarget::E);
-		break;
-	case 0x84:
-		ADD(RegisterTarget::H);
-		break;
-	case 0x85:
-		ADD(RegisterTarget::L);
-		break;
-	case 0x86:
-		ADD(RegisterTarget::MemHL);
-		break;
-	case 0x87:
-		ADD(RegisterTarget::A);
-		break;
-	case 0x88:
-		ADC(RegisterTarget::B);
-		break;
-	case 0x89:
-		ADC(RegisterTarget::C);
-		break;
-	case 0x8A:
-		ADC(RegisterTarget::D);
-		break;
-	case 0x8B:
-		ADC(RegisterTarget::E);
-		break;
-	case 0x8C:
-		ADC(RegisterTarget::H);
-		break;
-	case 0x8D:
-		ADC(RegisterTarget::L);
-		break;
-	case 0x8E:
-		ADC(RegisterTarget::MemHL);
-		break;
-	case 0x8F:
-		ADC(RegisterTarget::A);
-		break;
-	case 0x90:
-		SUB(RegisterTarget::B);
-		break;
-	case 0x91:
-		SUB(RegisterTarget::C);
-		break;
-	case 0x92:
-		SUB(RegisterTarget::D);
-		break;
-	case 0x93:
-		SUB(RegisterTarget::E);
-		break;
-	case 0x94:
-		SUB(RegisterTarget::H);
-		break;
-	case 0x95:
-		SUB(RegisterTarget::L);
-		break;
-	case 0x96:
-		SUB(RegisterTarget::MemHL);
-		break;
-	case 0x97:
-		SUB(RegisterTarget::A);
-		break;
-	case 0x98:
-		SBC(RegisterTarget::B);
-		break;
-	case 0x99:
-		SBC(RegisterTarget::C);
-		break;
-	case 0x9A:
-		SBC(RegisterTarget::D);
-		break;
-	case 0x9B:
-		SBC(RegisterTarget::E);
-		break;
-	case 0x9C:
-		SBC(RegisterTarget::H);
-		break;
-	case 0x9D:
-		SBC(RegisterTarget::L);
-		break;
-	case 0x9E:
-		SBC(RegisterTarget::MemHL);
-		break;
-	case 0x9F:
-		SBC(RegisterTarget::A);
-		break;
-	case 0xA0:
-		AND(RegisterTarget::B);
-		break;
-	case 0xA1:
-		AND(RegisterTarget::C);
-		break;
-	case 0xA2:
-		AND(RegisterTarget::D);
-		break;
-	case 0xA3:
-		AND(RegisterTarget::E);
-		break;
-	case 0xA4:
-		AND(RegisterTarget::H);
-		break;
-	case 0xA5:
-		AND(RegisterTarget::L);
-		break;
-	case 0xA6:
-		AND(RegisterTarget::MemHL);
-		break;
-	case 0xA7:
-		AND(RegisterTarget::A);
-		break;
-	case 0xA8:
-		XOR(RegisterTarget::B);
-		break;
-	case 0xA9:
-		XOR(RegisterTarget::C);
-		break;
-	case 0xAA:
-		XOR(RegisterTarget::D);
-		break;
-	case 0xAB:
-		XOR(RegisterTarget::E);
-		break;
-	case 0xAC:
-		XOR(RegisterTarget::H);
-		break;
-	case 0xAD:
-		XOR(RegisterTarget::L);
-		break;
-	case 0xAE:
-		XOR(RegisterTarget::MemHL);
-		break;
-	case 0xAF:
-		XOR(RegisterTarget::A);
-		break;
-	case 0xB0:
-		OR(RegisterTarget::B);
-		break;
-	case 0xB1:
-		OR(RegisterTarget::C);
-		break;
-	case 0xB2:
-		OR(RegisterTarget::D);
-		break;
-	case 0xB3:
-		OR(RegisterTarget::E);
-		break;
-	case 0xB4:
-		OR(RegisterTarget::H);
-		break;
-	case 0xB5:
-		OR(RegisterTarget::L);
-		break;
-	case 0xB6:
-		OR(RegisterTarget::MemHL);
-		break;
-	case 0xB7:
-		OR(RegisterTarget::A);
-		break;
-	case 0xB8:
-		CP(RegisterTarget::B);
-		break;
-	case 0xB9:
-		CP(RegisterTarget::C);
-		break;
-	case 0xBA:
-		CP(RegisterTarget::D);
-		break;
-	case 0xBB:
-		CP(RegisterTarget::E);
-		break;
-	case 0xBC:
-		CP(RegisterTarget::H);
-		break;
-	case 0xBD:
-		CP(RegisterTarget::L);
-		break;
-	case 0xBE:
-		CP(RegisterTarget::MemHL);
-		break;
-	case 0xBF:
-		CP(RegisterTarget::A);
-		break;
-	case 0xC0:
-		RET(Condition::NotZero);
-		break;
-	case 0xC1:
-		POP(RegisterTarget::BC);
-		break;
-	case 0xC2:
-		JP(Condition::NotZero);
-		break;
-	case 0xC3:
-		JP(Condition::None);
-		break;
-	case 0xC4:
-		CALL(Condition::NotZero);
-		break;
-	case 0xC5:
-		PUSH(RegisterTarget::BC);
-		break;
-	case 0xC6:
-		ADD(RegisterTarget::Byte);
-		break;
-	case 0xC7:
+			break;
+		case 0x77:
+			LD(RegisterTarget::MemHL, RegisterTarget::A);
+			break;
+		case 0x78:
+			LD(RegisterTarget::A, RegisterTarget::B);
+			break;
+		case 0x79:
+			LD(RegisterTarget::A, RegisterTarget::C);
+			break;
+		case 0x7A:
+			LD(RegisterTarget::A, RegisterTarget::D);
+			break;
+		case 0x7B:
+			LD(RegisterTarget::A, RegisterTarget::E);
+			break;
+		case 0x7C:
+			LD(RegisterTarget::A, RegisterTarget::H);
+			break;
+		case 0x7D:
+			LD(RegisterTarget::A, RegisterTarget::L);
+			break;
+		case 0x7E:
+			LD(RegisterTarget::A, RegisterTarget::MemHL);
+			break;
+		case 0x7F:
+			LD(RegisterTarget::A, RegisterTarget::A);
+			break;
+		case 0x80:
+			ADD(RegisterTarget::B);
+			break;
+		case 0x81:
+			ADD(RegisterTarget::C);
+			break;
+		case 0x82:
+			ADD(RegisterTarget::D);
+			break;
+		case 0x83:
+			ADD(RegisterTarget::E);
+			break;
+		case 0x84:
+			ADD(RegisterTarget::H);
+			break;
+		case 0x85:
+			ADD(RegisterTarget::L);
+			break;
+		case 0x86:
+			ADD(RegisterTarget::MemHL);
+			break;
+		case 0x87:
+			ADD(RegisterTarget::A);
+			break;
+		case 0x88:
+			ADC(RegisterTarget::B);
+			break;
+		case 0x89:
+			ADC(RegisterTarget::C);
+			break;
+		case 0x8A:
+			ADC(RegisterTarget::D);
+			break;
+		case 0x8B:
+			ADC(RegisterTarget::E);
+			break;
+		case 0x8C:
+			ADC(RegisterTarget::H);
+			break;
+		case 0x8D:
+			ADC(RegisterTarget::L);
+			break;
+		case 0x8E:
+			ADC(RegisterTarget::MemHL);
+			break;
+		case 0x8F:
+			ADC(RegisterTarget::A);
+			break;
+		case 0x90:
+			SUB(RegisterTarget::B);
+			break;
+		case 0x91:
+			SUB(RegisterTarget::C);
+			break;
+		case 0x92:
+			SUB(RegisterTarget::D);
+			break;
+		case 0x93:
+			SUB(RegisterTarget::E);
+			break;
+		case 0x94:
+			SUB(RegisterTarget::H);
+			break;
+		case 0x95:
+			SUB(RegisterTarget::L);
+			break;
+		case 0x96:
+			SUB(RegisterTarget::MemHL);
+			break;
+		case 0x97:
+			SUB(RegisterTarget::A);
+			break;
+		case 0x98:
+			SBC(RegisterTarget::B);
+			break;
+		case 0x99:
+			SBC(RegisterTarget::C);
+			break;
+		case 0x9A:
+			SBC(RegisterTarget::D);
+			break;
+		case 0x9B:
+			SBC(RegisterTarget::E);
+			break;
+		case 0x9C:
+			SBC(RegisterTarget::H);
+			break;
+		case 0x9D:
+			SBC(RegisterTarget::L);
+			break;
+		case 0x9E:
+			SBC(RegisterTarget::MemHL);
+			break;
+		case 0x9F:
+			SBC(RegisterTarget::A);
+			break;
+		case 0xA0:
+			AND(RegisterTarget::B);
+			break;
+		case 0xA1:
+			AND(RegisterTarget::C);
+			break;
+		case 0xA2:
+			AND(RegisterTarget::D);
+			break;
+		case 0xA3:
+			AND(RegisterTarget::E);
+			break;
+		case 0xA4:
+			AND(RegisterTarget::H);
+			break;
+		case 0xA5:
+			AND(RegisterTarget::L);
+			break;
+		case 0xA6:
+			AND(RegisterTarget::MemHL);
+			break;
+		case 0xA7:
+			AND(RegisterTarget::A);
+			break;
+		case 0xA8:
+			XOR(RegisterTarget::B);
+			break;
+		case 0xA9:
+			XOR(RegisterTarget::C);
+			break;
+		case 0xAA:
+			XOR(RegisterTarget::D);
+			break;
+		case 0xAB:
+			XOR(RegisterTarget::E);
+			break;
+		case 0xAC:
+			XOR(RegisterTarget::H);
+			break;
+		case 0xAD:
+			XOR(RegisterTarget::L);
+			break;
+		case 0xAE:
+			XOR(RegisterTarget::MemHL);
+			break;
+		case 0xAF:
+			XOR(RegisterTarget::A);
+			break;
+		case 0xB0:
+			OR(RegisterTarget::B);
+			break;
+		case 0xB1:
+			OR(RegisterTarget::C);
+			break;
+		case 0xB2:
+			OR(RegisterTarget::D);
+			break;
+		case 0xB3:
+			OR(RegisterTarget::E);
+			break;
+		case 0xB4:
+			OR(RegisterTarget::H);
+			break;
+		case 0xB5:
+			OR(RegisterTarget::L);
+			break;
+		case 0xB6:
+			OR(RegisterTarget::MemHL);
+			break;
+		case 0xB7:
+			OR(RegisterTarget::A);
+			break;
+		case 0xB8:
+			CP(RegisterTarget::B);
+			break;
+		case 0xB9:
+			CP(RegisterTarget::C);
+			break;
+		case 0xBA:
+			CP(RegisterTarget::D);
+			break;
+		case 0xBB:
+			CP(RegisterTarget::E);
+			break;
+		case 0xBC:
+			CP(RegisterTarget::H);
+			break;
+		case 0xBD:
+			CP(RegisterTarget::L);
+			break;
+		case 0xBE:
+			CP(RegisterTarget::MemHL);
+			break;
+		case 0xBF:
+			CP(RegisterTarget::A);
+			break;
+		case 0xC0:
+			RET(Condition::NotZero);
+			break;
+		case 0xC1:
+			POP(RegisterTarget::BC);
+			break;
+		case 0xC2:
+			JP(Condition::NotZero);
+			break;
+		case 0xC3:
+			JP(Condition::None);
+			break;
+		case 0xC4:
+			CALL(Condition::NotZero);
+			break;
+		case 0xC5:
+			PUSH(RegisterTarget::BC);
+			break;
+		case 0xC6:
+			ADD(RegisterTarget::Byte);
+			break;
+		case 0xC7:
 
-		break;
-	case 0xC8:
-		RET(Condition::Zero);
-		break;
-	case 0xC9:
-		RET(Condition::None);
-		break;
-	case 0xCA:
-		JP(Condition::Zero);
-		break;
-	case 0xCB:
-		Prefix();
-		break;
-	case 0xCC:
-		CALL(Condition::Zero);
-		break;
-	case 0xCD:
-		CALL(Condition::None);
-		break;
-	case 0xCE:
-		ADC(RegisterTarget::Byte);
-		break;
-	case 0xCF:
+			break;
+		case 0xC8:
+			RET(Condition::Zero);
+			break;
+		case 0xC9:
+			RET(Condition::None);
+			break;
+		case 0xCA:
+			JP(Condition::Zero);
+			break;
+		case 0xCB:
+			Prefix();
+			break;
+		case 0xCC:
+			CALL(Condition::Zero);
+			break;
+		case 0xCD:
+			CALL(Condition::None);
+			break;
+		case 0xCE:
+			ADC(RegisterTarget::Byte);
+			break;
+		case 0xCF:
 
-		break;
-	case 0xD0:
-		RET(Condition::NotCarry);
-		break;
-	case 0xD1:
-		POP(RegisterTarget::DE);
-		break;
-	case 0xD2:
-		JP(Condition::NotCarry);
-		break;
-	case 0xD3:
+			break;
+		case 0xD0:
+			RET(Condition::NotCarry);
+			break;
+		case 0xD1:
+			POP(RegisterTarget::DE);
+			break;
+		case 0xD2:
+			JP(Condition::NotCarry);
+			break;
+		case 0xD3:
 
-		break;
-	case 0xD4:
-		CALL(Condition::NotCarry);
-		break;
-	case 0xD5:
-		PUSH(RegisterTarget::DE);
-		break;
-	case 0xD6:
-		SUB(RegisterTarget::Byte);
-		break;
-	case 0xD7:
+			break;
+		case 0xD4:
+			CALL(Condition::NotCarry);
+			break;
+		case 0xD5:
+			PUSH(RegisterTarget::DE);
+			break;
+		case 0xD6:
+			SUB(RegisterTarget::Byte);
+			break;
+		case 0xD7:
 
-		break;
-	case 0xD8:
-		RET(Condition::Carry);
-		break;
-	case 0xD9:
-		RET(Condition::Interrupt);
-		break;
-	case 0xDA:
-		JP(Condition::Carry);
-		break;
-	case 0xDB:
+			break;
+		case 0xD8:
+			RET(Condition::Carry);
+			break;
+		case 0xD9:
+			RET(Condition::Interrupt);
+			break;
+		case 0xDA:
+			JP(Condition::Carry);
+			break;
+		case 0xDB:
 
-		break;
-	case 0xDC:
-		CALL(Condition::Carry);
-		break;
-	case 0xDD:
+			break;
+		case 0xDC:
+			CALL(Condition::Carry);
+			break;
+		case 0xDD:
 
-		break;
-	case 0xDE:
-		SBC(RegisterTarget::Byte);
-		break;
-	case 0xDF:
+			break;
+		case 0xDE:
+			SBC(RegisterTarget::Byte);
+			break;
+		case 0xDF:
 
-		break;
-	case 0xE0:
-		LD(RegisterTarget::Offset, RegisterTarget::A);
-		break;
-	case 0xE1:
-		POP(RegisterTarget::HL);
-		break;
-	case 0xE2:
-		LD(RegisterTarget::OffsetC, RegisterTarget::A);
-		break;
-	case 0xE3:
+			break;
+		case 0xE0:
+			LD(RegisterTarget::Offset, RegisterTarget::A);
+			break;
+		case 0xE1:
+			POP(RegisterTarget::HL);
+			break;
+		case 0xE2:
+			LD(RegisterTarget::OffsetC, RegisterTarget::A);
+			break;
+		case 0xE3:
 
-		break;
-	case 0xE4:
+			break;
+		case 0xE4:
 
-		break;
-	case 0xE5:
-		PUSH(RegisterTarget::HL);
-		break;
-	case 0xE6:
-		AND(RegisterTarget::Byte);
-		break;
-	case 0xE7:
+			break;
+		case 0xE5:
+			PUSH(RegisterTarget::HL);
+			break;
+		case 0xE6:
+			AND(RegisterTarget::Byte);
+			break;
+		case 0xE7:
 
-		break;
-	case 0xE8:
-		ADD(RegisterTarget::Offset, RegisterTarget::SP);
-		break;
-	case 0xE9:
-		JP(Condition::HL);
-		break;
-	case 0xEA:
-		LD(RegisterTarget::Word, RegisterTarget::A);
-		break;
-	case 0xEB:
+			break;
+		case 0xE8:
+			ADD(RegisterTarget::Offset, RegisterTarget::SP);
+			break;
+		case 0xE9:
+			JP(Condition::HL);
+			break;
+		case 0xEA:
+			LD(RegisterTarget::Word, RegisterTarget::A);
+			break;
+		case 0xEB:
 
-		break;
-	case 0xEC:
+			break;
+		case 0xEC:
 
-		break;
-	case 0xED:
+			break;
+		case 0xED:
 
-		break;
-	case 0xEE:
-		XOR(RegisterTarget::Byte);
-		break;
-	case 0xEF:
+			break;
+		case 0xEE:
+			XOR(RegisterTarget::Byte);
+			break;
+		case 0xEF:
 
-		break;
-	case 0xF0:
-		LD(RegisterTarget::A, RegisterTarget::Offset);
-		break;
-	case 0xF1:
-		POP(RegisterTarget::AF);
-		break;
-	case 0xF2:
-		LD(RegisterTarget::A, RegisterTarget::OffsetC);
-		break;
-	case 0xF3:
+			break;
+		case 0xF0:
+			LD(RegisterTarget::A, RegisterTarget::Offset);
+			break;
+		case 0xF1:
+			POP(RegisterTarget::AF);
+			break;
+		case 0xF2:
+			LD(RegisterTarget::A, RegisterTarget::OffsetC);
+			break;
+		case 0xF3:
 
-		break;
-	case 0xF4:
+			break;
+		case 0xF4:
 
-		break;
-	case 0xF5:
-		PUSH(RegisterTarget::AF);
-		break;
-	case 0xF6:
-		OR(RegisterTarget::Byte);
-		break;
-	case 0xF7:
+			break;
+		case 0xF5:
+			PUSH(RegisterTarget::AF);
+			break;
+		case 0xF6:
+			OR(RegisterTarget::Byte);
+			break;
+		case 0xF7:
 
-		break;
-	case 0xF8:
-		// LD(RegisterTarget::HL, )
-		break;
-	case 0xF9:
-		LD(RegisterTarget::SP, RegisterTarget::HL);
-		break;
-	case 0xFA:
-		LD(RegisterTarget::A, RegisterTarget::Word);
-		break;
-	case 0xFB:
+			break;
+		case 0xF8:
+			// LD(RegisterTarget::HL, )
+			break;
+		case 0xF9:
+			LD(RegisterTarget::SP, RegisterTarget::HL);
+			break;
+		case 0xFA:
+			LD(RegisterTarget::A, RegisterTarget::Word);
+			break;
+		case 0xFB:
 
-		break;
-	case 0xFC:
+			break;
+		case 0xFC:
 
-		break;
-	case 0xFD:
+			break;
+		case 0xFD:
 
-		break;
-	case 0xFE:
-		CP(RegisterTarget::Byte);
-		break;
-	case 0xFF:
+			break;
+		case 0xFE:
+			CP(RegisterTarget::Byte);
+			break;
+		case 0xFF:
 
-		break;
-	default:
-		std::cout << std::hex << "Unsupported instruction " << OP << " at " << PC << '\n';
-		std::exit(EXIT_FAILURE);
-		break;
+			break;
+		default:
+			std::cout << std::hex << "Unsupported instruction " << OP << " at " << PC << '\n';
+			std::exit(EXIT_FAILURE);
+			break;
 	}
 }
 
@@ -835,778 +835,778 @@ void CPU::Prefix()
 	u8 code = FetchByte();
 	switch (code)
 	{
-	case 0x00:
-		RLC(RegisterTarget::B);
-		break;
-	case 0x01:
-		RLC(RegisterTarget::C);
-		break;
-	case 0x02:
-		RLC(RegisterTarget::D);
-		break;
-	case 0x03:
-		RLC(RegisterTarget::E);
-		break;
-	case 0x04:
-		RLC(RegisterTarget::H);
-		break;
-	case 0x05:
-		RLC(RegisterTarget::L);
-		break;
-	case 0x06:
-		RLC(RegisterTarget::MemHL);
-		break;
-	case 0x07:
-		RLC(RegisterTarget::A);
-		break;
-	case 0x08:
-		RRC(RegisterTarget::B);
-		break;
-	case 0x09:
-		RRC(RegisterTarget::C);
-		break;
-	case 0x0A:
-		RRC(RegisterTarget::D);
-		break;
-	case 0x0B:
-		RRC(RegisterTarget::E);
-		break;
-	case 0x0C:
-		RRC(RegisterTarget::H);
-		break;
-	case 0x0D:
-		RRC(RegisterTarget::L);
-		break;
-	case 0x0E:
-		RRC(RegisterTarget::MemHL);
-		break;
-	case 0x0F:
-		RRC(RegisterTarget::A);
-		break;
-	case 0x10:
-		RL(RegisterTarget::B);
-		break;
-	case 0x11:
-		RL(RegisterTarget::C);
-		break;
-	case 0x12:
-		RL(RegisterTarget::D);
-		break;
-	case 0x13:
-		RL(RegisterTarget::E);
-		break;
-	case 0x14:
-		RL(RegisterTarget::H);
-		break;
-	case 0x15:
-		RL(RegisterTarget::L);
-		break;
-	case 0x16:
-		RL(RegisterTarget::MemHL);
-		break;
-	case 0x17:
-		RL(RegisterTarget::A);
-		break;
-	case 0x18:
-		RR(RegisterTarget::B);
-		break;
-	case 0x19:
-		RR(RegisterTarget::C);
-		break;
-	case 0x1A:
-		RR(RegisterTarget::D);
-		break;
-	case 0x1B:
-		RR(RegisterTarget::E);
-		break;
-	case 0x1C:
-		RR(RegisterTarget::H);
-		break;
-	case 0x1D:
-		RR(RegisterTarget::L);
-		break;
-	case 0x1E:
-		RR(RegisterTarget::MemHL);
-		break;
-	case 0x1F:
-		RR(RegisterTarget::A);
-		break;
-	case 0x20:
-		SLA(RegisterTarget::B);
-		break;
-	case 0x21:
-		SLA(RegisterTarget::C);
-		break;
-	case 0x22:
-		SLA(RegisterTarget::D);
-		break;
-	case 0x23:
-		SLA(RegisterTarget::E);
-		break;
-	case 0x24:
-		SLA(RegisterTarget::H);
-		break;
-	case 0x25:
-		SLA(RegisterTarget::L);
-		break;
-	case 0x26:
-		SLA(RegisterTarget::MemHL);
-		break;
-	case 0x27:
-		SLA(RegisterTarget::A);
-		break;
-	case 0x28:
-		SRA(RegisterTarget::B);
-		break;
-	case 0x29:
-		SRA(RegisterTarget::C);
-		break;
-	case 0x2A:
-		SRA(RegisterTarget::D);
-		break;
-	case 0x2B:
-		SRA(RegisterTarget::E);
-		break;
-	case 0x2C:
-		SRA(RegisterTarget::H);
-		break;
-	case 0x2D:
-		SRA(RegisterTarget::L);
-		break;
-	case 0x2E:
-		SRA(RegisterTarget::MemHL);
-		break;
-	case 0x2F:
-		SRA(RegisterTarget::A);
-		break;
-	case 0x30:
-		SWAP(RegisterTarget::B);
-		break;
-	case 0x31:
-		SWAP(RegisterTarget::C);
-		break;
-	case 0x32:
-		SWAP(RegisterTarget::D);
-		break;
-	case 0x33:
-		SWAP(RegisterTarget::E);
-		break;
-	case 0x34:
-		SWAP(RegisterTarget::H);
-		break;
-	case 0x35:
-		SWAP(RegisterTarget::L);
-		break;
-	case 0x36:
-		SWAP(RegisterTarget::MemHL);
-		break;
-	case 0x37:
-		SWAP(RegisterTarget::A);
-		break;
-	case 0x38:
-		SRL(RegisterTarget::B);
-		break;
-	case 0x39:
-		SRL(RegisterTarget::C);
-		break;
-	case 0x3A:
-		SRL(RegisterTarget::D);
-		break;
-	case 0x3B:
-		SRL(RegisterTarget::E);
-		break;
-	case 0x3C:
-		SRL(RegisterTarget::H);
-		break;
-	case 0x3D:
-		SRL(RegisterTarget::L);
-		break;
-	case 0x3E:
-		SRL(RegisterTarget::MemHL);
-		break;
-	case 0x3F:
-		SRL(RegisterTarget::A);
-		break;
-	case 0x40:
-		BIT(RegisterTarget::B, 0);
-		break;
-	case 0x41:
-		BIT(RegisterTarget::C, 0);
-		break;
-	case 0x42:
-		BIT(RegisterTarget::D, 0);
-		break;
-	case 0x43:
-		BIT(RegisterTarget::E, 0);
-		break;
-	case 0x44:
-		BIT(RegisterTarget::H, 0);
-		break;
-	case 0x45:
-		BIT(RegisterTarget::L, 0);
-		break;
-	case 0x46:
-		BIT(RegisterTarget::MemHL, 0);
-		break;
-	case 0x47:
-		BIT(RegisterTarget::A, 0);
-		break;
-	case 0x48:
-		BIT(RegisterTarget::B, 1);
-		break;
-	case 0x49:
-		BIT(RegisterTarget::C, 1);
-		break;
-	case 0x4A:
-		BIT(RegisterTarget::D, 1);
-		break;
-	case 0x4B:
-		BIT(RegisterTarget::E, 1);
-		break;
-	case 0x4C:
-		BIT(RegisterTarget::H, 1);
-		break;
-	case 0x4D:
-		BIT(RegisterTarget::L, 1);
-		break;
-	case 0x4E:
-		BIT(RegisterTarget::MemHL, 1);
-		break;
-	case 0x4F:
-		BIT(RegisterTarget::A, 1);
-		break;
-	case 0x50:
-		BIT(RegisterTarget::B, 2);
-		break;
-	case 0x51:
-		BIT(RegisterTarget::C, 2);
-		break;
-	case 0x52:
-		BIT(RegisterTarget::D, 2);
-		break;
-	case 0x53:
-		BIT(RegisterTarget::E, 2);
-		break;
-	case 0x54:
-		BIT(RegisterTarget::H, 2);
-		break;
-	case 0x55:
-		BIT(RegisterTarget::L, 2);
-		break;
-	case 0x56:
-		BIT(RegisterTarget::MemHL, 2);
-		break;
-	case 0x57:
-		BIT(RegisterTarget::A, 2);
-		break;
-	case 0x58:
-		BIT(RegisterTarget::B, 3);
-		break;
-	case 0x59:
-		BIT(RegisterTarget::C, 3);
-		break;
-	case 0x5A:
-		BIT(RegisterTarget::D, 3);
-		break;
-	case 0x5B:
-		BIT(RegisterTarget::E, 3);
-		break;
-	case 0x5C:
-		BIT(RegisterTarget::H, 3);
-		break;
-	case 0x5D:
-		BIT(RegisterTarget::L, 3);
-		break;
-	case 0x5E:
-		BIT(RegisterTarget::MemHL, 3);
-		break;
-	case 0x5F:
-		BIT(RegisterTarget::A, 3);
-		break;
-	case 0x60:
-		BIT(RegisterTarget::B, 4);
-		break;
-	case 0x61:
-		BIT(RegisterTarget::C, 4);
-		break;
-	case 0x62:
-		BIT(RegisterTarget::D, 4);
-		break;
-	case 0x63:
-		BIT(RegisterTarget::E, 4);
-		break;
-	case 0x64:
-		BIT(RegisterTarget::H, 4);
-		break;
-	case 0x65:
-		BIT(RegisterTarget::L, 4);
-		break;
-	case 0x66:
-		BIT(RegisterTarget::MemHL, 4);
-		break;
-	case 0x67:
-		BIT(RegisterTarget::A, 4);
-		break;
-	case 0x68:
-		BIT(RegisterTarget::B, 5);
-		break;
-	case 0x69:
-		BIT(RegisterTarget::C, 5);
-		break;
-	case 0x6A:
-		BIT(RegisterTarget::D, 5);
-		break;
-	case 0x6B:
-		BIT(RegisterTarget::E, 5);
-		break;
-	case 0x6C:
-		BIT(RegisterTarget::H, 5);
-		break;
-	case 0x6D:
-		BIT(RegisterTarget::L, 5);
-		break;
-	case 0x6E:
-		BIT(RegisterTarget::MemHL, 5);
-		break;
-	case 0x6F:
-		BIT(RegisterTarget::A, 5);
-		break;
-	case 0x70:
-		BIT(RegisterTarget::B, 6);
-		break;
-	case 0x71:
-		BIT(RegisterTarget::C, 6);
-		break;
-	case 0x72:
-		BIT(RegisterTarget::D, 6);
-		break;
-	case 0x73:
-		BIT(RegisterTarget::E, 6);
-		break;
-	case 0x74:
-		BIT(RegisterTarget::H, 6);
-		break;
-	case 0x75:
-		BIT(RegisterTarget::L, 6);
-		break;
-	case 0x76:
-		BIT(RegisterTarget::MemHL, 6);
-		break;
-	case 0x77:
-		BIT(RegisterTarget::A, 6);
-		break;
-	case 0x78:
-		BIT(RegisterTarget::B, 7);
-		break;
-	case 0x79:
-		BIT(RegisterTarget::C, 7);
-		break;
-	case 0x7A:
-		BIT(RegisterTarget::D, 7);
-		break;
-	case 0x7B:
-		BIT(RegisterTarget::E, 7);
-		break;
-	case 0x7C:
-		BIT(RegisterTarget::H, 7);
-		break;
-	case 0x7D:
-		BIT(RegisterTarget::L, 7);
-		break;
-	case 0x7E:
-		BIT(RegisterTarget::MemHL, 7);
-		break;
-	case 0x7F:
-		BIT(RegisterTarget::A, 7);
-		break;
-	case 0x80:
-		RES(RegisterTarget::B, 0);
-		break;
-	case 0x81:
-		RES(RegisterTarget::C, 0);
-		break;
-	case 0x82:
-		RES(RegisterTarget::D, 0);
-		break;
-	case 0x83:
-		RES(RegisterTarget::E, 0);
-		break;
-	case 0x84:
-		RES(RegisterTarget::H, 0);
-		break;
-	case 0x85:
-		RES(RegisterTarget::L, 0);
-		break;
-	case 0x86:
-		RES(RegisterTarget::MemHL, 0);
-		break;
-	case 0x87:
-		RES(RegisterTarget::A, 0);
-		break;
-	case 0x88:
-		RES(RegisterTarget::B, 1);
-		break;
-	case 0x89:
-		RES(RegisterTarget::C, 1);
-		break;
-	case 0x8A:
-		RES(RegisterTarget::D, 1);
-		break;
-	case 0x8B:
-		RES(RegisterTarget::E, 1);
-		break;
-	case 0x8C:
-		RES(RegisterTarget::H, 1);
-		break;
-	case 0x8D:
-		RES(RegisterTarget::L, 1);
-		break;
-	case 0x8E:
-		RES(RegisterTarget::MemHL, 1);
-		break;
-	case 0x8F:
-		RES(RegisterTarget::A, 1);
-		break;
-	case 0x90:
-		RES(RegisterTarget::B, 2);
-		break;
-	case 0x91:
-		RES(RegisterTarget::C, 2);
-		break;
-	case 0x92:
-		RES(RegisterTarget::D, 2);
-		break;
-	case 0x93:
-		RES(RegisterTarget::E, 2);
-		break;
-	case 0x94:
-		RES(RegisterTarget::H, 2);
-		break;
-	case 0x95:
-		RES(RegisterTarget::L, 2);
-		break;
-	case 0x96:
-		RES(RegisterTarget::MemHL, 2);
-		break;
-	case 0x97:
-		RES(RegisterTarget::A, 2);
-		break;
-	case 0x98:
-		RES(RegisterTarget::B, 3);
-		break;
-	case 0x99:
-		RES(RegisterTarget::C, 3);
-		break;
-	case 0x9A:
-		RES(RegisterTarget::D, 3);
-		break;
-	case 0x9B:
-		RES(RegisterTarget::E, 3);
-		break;
-	case 0x9C:
-		RES(RegisterTarget::H, 3);
-		break;
-	case 0x9D:
-		RES(RegisterTarget::L, 3);
-		break;
-	case 0x9E:
-		RES(RegisterTarget::MemHL, 3);
-		break;
-	case 0x9F:
-		RES(RegisterTarget::A, 3);
-		break;
-	case 0xA0:
-		RES(RegisterTarget::B, 4);
-		break;
-	case 0xA1:
-		RES(RegisterTarget::C, 4);
-		break;
-	case 0xA2:
-		RES(RegisterTarget::D, 4);
-		break;
-	case 0xA3:
-		RES(RegisterTarget::E, 4);
-		break;
-	case 0xA4:
-		RES(RegisterTarget::H, 4);
-		break;
-	case 0xA5:
-		RES(RegisterTarget::L, 4);
-		break;
-	case 0xA6:
-		RES(RegisterTarget::MemHL, 4);
-		break;
-	case 0xA7:
-		RES(RegisterTarget::A, 4);
-		break;
-	case 0xA8:
-		RES(RegisterTarget::B, 5);
-		break;
-	case 0xA9:
-		RES(RegisterTarget::C, 5);
-		break;
-	case 0xAA:
-		RES(RegisterTarget::D, 5);
-		break;
-	case 0xAB:
-		RES(RegisterTarget::E, 5);
-		break;
-	case 0xAC:
-		RES(RegisterTarget::H, 5);
-		break;
-	case 0xAD:
-		RES(RegisterTarget::L, 5);
-		break;
-	case 0xAE:
-		RES(RegisterTarget::MemHL, 5);
-		break;
-	case 0xAF:
-		RES(RegisterTarget::A, 5);
-		break;
-	case 0xB0:
-		RES(RegisterTarget::B, 6);
-		break;
-	case 0xB1:
-		RES(RegisterTarget::C, 6);
-		break;
-	case 0xB2:
-		RES(RegisterTarget::D, 6);
-		break;
-	case 0xB3:
-		RES(RegisterTarget::E, 6);
-		break;
-	case 0xB4:
-		RES(RegisterTarget::H, 6);
-		break;
-	case 0xB5:
-		RES(RegisterTarget::L, 6);
-		break;
-	case 0xB6:
-		RES(RegisterTarget::MemHL, 6);
-		break;
-	case 0xB7:
-		RES(RegisterTarget::A, 6);
-		break;
-	case 0xB8:
-		RES(RegisterTarget::B, 7);
-		break;
-	case 0xB9:
-		RES(RegisterTarget::C, 7);
-		break;
-	case 0xBA:
-		RES(RegisterTarget::D, 7);
-		break;
-	case 0xBB:
-		RES(RegisterTarget::E, 7);
-		break;
-	case 0xBC:
-		RES(RegisterTarget::H, 7);
-		break;
-	case 0xBD:
-		RES(RegisterTarget::L, 7);
-		break;
-	case 0xBE:
-		RES(RegisterTarget::MemHL, 7);
-		break;
-	case 0xBF:
-		RES(RegisterTarget::A, 7);
-		break;
-	case 0xC0:
-		SET(RegisterTarget::B, 0);
-		break;
-	case 0xC1:
-		SET(RegisterTarget::C, 0);
-		break;
-	case 0xC2:
-		SET(RegisterTarget::D, 0);
-		break;
-	case 0xC3:
-		SET(RegisterTarget::E, 0);
-		break;
-	case 0xC4:
-		SET(RegisterTarget::H, 0);
-		break;
-	case 0xC5:
-		SET(RegisterTarget::L, 0);
-		break;
-	case 0xC6:
-		SET(RegisterTarget::MemHL, 0);
-		break;
-	case 0xC7:
-		SET(RegisterTarget::A, 0);
-		break;
-	case 0xC8:
-		SET(RegisterTarget::B, 1);
-		break;
-	case 0xC9:
-		SET(RegisterTarget::C, 1);
-		break;
-	case 0xCA:
-		SET(RegisterTarget::D, 1);
-		break;
-	case 0xCB:
-		SET(RegisterTarget::E, 1);
-		break;
-	case 0xCC:
-		SET(RegisterTarget::H, 1);
-		break;
-	case 0xCD:
-		SET(RegisterTarget::L, 1);
-		break;
-	case 0xCE:
-		SET(RegisterTarget::MemHL, 1);
-		break;
-	case 0xCF:
-		SET(RegisterTarget::A, 1);
-		break;
-	case 0xD0:
-		SET(RegisterTarget::B, 2);
-		break;
-	case 0xD1:
-		SET(RegisterTarget::C, 2);
-		break;
-	case 0xD2:
-		SET(RegisterTarget::D, 2);
-		break;
-	case 0xD3:
-		SET(RegisterTarget::E, 2);
-		break;
-	case 0xD4:
-		SET(RegisterTarget::H, 2);
-		break;
-	case 0xD5:
-		SET(RegisterTarget::L, 2);
-		break;
-	case 0xD6:
-		SET(RegisterTarget::MemHL, 2);
-		break;
-	case 0xD7:
-		SET(RegisterTarget::A, 2);
-		break;
-	case 0xD8:
-		SET(RegisterTarget::B, 3);
-		break;
-	case 0xD9:
-		SET(RegisterTarget::C, 3);
-		break;
-	case 0xDA:
-		SET(RegisterTarget::D, 3);
-		break;
-	case 0xDB:
-		SET(RegisterTarget::E, 3);
-		break;
-	case 0xDC:
-		SET(RegisterTarget::H, 3);
-		break;
-	case 0xDD:
-		SET(RegisterTarget::L, 3);
-		break;
-	case 0xDE:
-		SET(RegisterTarget::MemHL, 3);
-		break;
-	case 0xDF:
-		SET(RegisterTarget::A, 3);
-		break;
-	case 0xE0:
-		SET(RegisterTarget::B, 4);
-		break;
-	case 0xE1:
-		SET(RegisterTarget::C, 4);
-		break;
-	case 0xE2:
-		SET(RegisterTarget::D, 4);
-		break;
-	case 0xE3:
-		SET(RegisterTarget::E, 4);
-		break;
-	case 0xE4:
-		SET(RegisterTarget::H, 4);
-		break;
-	case 0xE5:
-		SET(RegisterTarget::L, 4);
-		break;
-	case 0xE6:
-		SET(RegisterTarget::MemHL, 4);
-		break;
-	case 0xE7:
-		SET(RegisterTarget::A, 4);
-		break;
-	case 0xE8:
-		SET(RegisterTarget::B, 5);
-		break;
-	case 0xE9:
-		SET(RegisterTarget::C, 5);
-		break;
-	case 0xEA:
-		SET(RegisterTarget::D, 5);
-		break;
-	case 0xEB:
-		SET(RegisterTarget::E, 5);
-		break;
-	case 0xEC:
-		SET(RegisterTarget::H, 5);
-		break;
-	case 0xED:
-		SET(RegisterTarget::L, 5);
-		break;
-	case 0xEE:
-		SET(RegisterTarget::MemHL, 5);
-		break;
-	case 0xEF:
-		SET(RegisterTarget::A, 5);
-		break;
-	case 0xF0:
-		SET(RegisterTarget::B, 6);
-		break;
-	case 0xF1:
-		SET(RegisterTarget::C, 6);
-		break;
-	case 0xF2:
-		SET(RegisterTarget::D, 6);
-		break;
-	case 0xF3:
-		SET(RegisterTarget::E, 6);
-		break;
-	case 0xF4:
-		SET(RegisterTarget::H, 6);
-		break;
-	case 0xF5:
-		SET(RegisterTarget::L, 6);
-		break;
-	case 0xF6:
-		SET(RegisterTarget::MemHL, 6);
-		break;
-	case 0xF7:
-		SET(RegisterTarget::A, 6);
-		break;
-	case 0xF8:
-		SET(RegisterTarget::B, 7);
-		break;
-	case 0xF9:
-		SET(RegisterTarget::C, 7);
-		break;
-	case 0xFA:
-		SET(RegisterTarget::D, 7);
-		break;
-	case 0xFB:
-		SET(RegisterTarget::E, 7);
-		break;
-	case 0xFC:
-		SET(RegisterTarget::H, 7);
-		break;
-	case 0xFD:
-		SET(RegisterTarget::L, 7);
-		break;
-	case 0xFE:
-		SET(RegisterTarget::MemHL, 7);
-		break;
-	case 0xFF:
-		SET(RegisterTarget::A, 7);
-		break;
-	default:
-		std::cout << std::hex << "Unsupported prefix instruction " << code << " at " << PC << '\n';
-		std::exit(EXIT_FAILURE);
-		break;
+		case 0x00:
+			RLC(RegisterTarget::B);
+			break;
+		case 0x01:
+			RLC(RegisterTarget::C);
+			break;
+		case 0x02:
+			RLC(RegisterTarget::D);
+			break;
+		case 0x03:
+			RLC(RegisterTarget::E);
+			break;
+		case 0x04:
+			RLC(RegisterTarget::H);
+			break;
+		case 0x05:
+			RLC(RegisterTarget::L);
+			break;
+		case 0x06:
+			RLC(RegisterTarget::MemHL);
+			break;
+		case 0x07:
+			RLC(RegisterTarget::A);
+			break;
+		case 0x08:
+			RRC(RegisterTarget::B);
+			break;
+		case 0x09:
+			RRC(RegisterTarget::C);
+			break;
+		case 0x0A:
+			RRC(RegisterTarget::D);
+			break;
+		case 0x0B:
+			RRC(RegisterTarget::E);
+			break;
+		case 0x0C:
+			RRC(RegisterTarget::H);
+			break;
+		case 0x0D:
+			RRC(RegisterTarget::L);
+			break;
+		case 0x0E:
+			RRC(RegisterTarget::MemHL);
+			break;
+		case 0x0F:
+			RRC(RegisterTarget::A);
+			break;
+		case 0x10:
+			RL(RegisterTarget::B);
+			break;
+		case 0x11:
+			RL(RegisterTarget::C);
+			break;
+		case 0x12:
+			RL(RegisterTarget::D);
+			break;
+		case 0x13:
+			RL(RegisterTarget::E);
+			break;
+		case 0x14:
+			RL(RegisterTarget::H);
+			break;
+		case 0x15:
+			RL(RegisterTarget::L);
+			break;
+		case 0x16:
+			RL(RegisterTarget::MemHL);
+			break;
+		case 0x17:
+			RL(RegisterTarget::A);
+			break;
+		case 0x18:
+			RR(RegisterTarget::B);
+			break;
+		case 0x19:
+			RR(RegisterTarget::C);
+			break;
+		case 0x1A:
+			RR(RegisterTarget::D);
+			break;
+		case 0x1B:
+			RR(RegisterTarget::E);
+			break;
+		case 0x1C:
+			RR(RegisterTarget::H);
+			break;
+		case 0x1D:
+			RR(RegisterTarget::L);
+			break;
+		case 0x1E:
+			RR(RegisterTarget::MemHL);
+			break;
+		case 0x1F:
+			RR(RegisterTarget::A);
+			break;
+		case 0x20:
+			SLA(RegisterTarget::B);
+			break;
+		case 0x21:
+			SLA(RegisterTarget::C);
+			break;
+		case 0x22:
+			SLA(RegisterTarget::D);
+			break;
+		case 0x23:
+			SLA(RegisterTarget::E);
+			break;
+		case 0x24:
+			SLA(RegisterTarget::H);
+			break;
+		case 0x25:
+			SLA(RegisterTarget::L);
+			break;
+		case 0x26:
+			SLA(RegisterTarget::MemHL);
+			break;
+		case 0x27:
+			SLA(RegisterTarget::A);
+			break;
+		case 0x28:
+			SRA(RegisterTarget::B);
+			break;
+		case 0x29:
+			SRA(RegisterTarget::C);
+			break;
+		case 0x2A:
+			SRA(RegisterTarget::D);
+			break;
+		case 0x2B:
+			SRA(RegisterTarget::E);
+			break;
+		case 0x2C:
+			SRA(RegisterTarget::H);
+			break;
+		case 0x2D:
+			SRA(RegisterTarget::L);
+			break;
+		case 0x2E:
+			SRA(RegisterTarget::MemHL);
+			break;
+		case 0x2F:
+			SRA(RegisterTarget::A);
+			break;
+		case 0x30:
+			SWAP(RegisterTarget::B);
+			break;
+		case 0x31:
+			SWAP(RegisterTarget::C);
+			break;
+		case 0x32:
+			SWAP(RegisterTarget::D);
+			break;
+		case 0x33:
+			SWAP(RegisterTarget::E);
+			break;
+		case 0x34:
+			SWAP(RegisterTarget::H);
+			break;
+		case 0x35:
+			SWAP(RegisterTarget::L);
+			break;
+		case 0x36:
+			SWAP(RegisterTarget::MemHL);
+			break;
+		case 0x37:
+			SWAP(RegisterTarget::A);
+			break;
+		case 0x38:
+			SRL(RegisterTarget::B);
+			break;
+		case 0x39:
+			SRL(RegisterTarget::C);
+			break;
+		case 0x3A:
+			SRL(RegisterTarget::D);
+			break;
+		case 0x3B:
+			SRL(RegisterTarget::E);
+			break;
+		case 0x3C:
+			SRL(RegisterTarget::H);
+			break;
+		case 0x3D:
+			SRL(RegisterTarget::L);
+			break;
+		case 0x3E:
+			SRL(RegisterTarget::MemHL);
+			break;
+		case 0x3F:
+			SRL(RegisterTarget::A);
+			break;
+		case 0x40:
+			BIT(RegisterTarget::B, 0);
+			break;
+		case 0x41:
+			BIT(RegisterTarget::C, 0);
+			break;
+		case 0x42:
+			BIT(RegisterTarget::D, 0);
+			break;
+		case 0x43:
+			BIT(RegisterTarget::E, 0);
+			break;
+		case 0x44:
+			BIT(RegisterTarget::H, 0);
+			break;
+		case 0x45:
+			BIT(RegisterTarget::L, 0);
+			break;
+		case 0x46:
+			BIT(RegisterTarget::MemHL, 0);
+			break;
+		case 0x47:
+			BIT(RegisterTarget::A, 0);
+			break;
+		case 0x48:
+			BIT(RegisterTarget::B, 1);
+			break;
+		case 0x49:
+			BIT(RegisterTarget::C, 1);
+			break;
+		case 0x4A:
+			BIT(RegisterTarget::D, 1);
+			break;
+		case 0x4B:
+			BIT(RegisterTarget::E, 1);
+			break;
+		case 0x4C:
+			BIT(RegisterTarget::H, 1);
+			break;
+		case 0x4D:
+			BIT(RegisterTarget::L, 1);
+			break;
+		case 0x4E:
+			BIT(RegisterTarget::MemHL, 1);
+			break;
+		case 0x4F:
+			BIT(RegisterTarget::A, 1);
+			break;
+		case 0x50:
+			BIT(RegisterTarget::B, 2);
+			break;
+		case 0x51:
+			BIT(RegisterTarget::C, 2);
+			break;
+		case 0x52:
+			BIT(RegisterTarget::D, 2);
+			break;
+		case 0x53:
+			BIT(RegisterTarget::E, 2);
+			break;
+		case 0x54:
+			BIT(RegisterTarget::H, 2);
+			break;
+		case 0x55:
+			BIT(RegisterTarget::L, 2);
+			break;
+		case 0x56:
+			BIT(RegisterTarget::MemHL, 2);
+			break;
+		case 0x57:
+			BIT(RegisterTarget::A, 2);
+			break;
+		case 0x58:
+			BIT(RegisterTarget::B, 3);
+			break;
+		case 0x59:
+			BIT(RegisterTarget::C, 3);
+			break;
+		case 0x5A:
+			BIT(RegisterTarget::D, 3);
+			break;
+		case 0x5B:
+			BIT(RegisterTarget::E, 3);
+			break;
+		case 0x5C:
+			BIT(RegisterTarget::H, 3);
+			break;
+		case 0x5D:
+			BIT(RegisterTarget::L, 3);
+			break;
+		case 0x5E:
+			BIT(RegisterTarget::MemHL, 3);
+			break;
+		case 0x5F:
+			BIT(RegisterTarget::A, 3);
+			break;
+		case 0x60:
+			BIT(RegisterTarget::B, 4);
+			break;
+		case 0x61:
+			BIT(RegisterTarget::C, 4);
+			break;
+		case 0x62:
+			BIT(RegisterTarget::D, 4);
+			break;
+		case 0x63:
+			BIT(RegisterTarget::E, 4);
+			break;
+		case 0x64:
+			BIT(RegisterTarget::H, 4);
+			break;
+		case 0x65:
+			BIT(RegisterTarget::L, 4);
+			break;
+		case 0x66:
+			BIT(RegisterTarget::MemHL, 4);
+			break;
+		case 0x67:
+			BIT(RegisterTarget::A, 4);
+			break;
+		case 0x68:
+			BIT(RegisterTarget::B, 5);
+			break;
+		case 0x69:
+			BIT(RegisterTarget::C, 5);
+			break;
+		case 0x6A:
+			BIT(RegisterTarget::D, 5);
+			break;
+		case 0x6B:
+			BIT(RegisterTarget::E, 5);
+			break;
+		case 0x6C:
+			BIT(RegisterTarget::H, 5);
+			break;
+		case 0x6D:
+			BIT(RegisterTarget::L, 5);
+			break;
+		case 0x6E:
+			BIT(RegisterTarget::MemHL, 5);
+			break;
+		case 0x6F:
+			BIT(RegisterTarget::A, 5);
+			break;
+		case 0x70:
+			BIT(RegisterTarget::B, 6);
+			break;
+		case 0x71:
+			BIT(RegisterTarget::C, 6);
+			break;
+		case 0x72:
+			BIT(RegisterTarget::D, 6);
+			break;
+		case 0x73:
+			BIT(RegisterTarget::E, 6);
+			break;
+		case 0x74:
+			BIT(RegisterTarget::H, 6);
+			break;
+		case 0x75:
+			BIT(RegisterTarget::L, 6);
+			break;
+		case 0x76:
+			BIT(RegisterTarget::MemHL, 6);
+			break;
+		case 0x77:
+			BIT(RegisterTarget::A, 6);
+			break;
+		case 0x78:
+			BIT(RegisterTarget::B, 7);
+			break;
+		case 0x79:
+			BIT(RegisterTarget::C, 7);
+			break;
+		case 0x7A:
+			BIT(RegisterTarget::D, 7);
+			break;
+		case 0x7B:
+			BIT(RegisterTarget::E, 7);
+			break;
+		case 0x7C:
+			BIT(RegisterTarget::H, 7);
+			break;
+		case 0x7D:
+			BIT(RegisterTarget::L, 7);
+			break;
+		case 0x7E:
+			BIT(RegisterTarget::MemHL, 7);
+			break;
+		case 0x7F:
+			BIT(RegisterTarget::A, 7);
+			break;
+		case 0x80:
+			RES(RegisterTarget::B, 0);
+			break;
+		case 0x81:
+			RES(RegisterTarget::C, 0);
+			break;
+		case 0x82:
+			RES(RegisterTarget::D, 0);
+			break;
+		case 0x83:
+			RES(RegisterTarget::E, 0);
+			break;
+		case 0x84:
+			RES(RegisterTarget::H, 0);
+			break;
+		case 0x85:
+			RES(RegisterTarget::L, 0);
+			break;
+		case 0x86:
+			RES(RegisterTarget::MemHL, 0);
+			break;
+		case 0x87:
+			RES(RegisterTarget::A, 0);
+			break;
+		case 0x88:
+			RES(RegisterTarget::B, 1);
+			break;
+		case 0x89:
+			RES(RegisterTarget::C, 1);
+			break;
+		case 0x8A:
+			RES(RegisterTarget::D, 1);
+			break;
+		case 0x8B:
+			RES(RegisterTarget::E, 1);
+			break;
+		case 0x8C:
+			RES(RegisterTarget::H, 1);
+			break;
+		case 0x8D:
+			RES(RegisterTarget::L, 1);
+			break;
+		case 0x8E:
+			RES(RegisterTarget::MemHL, 1);
+			break;
+		case 0x8F:
+			RES(RegisterTarget::A, 1);
+			break;
+		case 0x90:
+			RES(RegisterTarget::B, 2);
+			break;
+		case 0x91:
+			RES(RegisterTarget::C, 2);
+			break;
+		case 0x92:
+			RES(RegisterTarget::D, 2);
+			break;
+		case 0x93:
+			RES(RegisterTarget::E, 2);
+			break;
+		case 0x94:
+			RES(RegisterTarget::H, 2);
+			break;
+		case 0x95:
+			RES(RegisterTarget::L, 2);
+			break;
+		case 0x96:
+			RES(RegisterTarget::MemHL, 2);
+			break;
+		case 0x97:
+			RES(RegisterTarget::A, 2);
+			break;
+		case 0x98:
+			RES(RegisterTarget::B, 3);
+			break;
+		case 0x99:
+			RES(RegisterTarget::C, 3);
+			break;
+		case 0x9A:
+			RES(RegisterTarget::D, 3);
+			break;
+		case 0x9B:
+			RES(RegisterTarget::E, 3);
+			break;
+		case 0x9C:
+			RES(RegisterTarget::H, 3);
+			break;
+		case 0x9D:
+			RES(RegisterTarget::L, 3);
+			break;
+		case 0x9E:
+			RES(RegisterTarget::MemHL, 3);
+			break;
+		case 0x9F:
+			RES(RegisterTarget::A, 3);
+			break;
+		case 0xA0:
+			RES(RegisterTarget::B, 4);
+			break;
+		case 0xA1:
+			RES(RegisterTarget::C, 4);
+			break;
+		case 0xA2:
+			RES(RegisterTarget::D, 4);
+			break;
+		case 0xA3:
+			RES(RegisterTarget::E, 4);
+			break;
+		case 0xA4:
+			RES(RegisterTarget::H, 4);
+			break;
+		case 0xA5:
+			RES(RegisterTarget::L, 4);
+			break;
+		case 0xA6:
+			RES(RegisterTarget::MemHL, 4);
+			break;
+		case 0xA7:
+			RES(RegisterTarget::A, 4);
+			break;
+		case 0xA8:
+			RES(RegisterTarget::B, 5);
+			break;
+		case 0xA9:
+			RES(RegisterTarget::C, 5);
+			break;
+		case 0xAA:
+			RES(RegisterTarget::D, 5);
+			break;
+		case 0xAB:
+			RES(RegisterTarget::E, 5);
+			break;
+		case 0xAC:
+			RES(RegisterTarget::H, 5);
+			break;
+		case 0xAD:
+			RES(RegisterTarget::L, 5);
+			break;
+		case 0xAE:
+			RES(RegisterTarget::MemHL, 5);
+			break;
+		case 0xAF:
+			RES(RegisterTarget::A, 5);
+			break;
+		case 0xB0:
+			RES(RegisterTarget::B, 6);
+			break;
+		case 0xB1:
+			RES(RegisterTarget::C, 6);
+			break;
+		case 0xB2:
+			RES(RegisterTarget::D, 6);
+			break;
+		case 0xB3:
+			RES(RegisterTarget::E, 6);
+			break;
+		case 0xB4:
+			RES(RegisterTarget::H, 6);
+			break;
+		case 0xB5:
+			RES(RegisterTarget::L, 6);
+			break;
+		case 0xB6:
+			RES(RegisterTarget::MemHL, 6);
+			break;
+		case 0xB7:
+			RES(RegisterTarget::A, 6);
+			break;
+		case 0xB8:
+			RES(RegisterTarget::B, 7);
+			break;
+		case 0xB9:
+			RES(RegisterTarget::C, 7);
+			break;
+		case 0xBA:
+			RES(RegisterTarget::D, 7);
+			break;
+		case 0xBB:
+			RES(RegisterTarget::E, 7);
+			break;
+		case 0xBC:
+			RES(RegisterTarget::H, 7);
+			break;
+		case 0xBD:
+			RES(RegisterTarget::L, 7);
+			break;
+		case 0xBE:
+			RES(RegisterTarget::MemHL, 7);
+			break;
+		case 0xBF:
+			RES(RegisterTarget::A, 7);
+			break;
+		case 0xC0:
+			SET(RegisterTarget::B, 0);
+			break;
+		case 0xC1:
+			SET(RegisterTarget::C, 0);
+			break;
+		case 0xC2:
+			SET(RegisterTarget::D, 0);
+			break;
+		case 0xC3:
+			SET(RegisterTarget::E, 0);
+			break;
+		case 0xC4:
+			SET(RegisterTarget::H, 0);
+			break;
+		case 0xC5:
+			SET(RegisterTarget::L, 0);
+			break;
+		case 0xC6:
+			SET(RegisterTarget::MemHL, 0);
+			break;
+		case 0xC7:
+			SET(RegisterTarget::A, 0);
+			break;
+		case 0xC8:
+			SET(RegisterTarget::B, 1);
+			break;
+		case 0xC9:
+			SET(RegisterTarget::C, 1);
+			break;
+		case 0xCA:
+			SET(RegisterTarget::D, 1);
+			break;
+		case 0xCB:
+			SET(RegisterTarget::E, 1);
+			break;
+		case 0xCC:
+			SET(RegisterTarget::H, 1);
+			break;
+		case 0xCD:
+			SET(RegisterTarget::L, 1);
+			break;
+		case 0xCE:
+			SET(RegisterTarget::MemHL, 1);
+			break;
+		case 0xCF:
+			SET(RegisterTarget::A, 1);
+			break;
+		case 0xD0:
+			SET(RegisterTarget::B, 2);
+			break;
+		case 0xD1:
+			SET(RegisterTarget::C, 2);
+			break;
+		case 0xD2:
+			SET(RegisterTarget::D, 2);
+			break;
+		case 0xD3:
+			SET(RegisterTarget::E, 2);
+			break;
+		case 0xD4:
+			SET(RegisterTarget::H, 2);
+			break;
+		case 0xD5:
+			SET(RegisterTarget::L, 2);
+			break;
+		case 0xD6:
+			SET(RegisterTarget::MemHL, 2);
+			break;
+		case 0xD7:
+			SET(RegisterTarget::A, 2);
+			break;
+		case 0xD8:
+			SET(RegisterTarget::B, 3);
+			break;
+		case 0xD9:
+			SET(RegisterTarget::C, 3);
+			break;
+		case 0xDA:
+			SET(RegisterTarget::D, 3);
+			break;
+		case 0xDB:
+			SET(RegisterTarget::E, 3);
+			break;
+		case 0xDC:
+			SET(RegisterTarget::H, 3);
+			break;
+		case 0xDD:
+			SET(RegisterTarget::L, 3);
+			break;
+		case 0xDE:
+			SET(RegisterTarget::MemHL, 3);
+			break;
+		case 0xDF:
+			SET(RegisterTarget::A, 3);
+			break;
+		case 0xE0:
+			SET(RegisterTarget::B, 4);
+			break;
+		case 0xE1:
+			SET(RegisterTarget::C, 4);
+			break;
+		case 0xE2:
+			SET(RegisterTarget::D, 4);
+			break;
+		case 0xE3:
+			SET(RegisterTarget::E, 4);
+			break;
+		case 0xE4:
+			SET(RegisterTarget::H, 4);
+			break;
+		case 0xE5:
+			SET(RegisterTarget::L, 4);
+			break;
+		case 0xE6:
+			SET(RegisterTarget::MemHL, 4);
+			break;
+		case 0xE7:
+			SET(RegisterTarget::A, 4);
+			break;
+		case 0xE8:
+			SET(RegisterTarget::B, 5);
+			break;
+		case 0xE9:
+			SET(RegisterTarget::C, 5);
+			break;
+		case 0xEA:
+			SET(RegisterTarget::D, 5);
+			break;
+		case 0xEB:
+			SET(RegisterTarget::E, 5);
+			break;
+		case 0xEC:
+			SET(RegisterTarget::H, 5);
+			break;
+		case 0xED:
+			SET(RegisterTarget::L, 5);
+			break;
+		case 0xEE:
+			SET(RegisterTarget::MemHL, 5);
+			break;
+		case 0xEF:
+			SET(RegisterTarget::A, 5);
+			break;
+		case 0xF0:
+			SET(RegisterTarget::B, 6);
+			break;
+		case 0xF1:
+			SET(RegisterTarget::C, 6);
+			break;
+		case 0xF2:
+			SET(RegisterTarget::D, 6);
+			break;
+		case 0xF3:
+			SET(RegisterTarget::E, 6);
+			break;
+		case 0xF4:
+			SET(RegisterTarget::H, 6);
+			break;
+		case 0xF5:
+			SET(RegisterTarget::L, 6);
+			break;
+		case 0xF6:
+			SET(RegisterTarget::MemHL, 6);
+			break;
+		case 0xF7:
+			SET(RegisterTarget::A, 6);
+			break;
+		case 0xF8:
+			SET(RegisterTarget::B, 7);
+			break;
+		case 0xF9:
+			SET(RegisterTarget::C, 7);
+			break;
+		case 0xFA:
+			SET(RegisterTarget::D, 7);
+			break;
+		case 0xFB:
+			SET(RegisterTarget::E, 7);
+			break;
+		case 0xFC:
+			SET(RegisterTarget::H, 7);
+			break;
+		case 0xFD:
+			SET(RegisterTarget::L, 7);
+			break;
+		case 0xFE:
+			SET(RegisterTarget::MemHL, 7);
+			break;
+		case 0xFF:
+			SET(RegisterTarget::A, 7);
+			break;
+		default:
+			std::cout << std::hex << "Unsupported prefix instruction " << code << " at " << PC << '\n';
+			std::exit(EXIT_FAILURE);
+			break;
 	}
 }
 
@@ -2709,6 +2709,7 @@ void CPU::ADD(RegisterTarget from, RegisterTarget to)
 					SP += offset;
 					tCycles = 16;
 					mCycles = 4;
+					break;
 				}
 				default:
 					std::cout << "Unsupported or Invalid Add Instruction\n";
@@ -3418,89 +3419,93 @@ void CPU::RET(Condition condition)
 {
 	switch (condition)
 	{
-	case Condition::None:
-	{
-		u8 low = memory->Read(SP++);
-		u8 high = memory->Read(SP++);
-		PC = (high << 8) | low;
-		tCycles = 16;
-		mCycles = 4;
-		break;
-	}
-	case Condition::Zero:
-		if (zero)
+		case Condition::None:
 		{
 			u8 low = memory->Read(SP++);
 			u8 high = memory->Read(SP++);
 			PC = (high << 8) | low;
-			tCycles = 20;
-			mCycles = 5;
-		}
-		else
-		{
-
-			tCycles = 8;
-			mCycles = 2;
+			tCycles = 16;
+			mCycles = 4;
 			break;
 		}
-		break;
-	case Condition::NotZero:
-		if (!zero)
+		case Condition::Zero:
+			if (zero)
+			{
+				u8 low = memory->Read(SP++);
+				u8 high = memory->Read(SP++);
+				PC = (high << 8) | low;
+				tCycles = 20;
+				mCycles = 5;
+			}
+			else
+			{
+
+				tCycles = 8;
+				mCycles = 2;
+				break;
+			}
+			break;
+		case Condition::NotZero:
+			if (!zero)
+			{
+				u8 low = memory->Read(SP++);
+				u8 high = memory->Read(SP++);
+				PC = (high << 8) | low;
+				tCycles = 20;
+				mCycles = 5;
+			}
+			else
+			{
+
+				tCycles = 8;
+				mCycles = 2;
+			}
+			break;
+		case Condition::Carry:
+			if (carry)
+			{
+				u8 low = memory->Read(SP++);
+				u8 high = memory->Read(SP++);
+				PC = (high << 8) | low;
+				tCycles = 20;
+				mCycles = 5;
+			}
+			else
+			{
+
+				tCycles = 8;
+				mCycles = 2;
+			}
+			break;
+		case Condition::NotCarry:
+			if (!carry)
+			{
+				u8 low = memory->Read(SP++);
+				u8 high = memory->Read(SP++);
+				PC = (high << 8) | low;
+				tCycles = 20;
+				mCycles = 5;
+			}
+			else
+			{
+
+				tCycles = 8;
+				mCycles = 2;
+			}
+			break;
+		case Condition::Interrupt:
 		{
 			u8 low = memory->Read(SP++);
 			u8 high = memory->Read(SP++);
 			PC = (high << 8) | low;
-			tCycles = 20;
-			mCycles = 5;
+			tCycles = 16;
+			mCycles = 4;
+			break;
 		}
-		else
-		{
-
-			tCycles = 8;
-			mCycles = 2;
-		}
-		break;
-	case Condition::Carry:
-		if (carry)
-		{
-			u8 low = memory->Read(SP++);
-			u8 high = memory->Read(SP++);
-			PC = (high << 8) | low;
-			tCycles = 20;
-			mCycles = 5;
-		}
-		else
-		{
-
-			tCycles = 8;
-			mCycles = 2;
-		}
-		break;
-	case Condition::NotCarry:
-		if (!carry)
-		{
-			u8 low = memory->Read(SP++);
-			u8 high = memory->Read(SP++);
-			PC = (high << 8) | low;
-			tCycles = 20;
-			mCycles = 5;
-		}
-		else
-		{
-
-			tCycles = 8;
-			mCycles = 2;
-		}
-		break;
-	case Condition::Interrupt:
-	{
-		u8 low = memory->Read(SP++);
-		u8 high = memory->Read(SP++);
-		PC = (high << 8) | low;
-		tCycles = 16;
-		mCycles = 4;
-		break;
-	}
+		default:
+			std::cout << "Unsupported or Invalid RET instruction\n";
+			std::exit(EXIT_FAILURE);
+			break;
 	}
 }
 
