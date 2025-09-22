@@ -71,6 +71,7 @@ Register& Register::operator=(const Register& value)
 	if (this->data == value.data) return *this;
 
 	data = value.data;
+	return *this;
 }
 
 Register Register::operator<<(int shift) const

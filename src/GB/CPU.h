@@ -21,8 +21,8 @@ enum class RegisterTarget
 	Byte,
 	Word,
 	Offset,
+	OffsetC,
 	MemBC,
-	MemC,
 	MemDE,
 	MemHL,
 	MemHLDec,
@@ -37,6 +37,7 @@ enum class Condition
 	Carry,
 	NotCarry,
 	HL,
+	Interrupt,
 };
 
 enum class Flag : u8
@@ -83,6 +84,8 @@ private:
 
 	// Select a prefix instruction
 	void Prefix();
+	// No instruction
+	void NOP();
 	// Load register into register
 	// Load memory into register
 	// Load register into memory
@@ -99,7 +102,7 @@ private:
 	void JR(Condition condition);
 	// Add register N to register A and store result in register A
 	// Add register NN to register HL and store result in register HL
-	void ADD(RegisterTarget to = RegisterTarget::A, RegisterTarget from = RegisterTarget::A);
+	void ADD(RegisterTarget from, RegisterTarget to = RegisterTarget::A);
 	// Add register N and carry flag to register A and store result in register A
 	void ADC(RegisterTarget reg);
 	// Subtract register N from register A and store result in register A
@@ -120,6 +123,34 @@ private:
 	void POP(RegisterTarget reg);
 	// Write the value of the associated register to the memory address SP points to
 	void PUSH(RegisterTarget reg);
+	// Return to PC if condition is met
+	void RET(Condition condition);
+	// 
+	void RST(int bit);
+	// TODO STOP instructiom
+	// void STOP();
+	// TODO HALT instruction
+	// void HALT();
+	// TODO EI instruction
+	// void EI();
+	// TODO DI instruction
+	// void DI();
+	// TODO DAA instruction
+	// void DAA();
+	// Sets the carry flag
+	void SCF();
+	// Shift register A bits left, bit 7 becomes carry flag
+	void RLCA();
+	// Shift register A bits left
+	void RLA();
+	// Shift register A bits right, bit 0 becomes carry flag
+	void RRCA();
+	// Shift register A bits right
+	void RRA();
+	// Get one's complement of register A
+	void CPL();
+	// Flips carry flag
+	void CCF();
 
 	// Prefix Instruction Functions
 
@@ -131,12 +162,19 @@ private:
 	void SET(RegisterTarget reg, int bit);
 	// Shift bits left, bit 7 becomes carry flag
 	void RLC(RegisterTarget reg);
+	// Shift bits left
 	void RL(RegisterTarget reg);
+	// Shift bits right, bit 0 becomes carry flag
 	void RRC(RegisterTarget reg);
+	// Shift bits right
 	void RR(RegisterTarget reg);
+	// Shift bits left, bit 0 reset
 	void SLA(RegisterTarget reg);
+	// Shift bits right, most significant byte is preserved
 	void SRA(RegisterTarget reg);
+	// Swap bits 0-3 to 4-7 and bits 4-7 to 0-3
 	void SWAP(RegisterTarget reg);
+	// Shift bits right, bit 7 reset
 	void SRL(RegisterTarget reg);
 
 private:
