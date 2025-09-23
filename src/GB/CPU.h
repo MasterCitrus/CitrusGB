@@ -83,7 +83,7 @@ public:
 	u16 GetSP() const { return SP; }
 	u16 GetPC() const { return PC; }
 
-	std::vector<Instruction> GetInstructions() const { return instructions; }
+	std::vector<Instruction>& GetInstructions() { return instructions; }
 
 private:
 

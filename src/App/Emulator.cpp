@@ -274,21 +274,53 @@ void Emulator::Update(float deltaTime)
 		ImGui::Begin("Disassembly");
 		if (ImGui::BeginTable("DisassemblyTable", 3))
 		{
+			ImGuiTable* table = ImGui::GetCurrentContext()->CurrentTable;
+
 			ImGui::TableSetupColumn("Address", ImGuiTableColumnFlags_WidthFixed, 50.0f);
 			ImGui::TableSetupColumn("Opcode", ImGuiTableColumnFlags_WidthFixed, 50.0f);
 			ImGui::TableSetupColumn("Mnemonic");
 			ImGui::TableHeadersRow();
 			for (auto& dism : gb.GetCPU()->GetInstructions())
 			{
-				ImGui::BeginGroup();
 				ImGui::TableNextRow();
+
+				ImVec2 top = { table->WorkRect.Min.x, table->RowPosY1 };
+
 				ImGui::TableSetColumnIndex(0);
 				ImGui::Text("%s", std::format("{:#04X}", dism.address).c_str());
 				ImGui::TableSetColumnIndex(1);
 				ImGui::Text("%s", std::format("{:#02X}", dism.opcode).c_str());
 				ImGui::TableSetColumnIndex(2);
 				ImGui::Text("%s", dism.mnemonic.c_str());
-				ImGui::EndGroup();
+				
+				ImVec2 bottom = { table->WorkRect.Max.x, table->RowPosY2 };
+
+				bool rowHovered = false;
+				if (table && ImGui::IsMouseHoveringRect(top, bottom))
+				{
+					rowHovered = true;
+				}
+				
+				if (rowHovered)
+				{
+					ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, ImGui::GetColorU32(ImGuiCol_HeaderHovered));
+
+					ImGui::BeginTooltip();
+					ImGui::Text("A: %s", std::format("{:#02X}", dism.state.A).c_str());
+					ImGui::Text("F: %s", std::format("{:#02X}", dism.state.F).c_str());
+					ImGui::Text("B: %s", std::format("{:#02X}", dism.state.B).c_str());
+					ImGui::Text("C: %s", std::format("{:#02X}", dism.state.C).c_str());
+					ImGui::Text("D: %s", std::format("{:#02X}", dism.state.D).c_str());
+					ImGui::Text("E: %s", std::format("{:#02X}", dism.state.E).c_str());
+					ImGui::Text("H: %s", std::format("{:#02X}", dism.state.H).c_str());
+					ImGui::Text("L: %s", std::format("{:#02X}", dism.state.L).c_str());
+					ImGui::Text("SP: %s", std::format("{:#04X}", dism.state.SP).c_str());
+					ImGui::Text("Zero: %s", dism.state.zero ? "True" : "False");
+					ImGui::Text("Subtract: %s", dism.state.subtract ? "True" : "False");
+					ImGui::Text("Half Carry: %s", dism.state.halfCarry ? "True" : "False");
+					ImGui::Text("Carry: %s", dism.state.carry ? "True" : "False");
+					ImGui::EndTooltip();
+				}
 			}
 
 			ImGui::EndTable();

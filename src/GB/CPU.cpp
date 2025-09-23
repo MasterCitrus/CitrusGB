@@ -46,6 +46,19 @@ void CPU::SkipBootROM(GameBoyMode mode)
 void CPU::Step()
 {
 	currentInstruction.address = PC;
+	currentInstruction.state.A = AF.GetHighByte();
+	currentInstruction.state.F = AF.GetLowByte();
+	currentInstruction.state.B = BC.GetHighByte();
+	currentInstruction.state.C = BC.GetLowByte();
+	currentInstruction.state.D = DE.GetHighByte();
+	currentInstruction.state.E = DE.GetLowByte();
+	currentInstruction.state.H = HL.GetHighByte();
+	currentInstruction.state.L = HL.GetLowByte();
+	currentInstruction.state.SP = SP;
+	currentInstruction.state.zero = zero;
+	currentInstruction.state.subtract = subtract;
+	currentInstruction.state.halfCarry = halfCarry;
+	currentInstruction.state.carry = carry;
 	Decode();
 	instructions.push_back(currentInstruction);
 }
