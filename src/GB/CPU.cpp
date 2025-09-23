@@ -15,6 +15,34 @@ CPU::~CPU()
 {
 }
 
+void CPU::SkipBootROM(GameBoyMode mode)
+{
+	// TODO set values for DMG0, MGB and SGB2 for original Game Boy
+	// Set values for CGB(DMG) and CGB for Game Boy Colour
+	// AGB(DMG) and AGB modes for Game Boy Advance possibly in future
+	switch (mode)
+	{
+		case GameBoyMode::DMG:
+			AF.SetRegister(0x0180);
+			BC.SetRegister(0x13);
+			DE.SetRegister(0x0);
+			HL.SetRegister(0x014D);
+			PC = 0x100;
+			SP = 0xFFFE;
+			zero = true;
+			subtract = false;
+			halfCarry = false;
+			carry = false;
+			break;
+		case GameBoyMode::CGB:
+			// TODO
+			break;
+		case GameBoyMode::SGB:
+			// TODO
+			break;
+	}
+}
+
 void CPU::Step()
 {
 	currentInstruction.address = PC;
@@ -44,13 +72,13 @@ void CPU::Decode()
 			INC(RegisterTarget::B);
 			break;
 		case 0x05:
-			DEC(RegisterTarget::C);
+			DEC(RegisterTarget::B);
 			break;
 		case 0x06:
 			LD(RegisterTarget::B, RegisterTarget::Byte);
 			break;
 		case 0x07:
-		
+			RLCA();
 			break;
 		case 0x08:
 			LD(RegisterTarget::Word, RegisterTarget::SP);
@@ -74,10 +102,10 @@ void CPU::Decode()
 			LD(RegisterTarget::C, RegisterTarget::Byte);
 			break;
 		case 0x0F:
-
+			RRCA();
 			break;
 		case 0x10:
-		
+			currentInstruction.mnemonic = "STOP - Unimplemented";
 			break;
 		case 0x11:
 			LD(RegisterTarget::DE, RegisterTarget::Word);
@@ -98,7 +126,7 @@ void CPU::Decode()
 			LD(RegisterTarget::D, RegisterTarget::Byte);
 			break;
 		case 0x17:
-
+			RLA();
 			break;
 		case 0x18:
 			JR(Condition::None);
@@ -122,7 +150,7 @@ void CPU::Decode()
 			LD(RegisterTarget::E, RegisterTarget::Byte);
 			break;
 		case 0x1F:
-
+			RRA();
 			break;
 		case 0x20:
 			JR(Condition::NotZero);
@@ -146,7 +174,7 @@ void CPU::Decode()
 			LD(RegisterTarget::H, RegisterTarget::Byte);
 			break;
 		case 0x27:
-
+			currentInstruction.mnemonic = "DAA - Unimplemented";
 			break;
 		case 0x28:
 			JR(Condition::Zero);
@@ -170,7 +198,7 @@ void CPU::Decode()
 			LD(RegisterTarget::L, RegisterTarget::Byte);
 			break;
 		case 0x2F:
-
+			CPL();
 			break;
 		case 0x30:
 			JR(Condition::NotCarry);
@@ -194,7 +222,7 @@ void CPU::Decode()
 			LD(RegisterTarget::MemHL, RegisterTarget::Byte);
 			break;
 		case 0x37:
-
+			SCF();
 			break;
 		case 0x38:
 			JR(Condition::Carry);
@@ -218,7 +246,7 @@ void CPU::Decode()
 			LD(RegisterTarget::A, RegisterTarget::Byte);
 			break;
 		case 0x3F:
-		
+			CCF();
 			break;
 		case 0x40:
 			LD(RegisterTarget::B, RegisterTarget::B);
@@ -383,7 +411,7 @@ void CPU::Decode()
 			LD(RegisterTarget::MemHL, RegisterTarget::L);
 			break;
 		case 0x76:
-
+			currentInstruction.mnemonic = "HALT - Unimplemented";
 			break;
 		case 0x77:
 			LD(RegisterTarget::MemHL, RegisterTarget::A);
@@ -626,7 +654,7 @@ void CPU::Decode()
 			ADD(RegisterTarget::Byte);
 			break;
 		case 0xC7:
-
+			RST(0);
 			break;
 		case 0xC8:
 			RET(Condition::Zero);
@@ -650,7 +678,7 @@ void CPU::Decode()
 			ADC(RegisterTarget::Byte);
 			break;
 		case 0xCF:
-
+			RST(1);
 			break;
 		case 0xD0:
 			RET(Condition::NotCarry);
@@ -662,7 +690,7 @@ void CPU::Decode()
 			JP(Condition::NotCarry);
 			break;
 		case 0xD3:
-
+			currentInstruction.mnemonic = "D3 - INVALID";
 			break;
 		case 0xD4:
 			CALL(Condition::NotCarry);
@@ -674,7 +702,7 @@ void CPU::Decode()
 			SUB(RegisterTarget::Byte);
 			break;
 		case 0xD7:
-
+			RST(2);
 			break;
 		case 0xD8:
 			RET(Condition::Carry);
@@ -686,19 +714,19 @@ void CPU::Decode()
 			JP(Condition::Carry);
 			break;
 		case 0xDB:
-
+			currentInstruction.mnemonic = "DB - INVALID";
 			break;
 		case 0xDC:
 			CALL(Condition::Carry);
 			break;
 		case 0xDD:
-
+			currentInstruction.mnemonic = "DD - INVALID";
 			break;
 		case 0xDE:
 			SBC(RegisterTarget::Byte);
 			break;
 		case 0xDF:
-
+			RST(3);
 			break;
 		case 0xE0:
 			LD(RegisterTarget::Offset, RegisterTarget::A);
@@ -710,10 +738,10 @@ void CPU::Decode()
 			LD(RegisterTarget::OffsetC, RegisterTarget::A);
 			break;
 		case 0xE3:
-
+			currentInstruction.mnemonic = "E3 - INVALID";
 			break;
 		case 0xE4:
-
+			currentInstruction.mnemonic = "E4 - INVALID";
 			break;
 		case 0xE5:
 			PUSH(RegisterTarget::HL);
@@ -722,7 +750,7 @@ void CPU::Decode()
 			AND(RegisterTarget::Byte);
 			break;
 		case 0xE7:
-
+			RST(4);
 			break;
 		case 0xE8:
 			ADD(RegisterTarget::Offset, RegisterTarget::SP);
@@ -734,19 +762,19 @@ void CPU::Decode()
 			LD(RegisterTarget::Word, RegisterTarget::A);
 			break;
 		case 0xEB:
-
+			currentInstruction.mnemonic = "EB - INVALID";
 			break;
 		case 0xEC:
-
+			currentInstruction.mnemonic = "EC - INVALID";
 			break;
 		case 0xED:
-
+			currentInstruction.mnemonic = "ED - INVALID";
 			break;
 		case 0xEE:
 			XOR(RegisterTarget::Byte);
 			break;
 		case 0xEF:
-
+			RST(5);
 			break;
 		case 0xF0:
 			LD(RegisterTarget::A, RegisterTarget::Offset);
@@ -758,10 +786,10 @@ void CPU::Decode()
 			LD(RegisterTarget::A, RegisterTarget::OffsetC);
 			break;
 		case 0xF3:
-
+			currentInstruction.mnemonic = "DI - Unimplemented";
 			break;
 		case 0xF4:
-
+			currentInstruction.mnemonic = "F4 - INVALID";
 			break;
 		case 0xF5:
 			PUSH(RegisterTarget::AF);
@@ -770,10 +798,11 @@ void CPU::Decode()
 			OR(RegisterTarget::Byte);
 			break;
 		case 0xF7:
-
+			RST(6);
 			break;
 		case 0xF8:
 			// LD(RegisterTarget::HL, )
+			currentInstruction.mnemonic = "LD HL, SP + s8 - Unimplemented";
 			break;
 		case 0xF9:
 			LD(RegisterTarget::SP, RegisterTarget::HL);
@@ -782,19 +811,19 @@ void CPU::Decode()
 			LD(RegisterTarget::A, RegisterTarget::Word);
 			break;
 		case 0xFB:
-
+			currentInstruction.mnemonic = "EI - Unimplemented";
 			break;
 		case 0xFC:
-
+			currentInstruction.mnemonic = "FC - INVALID";
 			break;
 		case 0xFD:
-
+			currentInstruction.mnemonic = "FD - INVALID";
 			break;
 		case 0xFE:
 			CP(RegisterTarget::Byte);
 			break;
 		case 0xFF:
-
+			RST(7);
 			break;
 		default:
 			std::cout << std::hex << "Unsupported instruction " << OP << " at " << PC << '\n';
@@ -807,19 +836,27 @@ void CPU::Reset()
 {
 	mCycles = 0;
 	tCycles = 0;
-	AF = 0x00;
-	BC = 0x00;
-	DE = 0x00;
-	HL = 0x00;
-	zero = false;
-	subtract = false;
-	halfCarry = false;
-	carry = false;
-	IME = false;
-	PC = 0x00;
 	OP = 0x0;
-	SP = 0x0;
 	instructions.clear();
+	if (memory->GetBootROMEnabled())
+	{
+		AF = 0x00;
+		BC = 0x00;
+		DE = 0x00;
+		HL = 0x00;
+		zero = false;
+		subtract = false;
+		halfCarry = false;
+		carry = false;
+		IME = false;
+		PC = 0x00;
+		SP = 0x0;
+	}
+	else
+	{
+		SkipBootROM(GameBoyMode::DMG);
+	}
+	
 }
 
 u8 CPU::FetchByte()
@@ -2569,8 +2606,8 @@ void CPU::JP(Condition condition)
 	u16 address = FetchWord();
 	switch (condition)
 	{
-		currentInstruction.mnemonic = "JP a16";
 		case Condition::None:
+			currentInstruction.mnemonic = "JP a16";
 			PC = address;
 			tCycles = 16;
 			mCycles = 4;
@@ -2673,7 +2710,7 @@ void CPU::JR(Condition condition)
 			break;
 		case Condition::NotZero:
 			currentInstruction.mnemonic = "JR NZ s8";
-			if (zero)
+			if (!zero)
 			{
 				PC += offset;
 				tCycles = 12;
@@ -2687,7 +2724,7 @@ void CPU::JR(Condition condition)
 			break;
 		case Condition::Carry:
 			currentInstruction.mnemonic = "JR C s8";
-			if (zero)
+			if (carry)
 			{
 				PC += offset;
 				tCycles = 12;
@@ -2701,7 +2738,7 @@ void CPU::JR(Condition condition)
 			break;
 		case Condition::NotCarry:
 			currentInstruction.mnemonic = "JR NC s8";
-			if (zero)
+			if (!carry)
 			{
 				PC += offset;
 				tCycles = 12;

@@ -64,6 +64,7 @@ private:
 	bool showCPUState = true;
 	bool showDisassembly = true;
 	bool showMemoryMap = true;
+	bool skipBootROM = false;
 };
 
 	static void SDLCALL OpenFileCallback(void* userdata, const char* const* filelist, int filter_index);

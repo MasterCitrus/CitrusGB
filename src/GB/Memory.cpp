@@ -7,6 +7,7 @@ Memory::Memory()
     : bootROM(0x100, 0), VRAM(0x2000, 0), WRAM0(0x1000, 0), WRAM1(0x1000, 0), ERAM(0x2000, 0),
     OAM(0xA0, 0), ioRegisters(0x80, 0), HRAM(0x80, 0), interruptRegister(0), bootRomEnabled(true)
 {
+    Write(0xFF44, 0x90);
 }
 
 Memory::~Memory()
@@ -23,12 +24,13 @@ u8 Memory::Read(u16 address)
         }
         else
         {
-            // TODO Cartridge memory reading ROM Bank 0
+            return cart->Read(address);
         }
     }
     else if (address >= 0x4000 && address < 0x8000)
     {
         // TODO Cartridge memory reading ROM Bank N (Switchable with some cart types)
+        return cart->Read(address);
     }
     else if (address >= 0x8000 && address < 0xA000)
     {
@@ -211,6 +213,11 @@ bool Memory::LoadBootROM()
 void Memory::SetBootROMPath(const std::string& path)
 {
     bootROMPath = path;
+}
+
+void Memory::SetSkipBootROM(bool skip)
+{
+    bootRomEnabled = skip;
 }
 
 void Memory::Reset()

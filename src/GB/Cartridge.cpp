@@ -2,6 +2,11 @@
 
 #include <fstream>
 
+u8 Cartridge::Read(u16 address)
+{
+	return ROM[address];
+}
+
 bool Cartridge::LoadROM(const std::string& rom)
 {
 	std::ifstream file(rom, std::ios::binary | std::ios::ate);

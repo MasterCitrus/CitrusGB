@@ -1,5 +1,7 @@
 #pragma once
 
+#include "GBDefinitions.h"
+
 #include <memory>
 #include <string>
 
@@ -17,6 +19,9 @@ public:
 
 	CPU* GetCPU() const { return cpu.get(); }
 	Memory* GetMemory() const { return memory.get(); }
+	Cartridge* GetCart() const { return cart.get(); }
+	GPU* GetGPU() const { return gpu.get(); }
+	APU* GetAPU() const { return apu.get(); }
 
 	void Init();
 	void Update();

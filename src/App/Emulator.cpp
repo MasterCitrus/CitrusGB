@@ -174,7 +174,8 @@ void Emulator::Update(float deltaTime)
 			if (ImGui::MenuItem("Open Rom"))
 			{
 				LoadROMFile();
-			}if (ImGui::MenuItem("Eject Rom"))
+			}
+			if (ImGui::MenuItem("Eject Rom"))
 			{
 				gb.EjectROM();
 			}
@@ -188,21 +189,19 @@ void Emulator::Update(float deltaTime)
 		{
 			ImGui::Text("Show CPU State");
 			ImGui::SameLine();
-			if (ImGui::Checkbox("##showcpustate", &showCPUState))
-			{
-
-			}
+			ImGui::Checkbox("##showcpustate", &showCPUState);
 			ImGui::Text("Show Disassembly");
 			ImGui::SameLine();
-			if (ImGui::Checkbox("##showdisassembly", &showDisassembly))
-			{
-
-			}
+			ImGui::Checkbox("##showdisassembly", &showDisassembly);
 			ImGui::Text("Show Memory Map");
 			ImGui::SameLine();
-			if (ImGui::Checkbox("##showmemorymap", &showMemoryMap))
+			ImGui::Checkbox("##showmemorymap", &showMemoryMap);
+			ImGui::Text("Skip Boot ROM");
+			ImGui::SameLine();
+			if (ImGui::Checkbox("##skipbootrom", &skipBootROM))
 			{
-
+				gb.GetMemory()->SetSkipBootROM(!skipBootROM);
+				gb.GetCPU()->Reset();
 			}
 			ImGui::EndMenu();
 		}
@@ -218,81 +217,92 @@ void Emulator::Update(float deltaTime)
 
 	// CPU State UI
 
-	ImGui::Begin("CPU State", &showCPUState);
-	if (ImGui::BeginTable("Registers", 2, ImGuiTableFlags_Borders))
+	if(showCPUState)
 	{
-		ImGui::TableNextRow();
-		ImGui::TableSetColumnIndex(0);
-		ImGui::Text("AF: %s", std::format("{:#04X}", gb.GetCPU()->GetAF().GetRegister()).c_str());
-		ImGui::TableSetColumnIndex(1);
-		ImGui::Text("BC: %s", std::format("{:#04X}", gb.GetCPU()->GetBC().GetRegister()).c_str());
-
-		ImGui::TableNextRow();
-		ImGui::TableSetColumnIndex(0);
-		ImGui::Text("DE: %s", std::format("{:#04X}", gb.GetCPU()->GetDE().GetRegister()).c_str());
-		ImGui::TableSetColumnIndex(1);
-		ImGui::Text("HL: %s", std::format("{:#04X}", gb.GetCPU()->GetHL().GetRegister()).c_str());
-
-		ImGui::TableNextRow();
-		ImGui::TableSetColumnIndex(0);
-		ImGui::Text("SP: %s", std::format("{:#04X}", gb.GetCPU()->GetSP()).c_str());
-		ImGui::TableSetColumnIndex(1);
-		ImGui::Text("PC: %s", std::format("{:#04X}", gb.GetCPU()->GetPC()).c_str());
-
-		ImGui::EndTable();
-	}
-
-	ImGui::Text("Cycles: %d", gb.GetCycles());
-
-	bool zero = gb.GetCPU()->GetZeroFlag();
-	ImGui::Text("Z");
-	ImGui::SameLine();
-	ImGui::Checkbox("##ZeroFlag", &zero);
-	ImGui::SameLine();
-	bool subtract = gb.GetCPU()->GetSubtractFlag();
-	ImGui::Text("S");
-	ImGui::SameLine();
-	ImGui::Checkbox("##SubtractFlag", &subtract);
-	ImGui::SameLine();
-	bool halfCarry = gb.GetCPU()->GetHalfCarryFlag();
-	ImGui::Text("H");
-	ImGui::SameLine();
-	ImGui::Checkbox("##HalfCarryFlag", &halfCarry);
-	ImGui::SameLine();
-	bool carry = gb.GetCPU()->GetCarryFlag();
-	ImGui::Text("C");
-	ImGui::SameLine();
-	ImGui::Checkbox("##CarryFlag", &carry);
-	ImGui::End();
-
-	// Disassembly UI
-
-	ImGui::Begin("Disassembly", &showDisassembly);
-	if (ImGui::BeginTable("DisassemblyTable", 3))
-	{
-		ImGui::TableSetupColumn("Address", ImGuiTableColumnFlags_WidthFixed, 50.0f);
-		ImGui::TableSetupColumn("Opcode", ImGuiTableColumnFlags_WidthFixed, 50.0f);
-		ImGui::TableSetupColumn("Mnemonic");
-		ImGui::TableHeadersRow();
-		for (auto& dism : gb.GetCPU()->GetInstructions())
+		ImGui::Begin("CPU State");
+		if (ImGui::BeginTable("Registers", 2, ImGuiTableFlags_Borders))
 		{
 			ImGui::TableNextRow();
 			ImGui::TableSetColumnIndex(0);
-			ImGui::Text("%s", std::format("{:#04X}", dism.address).c_str());
+			ImGui::Text("AF: %s", std::format("{:#04X}", gb.GetCPU()->GetAF().GetRegister()).c_str());
 			ImGui::TableSetColumnIndex(1);
-			ImGui::Text("%s", std::format("{:#02X}", dism.opcode).c_str());
-			ImGui::TableSetColumnIndex(2);
-			ImGui::Text("%s", dism.mnemonic.c_str());
+			ImGui::Text("BC: %s", std::format("{:#04X}", gb.GetCPU()->GetBC().GetRegister()).c_str());
+
+			ImGui::TableNextRow();
+			ImGui::TableSetColumnIndex(0);
+			ImGui::Text("DE: %s", std::format("{:#04X}", gb.GetCPU()->GetDE().GetRegister()).c_str());
+			ImGui::TableSetColumnIndex(1);
+			ImGui::Text("HL: %s", std::format("{:#04X}", gb.GetCPU()->GetHL().GetRegister()).c_str());
+
+			ImGui::TableNextRow();
+			ImGui::TableSetColumnIndex(0);
+			ImGui::Text("SP: %s", std::format("{:#04X}", gb.GetCPU()->GetSP()).c_str());
+			ImGui::TableSetColumnIndex(1);
+			ImGui::Text("PC: %s", std::format("{:#04X}", gb.GetCPU()->GetPC()).c_str());
+
+			ImGui::EndTable();
 		}
 
-		ImGui::EndTable();
+		ImGui::Text("Cycles: %d", gb.GetCycles());
+
+		bool zero = gb.GetCPU()->GetZeroFlag();
+		ImGui::Text("Z");
+		ImGui::SameLine();
+		ImGui::Checkbox("##ZeroFlag", &zero);
+		ImGui::SameLine();
+		bool subtract = gb.GetCPU()->GetSubtractFlag();
+		ImGui::Text("S");
+		ImGui::SameLine();
+		ImGui::Checkbox("##SubtractFlag", &subtract);
+		ImGui::SameLine();
+		bool halfCarry = gb.GetCPU()->GetHalfCarryFlag();
+		ImGui::Text("H");
+		ImGui::SameLine();
+		ImGui::Checkbox("##HalfCarryFlag", &halfCarry);
+		ImGui::SameLine();
+		bool carry = gb.GetCPU()->GetCarryFlag();
+		ImGui::Text("C");
+		ImGui::SameLine();
+		ImGui::Checkbox("##CarryFlag", &carry);
+		ImGui::End();
 	}
-	ImGui::End();
+
+	// Disassembly UI
+
+	if(showDisassembly)
+	{
+		ImGui::Begin("Disassembly");
+		if (ImGui::BeginTable("DisassemblyTable", 3))
+		{
+			ImGui::TableSetupColumn("Address", ImGuiTableColumnFlags_WidthFixed, 50.0f);
+			ImGui::TableSetupColumn("Opcode", ImGuiTableColumnFlags_WidthFixed, 50.0f);
+			ImGui::TableSetupColumn("Mnemonic");
+			ImGui::TableHeadersRow();
+			for (auto& dism : gb.GetCPU()->GetInstructions())
+			{
+				ImGui::BeginGroup();
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0);
+				ImGui::Text("%s", std::format("{:#04X}", dism.address).c_str());
+				ImGui::TableSetColumnIndex(1);
+				ImGui::Text("%s", std::format("{:#02X}", dism.opcode).c_str());
+				ImGui::TableSetColumnIndex(2);
+				ImGui::Text("%s", dism.mnemonic.c_str());
+				ImGui::EndGroup();
+			}
+
+			ImGui::EndTable();
+		}
+		ImGui::End();
+	}
 
 	// Memory Map UI
 
-	ImGui::Begin("Memory", &showMemoryMap);
-	ImGui::End();
+	if(showMemoryMap)
+	{
+		ImGui::Begin("Memory");
+		ImGui::End();
+	}
 
 	//ImGui::Begin("Table Area");
 	//if (ImGui::BeginTable("Test Table", 2))

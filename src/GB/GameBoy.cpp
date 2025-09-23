@@ -41,6 +41,7 @@ void GameBoy::LoadROM(const std::string& rom)
 void GameBoy::EjectROM()
 {
 	running = false;
+	cart->EjectROM();
 	Reset();
 }
 

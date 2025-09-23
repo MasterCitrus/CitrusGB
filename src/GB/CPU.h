@@ -1,5 +1,6 @@
 #pragma once
 
+#include "GBDefinitions.h"
 #include "Instruction.h"
 #include "Register.h"
 
@@ -56,6 +57,8 @@ class CPU
 public:
 	CPU(Memory* memory);
 	~CPU();
+
+	void SkipBootROM(GameBoyMode mode);
 
 	void Step();
 	void Decode();

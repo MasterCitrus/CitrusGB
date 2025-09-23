@@ -20,6 +20,9 @@ public:
 	bool LoadBootROM();
 	void SetCart(Cartridge* cart) { this->cart = cart; }
 	void SetBootROMPath(const std::string& path);
+	void SetSkipBootROM(bool skip);
+
+	bool GetBootROMEnabled() const { return bootRomEnabled; }
 
 	void Reset();
 
